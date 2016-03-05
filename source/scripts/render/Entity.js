@@ -1,8 +1,7 @@
 var React = require("react")
-var Media = require("../Media")
 
 var UNIT = 20
-var NULL_TEXTURE = Media.images.textures.null
+var NULL_TEXTURE = require("../../images/textures/null.png")
 
 class Entity extends React.Component {
     render() {
@@ -62,6 +61,10 @@ class Entity extends React.Component {
             this.props.data.onDoubleClick(event)
         }
     }
+}
+
+Entity.defaultProps = {
+    data: {}
 }
 
 module.exports = Entity
