@@ -15,13 +15,17 @@ var React = require("react")
 var ReactDOM = require("react-dom")
 var Afloop = require("afloop")
 
-/////////////////////////
-///// Initializing /////
-///////////////////////
+/////////////////////
+///// Modeling /////
+///////////////////
 
-var state = {
-    message: "Hello World!"
-}
+var Game = require("./scripts/model/Game.js")
+
+var state = new Object({
+    game: new Game({
+        // ...
+    })
+})
 
 // While developing, we expose the game state
 // to the window, so we can examine it via the
@@ -35,6 +39,7 @@ if(STAGE == "DEVELOPMENT") {
 ///// Rendering /////
 ////////////////////
 
+var Entity = require("./scripts/render/Entity")
 var AspectRatioFrame = require("./scripts/render/AspectRatioFrame")
 
 class Mount extends React.Component {
@@ -42,7 +47,9 @@ class Mount extends React.Component {
         if(!!this.state) {
             return (
                 <AspectRatioFrame width={320} height={180}>
-                    <div>{this.state.message}</div>
+                    {this.state.game.entities.map((entity, index) => {
+                        return <Entity data={entity} key={index}/>
+                    })}
                 </AspectRatioFrame>
             )
         } else {
@@ -58,5 +65,6 @@ var mount = ReactDOM.render(<Mount/>, document.getElementById("mount"))
 //////////////////
 
 var loop = new Afloop(function() {
+    state.game.update()
     mount.setState(state)
 })

@@ -44,7 +44,7 @@ rimraf("./builds", function() {
                 {test: /\.html$/i, loader: new WebpackExtract("html", "index.html").extract(["html-loader"])},
                 {test: /\.(png|jpe?g|gif|svg)$/i, loaders: ["url-loader", "image-webpack-loader"]},
                 {test: /\.(ttf|otf|woff|svg)$/i, loader: "url-loader"},
-                {test: /\.mp3$/i, loader: "url-loader"},
+                {test: /\.(mp3|wav)$/i, loader: "url-loader"},
             ]
         },
         node: {
