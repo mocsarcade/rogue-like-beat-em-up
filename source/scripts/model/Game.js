@@ -1,3 +1,4 @@
+var Camera = require("./Camera.js")
 var Adventurer = require("./Adventurer.js")
 var Dungeon = require("./Dungeon.js")
 
@@ -10,6 +11,13 @@ class Game {
         this.dungeon = new Dungeon({
             game: this
         })
+        this.camera = new Camera({
+            position: {x: 0, y: 0},
+            width: 16, height: 9,
+            zoom: 0.75
+        })
+        
+        this.camera.center(this.adventurer.position)
     }
     get entities() {
         // Returns a big list of every
