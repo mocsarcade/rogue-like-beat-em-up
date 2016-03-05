@@ -40,6 +40,7 @@ if(STAGE == "DEVELOPMENT") {
 ////////////////////
 
 var Entity = require("./scripts/render/Entity")
+var Camera = require("./scripts/render/Camera")
 var AspectRatioFrame = require("./scripts/render/AspectRatioFrame")
 
 class Mount extends React.Component {
@@ -47,9 +48,11 @@ class Mount extends React.Component {
         if(!!this.state) {
             return (
                 <AspectRatioFrame width={320} height={180}>
-                    {this.state.game.entities.map((entity, index) => {
-                        return <Entity data={entity} key={index}/>
-                    })}
+                    <Camera data={this.state.game.camera}>
+                        {this.state.game.entities.map((entity, index) => {
+                            return <Entity data={entity} key={index}/>
+                        })}
+                    </Camera>
                 </AspectRatioFrame>
             )
         } else {

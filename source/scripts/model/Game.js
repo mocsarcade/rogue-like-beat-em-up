@@ -1,5 +1,6 @@
+var Camera = require("./Camera.js")
 var Adventurer = require("./Adventurer.js")
-var Room = require("./Room.js")
+var Dungeon = require("./Dungeon.js")
 
 class Game {
     constructor() {
@@ -7,25 +8,16 @@ class Game {
             position: {x: 2, y: 2},
             game: this
         })
-        this.dungeon = {
-            rooms: [
-                new Room({
-                    position: {x: 1, y: 1},
-                    width: 7, height: 7,
-                    color: "#999"
-                }),
-                new Room({
-                    position: {x: 8, y: 1},
-                    width: 5, height: 5,
-                    color: "#888"
-                }),
-                new Room({
-                    position: {x: 13, y: 1},
-                    width: 2, height: 2,
-                    color: "#777"
-                }),
-            ]
-        }
+        this.dungeon = new Dungeon({
+            game: this
+        })
+        this.camera = new Camera({
+            position: {x: 0, y: 0},
+            width: 16, height: 9,
+            zoom: 0.75
+        })
+        
+        this.camera.center(this.adventurer.position)
     }
     get entities() {
         // Returns a big list of every

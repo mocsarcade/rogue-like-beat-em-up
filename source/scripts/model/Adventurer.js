@@ -51,6 +51,11 @@ class Adventurer {
         
         this.position.x += movement.x
         this.position.y += movement.y
+        
+        if(this.game != undefined
+        && this.game.camera != undefined) {
+            this.game.camera.center(this.position)
+        }
     }
 }
 
