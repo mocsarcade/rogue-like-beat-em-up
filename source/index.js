@@ -15,9 +15,9 @@ var React = require("react")
 var ReactDOM = require("react-dom")
 var Afloop = require("afloop")
 
-/////////////////////
-///// Modeling /////
-///////////////////
+/////////////////////////
+///// Initializing /////
+///////////////////////
 
 var Game = require("./scripts/model/Game.js")
 
@@ -31,6 +31,7 @@ var state = new Object({
 // to the window, so we can examine it via the
 // browser javascript console. Please do not
 // try to use this global variable elsewhere.
+
 if(STAGE == "DEVELOPMENT") {
     window.state = state
 }
@@ -38,6 +39,9 @@ if(STAGE == "DEVELOPMENT") {
 //////////////////////
 ///// Rendering /////
 ////////////////////
+
+// This is where we declaratively define how
+// the game will be rendered, given the state.
 
 var Entity = require("./scripts/render/Entity")
 var Camera = require("./scripts/render/Camera")
@@ -49,8 +53,8 @@ class Mount extends React.Component {
             return (
                 <AspectRatioFrame width={320} height={180}>
                     <Camera data={this.state.game.camera}>
-                        {this.state.game.entities.map((entity, index) => {
-                            return <Entity data={entity} key={index}/>
+                        {this.state.game.entities.map((entity) => {
+                            return <Entity data={entity} key={entity.id}/>
                         })}
                     </Camera>
                 </AspectRatioFrame>
@@ -67,7 +71,7 @@ var mount = ReactDOM.render(<Mount/>, document.getElementById("mount"))
 ///// Looping /////
 //////////////////
 
-var loop = new Afloop(function() {
-    state.game.update()
+var loop = new Afloop(function(delta) {
+    state.game.onLoop(delta)
     mount.setState(state)
 })

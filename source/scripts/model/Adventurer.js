@@ -1,20 +1,19 @@
 var Keyb = require("keyb")
 var Media = require("../Media.js")
+var Effect = require("./Effect.js")
+var Creature = require("./Creature.js")
 
-class Adventurer {
-    constructor(protoadventurer = new Object()) {
-        this.position = protoadventurer.position || {x: 0, y: 0}
-        this.game = protoadventurer.game
+class Adventurer extends Creature {
+    constructor(adventurer = new Object()) {
+        adventurer.health = adventurer.health || 3
+        super(adventurer)
         
-        this.shape = Media.images.shapes.entities[1]
+        this.shape = Media.images.shapes.monsters[3]
         this.color = Media.colors.yellow
         this.transition = true
-        this.stack = 1
-        
-        this.height = 2
-        this.anchor = {x: 0, y: 1}
+        this.stack = 2
     }
-    update() {
+    onLoop() {
         if(Keyb.isJustDown("W")
         || Keyb.isJustDown("<up>")) {
             this.move({y: -1})
@@ -32,30 +31,30 @@ class Adventurer {
             this.move({x: +1})
         }
     }
-    move(movement = new Object()) {
-        movement.x = movement.x || 0
-        movement.y = movement.y || 0
-        
-        var isInDungeon = this.game.dungeon.rooms.some((room) => {
-            return room.contains({
-                x: this.position.x + movement.x,
-                y: this.position.y + movement.y
-            })
+    onCollide(entity) {
+        if(entity.type == "Monster") {
+            entity.takeDamage(this.strength)
+            this.game.effects.push(new Effect({
+                position: entity.position,
+                game: this.game
+            }))
+        }
+    }
+    onDeath() {
+        var adventurer = new Adventurer({
+            position: {x: 0, y: 0},
+            game: this.game
         })
-        
-        if(!isInDungeon) {
-            movement.x = 0
-            movement.y = 0
-            return
-        }
-        
-        this.position.x += movement.x
-        this.position.y += movement.y
-        
-        if(this.game != undefined
-        && this.game.camera != undefined) {
-            this.game.camera.center(this.position)
-        }
+        this.game.adventurer = adventurer
+        this.game.camera.center(adventurer)
+    }
+    onHasMoved() {
+        this.game.camera.center(this.position)
+        this.game.monsters.forEach((monster) => {
+            if(!!monster.takeAction) {
+                monster.takeAction()
+            }
+        })
     }
 }
 
