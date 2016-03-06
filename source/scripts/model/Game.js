@@ -1,15 +1,17 @@
 var Camera = require("./Camera.js")
 var Monster = require("./Monster.js")
 var Adventurer = require("./Adventurer.js")
-var Dungeon = require("./Dungeon.js")
+
+var PlaygroundDungeon = require("./Dungeon.js").PlaygroundDungeon
+var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
 
 class Game {
     constructor() {
         this.adventurer = new Adventurer({
-            position: {x: 2, y: 2},
+            position: {x: 0, y: 0},
             game: this
         })
-        this.dungeon = new Dungeon({
+        this.dungeon = new StupidRandomDungeon({
             game: this
         })
         this.camera = new Camera({
