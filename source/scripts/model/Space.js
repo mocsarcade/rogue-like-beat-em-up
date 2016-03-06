@@ -1,9 +1,10 @@
-class Space {
-    constructor(protoroom = new Object()) {
-        this.position = protoroom.position || {x: 0, y: 0}
-        this.width = protoroom.width || 1
-        this.height = protoroom.height || 1
-        this.color = protoroom.color || "hotpink"
+var Entity = require("./Entity.js")
+
+class Space extends Entity {
+    constructor(space) {
+        super(space)
+        
+        this.color = space.color || "#444"
     }
     contains(position) {
         return position.x >= this.position.x

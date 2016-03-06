@@ -1,13 +1,9 @@
 var Media = require("../Media.js")
-var Geometry = require("./Geometry.js")
-var ShortID = require("shortid")
+var Entity = require("./Entity.js")
 
-class Effect {
-    constructor(protoeffect = new Object()) {
-        this.position = new Geometry.Point(protoeffect.position)
-        this.game = protoeffect.game || undefined
-        
-        this.id = ShortID.generate()
+class Effect extends Entity {
+    constructor(effect) {
+        super(effect)
         
         this.height = 2
         this.anchor = {x: 0, y: 1}
@@ -18,7 +14,7 @@ class Effect {
         
         this.time = 0.1
     }
-    update(delta) {
+    onLoop(delta) {
         this.time -= delta
         if(this.time <= 0) {
             var index = this.game.effects.indexOf(this)

@@ -1,26 +1,31 @@
 var Media = require("../Media.js")
+var Effect = require("./Effect.js")
+var Creature = require("./Creature.js")
 
-class Monster {
-    constructor(protomonster = new Object()) {
-        this.position = protomonster.position || {x: 0, y: 0}
-        this.game = protomonster.game || undefined
-        
-        this.anchor = {x: 0, y: 1}
-        this.height = 2
+class Monster extends Creature {
+    constructor(monster) {
+        super(monster)
         
         this.shape = Media.images.shapes.monsters[127]
         this.color = Media.colors.red
         this.transition = true
         this.stack = 1
-        
-        this.life = 3
     }
-    takeDamage(damage = 0) {
-        this.life -= damage
-        if(this.life <= 0) {
-            var index = this.game.monsters.indexOf(this)
-            this.game.monsters.splice(index, 1)
+    takeAction() {
+        this.move({x: -1}) // dumb behavior
+    }
+    onCollide(entity) {
+        if(entity.type == "Adventurer") {
+            this.game.adventurer.takeDamage(this.strength)
+            this.game.effects.push(new Effect({
+                position: this.game.adventurer.position,
+                game: this.game,
+            }))
         }
+    }
+    onDeath() {
+        var index = this.game.monsters.indexOf(this)
+        this.game.monsters.splice(index, 1)
     }
 }
 

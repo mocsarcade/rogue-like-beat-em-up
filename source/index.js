@@ -53,8 +53,8 @@ class Mount extends React.Component {
             return (
                 <AspectRatioFrame width={320} height={180}>
                     <Camera data={this.state.game.camera}>
-                        {this.state.game.entities.map((entity, index) => {
-                            return <Entity data={entity} key={index}/>
+                        {this.state.game.entities.map((entity) => {
+                            return <Entity data={entity} key={entity.id}/>
                         })}
                     </Camera>
                 </AspectRatioFrame>
@@ -72,6 +72,6 @@ var mount = ReactDOM.render(<Mount/>, document.getElementById("mount"))
 //////////////////
 
 var loop = new Afloop(function(delta) {
-    state.game.update(delta)
+    state.game.onLoop(delta)
     mount.setState(state)
 })

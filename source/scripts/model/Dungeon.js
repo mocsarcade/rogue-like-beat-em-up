@@ -5,43 +5,35 @@ class Dungeon {
         this.spaces = new Array()
         this.spaces.push(new Space({
             position: {x: 0, y: 0},
-            width: 7, height: 7,
-            color: "#999"
+            width: 7, height: 7
         }))
         this.spaces.push(new Space({
             position: {x: 7, y: 2},
-            width: 5, height: 5,
-            color: "#888"
+            width: 5, height: 5
         }))
         this.spaces.push(new Space({
             position: {x: 12, y: 0},
-            width: 3, height: 5,
-            color: "#777"
+            width: 3, height: 5
         }))
         this.spaces.push(new Space({
             position: {x: 10, y: -7},
-            width: 7, height: 7,
-            color: "#666"
+            width: 7, height: 7
         }))
         this.spaces.push(new Space({
             position: {x: 7, y: -7},
-            width: 3, height: 3,
-            color: "#888"
+            width: 3, height: 3
         }))
         this.spaces.push(new Space({
             position: {x: 2, y: -6},
-            width: 5, height: 5,
-            color: "#777"
+            width: 5, height: 5
         }))
         this.spaces.push(new Space({
             position: {x: -3, y: -3},
-            width: 5, height: 3,
-            color: "#555"
+            width: 5, height: 3
         }))
         this.spaces.push(new Space({
             position: {x: 5, y: 7},
-            width: 3, height: 3,
-            color: "#777"
+            width: 3, height: 3
         }))
     }
 }

@@ -1,23 +1,19 @@
 var Keyb = require("keyb")
 var Media = require("../Media.js")
 var Effect = require("./Effect.js")
+var Creature = require("./Creature.js")
 
-class Adventurer {
-    constructor(protoadventurer = new Object()) {
-        this.position = protoadventurer.position || {x: 0, y: 0}
-        this.game = protoadventurer.game || undefined
-        
-        this.anchor = {x: 0, y: 1}
-        this.height = 2
+class Adventurer extends Creature {
+    constructor(adventurer = new Object()) {
+        adventurer.health = adventurer.health || 3
+        super(adventurer)
         
         this.shape = Media.images.shapes.monsters[3]
         this.color = Media.colors.yellow
         this.transition = true
         this.stack = 2
-        
-        this.damage = 1
     }
-    update() {
+    onLoop() {
         if(Keyb.isJustDown("W")
         || Keyb.isJustDown("<up>")) {
             this.move({y: -1})
@@ -35,55 +31,30 @@ class Adventurer {
             this.move({x: +1})
         }
     }
-    move(movement = new Object()) {
-        movement.x = movement.x || 0
-        movement.y = movement.y || 0
-        
-        // Handle collision between the adventurer
-        // and the walls of the dungeon.
-        
-        var isOnSpace = this.game.dungeon.spaces.some((room) => {
-            return room.contains({
-                x: this.position.x + movement.x,
-                y: this.position.y + movement.y
-            })
-        })
-        
-        if(!isOnSpace) {
-            movement.x = 0
-            movement.y = 0
-        }
-        
-        // Handle collision between the adventurer
-        // and the monsters in the dungeon.
-        
-        var monster = this.game.monsters.find((monster) => {
-            if(this.position.x + movement.x == monster.position.x
-            && this.position.y + movement.y == monster.position.y) {
-                return true
-            }
-        })
-        
-        if(!!monster) {
-            movement.x = 0
-            movement.y = 0
-            
-            monster.takeDamage(this.damage)
+    onCollide(entity) {
+        if(entity.type == "Monster") {
+            entity.takeDamage(this.strength)
             this.game.effects.push(new Effect({
-                position: monster.position,
-                game: this.game,
+                position: entity.position,
+                game: this.game
             }))
         }
-        
-        // Move the adventurer.
-        
-        this.position.x += movement.x
-        this.position.y += movement.y
-        
-        if(this.game != undefined
-        && this.game.camera != undefined) {
-            this.game.camera.center(this.position)
-        }
+    }
+    onDeath() {
+        var adventurer = new Adventurer({
+            position: {x: 0, y: 0},
+            game: this.game
+        })
+        this.game.adventurer = adventurer
+        this.game.camera.center(adventurer)
+    }
+    onHasMoved() {
+        this.game.camera.center(this.position)
+        this.game.monsters.forEach((monster) => {
+            if(!!monster.takeAction) {
+                monster.takeAction()
+            }
+        })
     }
 }
 
