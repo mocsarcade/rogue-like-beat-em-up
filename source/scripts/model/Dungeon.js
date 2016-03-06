@@ -36,6 +36,11 @@ class Dungeon {
             width: 3, height: 3
         }))
     }
+    canMove(position) {
+        return this.spaces.some((space) => {
+            return space.contains(position)
+        })
+    }
 }
 
 module.exports = Dungeon

@@ -12,6 +12,8 @@ class Adventurer extends Creature {
         this.color = Media.colors.yellow
         this.transition = true
         this.stack = 2
+        
+        this.type = "Adventurer"
     }
     onLoop() {
         if(Keyb.isJustDown("W")
@@ -30,6 +32,9 @@ class Adventurer extends Creature {
         || Keyb.isJustDown("<right>")) {
             this.move({x: +1})
         }
+        if(Keyb.isJustDown("<space>")) {
+            this.move()
+        }
     }
     onCollide(entity) {
         if(entity.type == "Monster") {
@@ -46,7 +51,7 @@ class Adventurer extends Creature {
             game: this.game
         })
         this.game.adventurer = adventurer
-        this.game.camera.center(adventurer)
+        this.game.camera.center(adventurer.position)
     }
     onHasMoved() {
         this.game.camera.center(this.position)
