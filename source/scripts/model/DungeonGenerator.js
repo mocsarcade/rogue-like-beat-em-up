@@ -40,7 +40,8 @@ class DungeonGenerator {
     getRandomDimensions() {
         return {
             width: Math.floor(this.getRandom(this.minimumSpace.width, this.maximumSpace.width)),
-            height: Math.floor(this.getRandom(this.minimumSpace.height, this.maximumSpace.height))}
+            height: Math.floor(this.getRandom(this.minimumSpace.height, this.maximumSpace.height))
+        }
     }
 
     getRandom(minimum, maximum) {
