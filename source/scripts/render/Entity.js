@@ -43,7 +43,7 @@ class Entity extends React.Component {
                 ].join("") || null,
                 transformOrigin: !!this.props.data.rotation || !!this.props.data.skew || !!this.props.data.direction ? "center" : null,
                 // Miscellaneous
-                zIndex: this.props.data.stack,
+                zIndex: (this.props.data.position && this.props.data.position.y || 0) + (this.props.data.stack || 0),
                 opacity: this.props.data.opacity,
                 visibility: this.props.data.isHidden ? "hidden" : null
             },

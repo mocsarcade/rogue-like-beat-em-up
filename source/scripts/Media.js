@@ -1,12 +1,18 @@
 var Media = {
     images: {
         shapes: {
-            entities: {
-                0: require("../images/shapes/entities/0.png"),
-                1: require("../images/shapes/entities/1.png"),
-                2: require("../images/shapes/entities/2.png"),
-                3: require("../images/shapes/entities/3.png"),
-            }
+            monsters: {
+                0: require("../images/shapes/monsters/0.png"),
+                1: require("../images/shapes/monsters/1.png"),
+                2: require("../images/shapes/monsters/2.png"),
+                3: require("../images/shapes/monsters/3.png"),
+                127: require("../images/shapes/monsters/127.png"),
+            },
+            effects: {
+                general: {
+                    0: require("../images/shapes/effects/general/0.png"),
+                },
+            },
         },
         textures: {
             null: require("../images/textures/null.png"),
@@ -21,7 +27,8 @@ var Media = {
         },
     },
     colors: {
-        yellow: "#DEB74A"
+        yellow: "#DEB74A",
+        red: "#D34328",
     },
 }
 

@@ -1,4 +1,5 @@
 var Camera = require("./Camera.js")
+var Monster = require("./Monster.js")
 var Adventurer = require("./Adventurer.js")
 var Dungeon = require("./Dungeon.js")
 
@@ -17,6 +18,14 @@ class Game {
             zoom: 0.75
         })
         
+        this.monsters = new Array()
+        this.monsters.push(new Monster({
+            position: {x: 5, y: 5},
+            game: this
+        }))
+        
+        this.effects = new Array()
+        
         this.camera.center(this.adventurer.position)
     }
     get entities() {
@@ -26,11 +35,16 @@ class Game {
         return (
             new Array()
                 .concat(this.adventurer)
-                .concat(this.dungeon.rooms)
+                .concat(this.dungeon.spaces)
+                .concat(this.monsters)
+                .concat(this.effects)
         )
     }
-    update() {
-        this.adventurer.update()
+    update(delta) {
+        this.adventurer.update(delta)
+        this.effects.forEach((effect) => {
+            effect.update(delta)
+        })
     }
 }
 

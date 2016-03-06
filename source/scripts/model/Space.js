@@ -1,4 +1,4 @@
-class Room {
+class Space {
     constructor(protoroom = new Object()) {
         this.position = protoroom.position || {x: 0, y: 0}
         this.width = protoroom.width || 1
@@ -13,4 +13,4 @@ class Room {
     }
 }
 
-module.exports = Room
+module.exports = Space
