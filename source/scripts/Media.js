@@ -7,6 +7,10 @@ var Media = {
                 2: require("../images/shapes/monsters/2.png"),
                 3: require("../images/shapes/monsters/3.png"),
                 127: require("../images/shapes/monsters/127.png"),
+                bats: {
+                    0: require("../images/shapes/monsters/82.png"),
+                    1: require("../images/shapes/monsters/101.png"),
+                },
             },
             effects: {
                 general: {
