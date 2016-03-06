@@ -2,6 +2,7 @@ var Camera = require("./Camera.js")
 var Monster = require("./Monster.js")
 var Adventurer = require("./Adventurer.js")
 var Dungeon = require("./Dungeon.js")
+var Generator = require("./DungeonGenerator.js")
 
 class Game {
     constructor() {
@@ -28,7 +29,12 @@ class Game {
             }),
         ]
         this.effects = new Array()
-        
+
+        if (window.location.href.indexOf("generate") != -1) {
+            var generator = new Generator()
+            this.dungeon.spaces = generator.generate(10)
+        }
+
         this.camera.center(this.adventurer.position)
     }
     get entities() {
