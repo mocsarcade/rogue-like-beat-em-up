@@ -58,4 +58,9 @@ export class StupidRandomDungeon {
             }))
         }
     }
+    canMove(position) {
+        return this.spaces.some((space) => {
+            return space.contains(position)
+        })
+    }
 }

@@ -6,3 +6,19 @@ module.exports.queryURL = function(name) {
     var results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(location.search)
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "))
 }
+
+module.exports.Point = class Point {
+    constructor(point = {}) {
+        this.x = point.x || 0
+        this.y = point.y || 0
+    }
+    toString() {
+        return this.x + "x" + this.y
+    }
+    translate(that = {}) {
+        return new Point({
+            x: this.x + (that.x || 0),
+            y: this.y + (that.y || 0)
+        })
+    }
+}
