@@ -7,7 +7,6 @@ module.exports.queryURL = function(name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "))
 }
 
-
 module.exports.Point = class Point {
     constructor(point = {}) {
         this.x = point.x || 0
@@ -16,7 +15,7 @@ module.exports.Point = class Point {
     toString() {
         return this.x + "x" + this.y
     }
-    toPoint(that = {}) {
+    translate(that = {}) {
         return new Point({
             x: this.x + (that.x || 0),
             y: this.y + (that.y || 0)
