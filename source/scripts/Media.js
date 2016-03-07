@@ -13,9 +13,15 @@ var Media = {
                 },
             },
             effects: {
-                general: {
-                    0: require("../images/shapes/effects/general/0.png"),
-                },
+                general: [
+                    require("../images/shapes/effects/general/0.png"),
+                ],
+            },
+            terrain: {
+                stairs: [
+                    require("../images/shapes/terrain/tiles/30.png"),
+                    require("../images/shapes/terrain/tiles/31.png"),
+                ],
             },
         },
         textures: {
@@ -32,7 +38,7 @@ var Media = {
     },
     colors: {
         yellow: "#DEB74A",
-        red: "#D34328",
+        red: "#BF6960",
     },
 }
 

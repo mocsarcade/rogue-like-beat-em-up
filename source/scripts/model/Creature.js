@@ -36,7 +36,7 @@ class Creature extends Entity {
         // Handle collision between this monster
         // and the other monsters in the dungeon.
         
-        var monster = this.game.monsters.find((monster) => {
+        var monster = this.game.dungeon.monsters.find((monster) => {
             if(monster != this) {
                 if(monster.position.x == this.position.x + movement.x
                 && monster.position.y == this.position.y + movement.y) {

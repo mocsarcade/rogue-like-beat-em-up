@@ -1,78 +1,20 @@
 var Camera = require("./Camera.js")
-var Monster = require("./Monster.js")
 var Adventurer = require("./Adventurer.js")
 
 var PlaygroundDungeon = require("./Dungeon.js").PlaygroundDungeon
 var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
 
 class Game {
-    constructor() {
-        this.adventurer = new Adventurer({
-            position: {x: 0, y: 0},
-            game: this
-        })
-        this.dungeon = new StupidRandomDungeon({
-            game: this
-        })
+    constructor(game) {
+        this.dungeons = game.dungeons
+        
         this.camera = new Camera({
             position: {x: 0, y: 0},
             width: 16, height: 9,
             zoom: 0.75
         })
-        this.monsters = [
-            new Monster({
-                game: this,
-                position: {x: 5, y: 5},
-                color: "#00C",
-                action: function() {
-                    if(this.getReady()) {
-                        var movement = this.getRandomMovement([
-                            {y: -1}, {y: +1}, {x: -1}, {x: +1}
-                        ])
-                        
-                        // move.
-                        this.move(movement)
-                    }
-                },
-            }),
-            new Monster({
-                game: this,
-                position: {x: 3, y: 3},
-                color: "#0C0",
-                action: function() {
-                    if(this.getReady()) {
-                        var movement = this.getRandomMovement([
-                            {x: -1, y: -1},
-                            {x: +1, y: +1},
-                            {x: -1, y: -1},
-                            {x: +1, y: +1},
-                        ])
-                        
-                        // move.
-                        this.move(movement)
-                    }
-                },
-            }),
-            new Monster({
-                game: this,
-                position: {x: 8, y: 3},
-                color: "#C33",
-                action: function() {
-                    var movement = this.getRandomMovement([
-                        {y: -1},
-                        {y: +1},
-                        {x: -1},
-                        {x: +1}
-                    ])
-                    
-                    // move.
-                    this.move(movement)
-                },
-            }),
-        ]
-        this.effects = new Array()
         
-        this.camera.center(this.adventurer.position)
+        this.restart()
     }
     get entities() {
         // Returns a big list of every
@@ -82,7 +24,8 @@ class Game {
             new Array()
                 .concat(this.adventurer)
                 .concat(this.dungeon.spaces)
-                .concat(this.monsters)
+                .concat(this.dungeon.monsters)
+                .concat(this.dungeon.stairs)
                 .concat(this.effects)
         )
     }
@@ -91,6 +34,39 @@ class Game {
         this.effects.forEach((effect) => {
             effect.onLoop(delta)
         })
+    }
+    restart() {
+        this.adventurer = new Adventurer({
+            position: {x: 0, y: 0},
+            health: 1,
+            game: this
+        })
+        this.start()
+    }
+    start() {
+        if(this.adventurer.stage < this.dungeons.length) {
+            this.adventurer.position.x = 0
+            this.adventurer.position.y = 0
+            var dungeon = this.dungeons[this.adventurer.stage]
+            this.dungeon = new StupidRandomDungeon({
+                colors: dungeon.colors,
+                size: dungeon.size,
+                game: this
+            })
+            
+            this.effects = new Array()
+            
+            this.camera.center(this.adventurer.position)
+            this.camera.key += 1
+        } else {
+            alert("Congratulations! You've won!!")
+        }
+    }
+    advance() {
+        this.adventurer.stage += 1
+        this.adventurer.key += 1
+        
+        this.start()
     }
 }
 

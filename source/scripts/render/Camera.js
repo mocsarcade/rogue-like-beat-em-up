@@ -5,7 +5,7 @@ var UNIT = 20
 class Camera extends React.Component {
     render() {
         return (
-            <div className="camera" style={this.renderStyle()}>
+            <div className="camera" key={this.props.data.key} style={this.renderStyle()}>
                 {this.props.children}
             </div>
         )
