@@ -7,9 +7,10 @@ var NULL_TEXTURE = Media.images.textures.null
 class Entity extends React.Component {
     render() {
         return React.createElement("div", {
-            // Idthis.props.data
+            // Identity
+            className: "entity",
             id: this.props.data.id,
-            key: this.props.data.id,
+            key: this.props.data.key,
             style: {
                 // Size
                 width: Math.ceil(this.props.data.width || 1) * UNIT + "px",
@@ -26,7 +27,7 @@ class Entity extends React.Component {
                 backgroundPosition: !!this.props.data.texture ? "bottom" : null,
                 backgroundColor: !!this.props.data.color ? this.props.data.color : null,
                 backgroundImage: !this.props.data.color ? "url(" + NULL_TEXTURE + ")" : null,
-                WebkitMask: !!this.props.data.shape ? "url(" + this.props.data.shape + ")" : null,
+                WebkitMaskImage: !!this.props.data.shape ? "url(" + this.props.data.shape + ")" : null,
                 WebkitMaskRepeat: !!this.props.data.shape ? "no-repeat" : null,
                 WebkitMaskPosition: !!this.props.data.shape ? "bottom" : null,
                 WebkitMaskSize: !!this.props.data.shape ? "contain" : null,

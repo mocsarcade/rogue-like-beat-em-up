@@ -1,41 +1,22 @@
 var Camera = require("./Camera.js")
-var Monster = require("./Monster.js")
 var Adventurer = require("./Adventurer.js")
-var Dungeon = require("./Dungeon.js")
+
+var PlaygroundDungeon = require("./Dungeon.js").PlaygroundDungeon
+var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
+
 var Generator = require("./DungeonGenerator.js")
 
-class Game {
-    constructor() {
-        this.adventurer = new Adventurer({
-            position: {x: 2, y: 2},
-            game: this
-        })
-        this.dungeon = new Dungeon({
-            game: this
-        })
+export class Game {
+    constructor(game) {
+        this.dungeons = game.dungeons
+
         this.camera = new Camera({
             position: {x: 0, y: 0},
             width: 16, height: 9,
             zoom: 0.75
         })
-        this.monsters = [
-            new Monster({
-                position: {x: 5, y: 5},
-                game: this
-            }),
-            new Monster({
-                position: {x: 8, y: 3},
-                game: this
-            }),
-        ]
-        this.effects = new Array()
 
-        if (window.location.href.indexOf("generate") != -1) {
-            var generator = new Generator()
-            this.dungeon.spaces = generator.generate(10)
-        }
-
-        this.camera.center(this.adventurer.position)
+        this.restart()
     }
     get entities() {
         // Returns a big list of every
@@ -45,7 +26,8 @@ class Game {
             new Array()
                 .concat(this.adventurer)
                 .concat(this.dungeon.spaces)
-                .concat(this.monsters)
+                .concat(this.dungeon.monsters)
+                .concat(this.dungeon.stairs)
                 .concat(this.effects)
         )
     }
@@ -55,6 +37,37 @@ class Game {
             effect.onLoop(delta)
         })
     }
-}
+    restart() {
+        this.adventurer = new Adventurer({
+            position: {x: 0, y: 0},
+            health: 1,
+            game: this
+        })
+        this.start()
+    }
+    start() {
+        if(this.adventurer.stage < this.dungeons.length) {
+            this.adventurer.position.x = 0
+            this.adventurer.position.y = 0
+            var dungeon = this.dungeons[this.adventurer.stage]
+            this.dungeon = new StupidRandomDungeon({
+                colors: dungeon.colors,
+                size: dungeon.size,
+                game: this
+            })
 
-module.exports = Game
+            this.effects = new Array()
+
+            this.camera.center(this.adventurer.position)
+            this.camera.key += 1
+        } else {
+            alert("Congratulations! You've won!!")
+        }
+    }
+    advance() {
+        this.adventurer.stage += 1
+        this.adventurer.key += 1
+
+        this.start()
+    }
+}

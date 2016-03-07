@@ -12,6 +12,9 @@ class Adventurer extends Creature {
         this.color = Media.colors.yellow
         this.transition = true
         this.stack = 2
+        
+        this.type = "Adventurer"
+        this.stage = 0
     }
     onLoop() {
         if(Keyb.isJustDown("W")
@@ -30,6 +33,9 @@ class Adventurer extends Creature {
         || Keyb.isJustDown("<right>")) {
             this.move({x: +1})
         }
+        if(Keyb.isJustDown("<space>")) {
+            this.move()
+        }
     }
     onCollide(entity) {
         if(entity.type == "Monster") {
@@ -41,16 +47,16 @@ class Adventurer extends Creature {
         }
     }
     onDeath() {
-        var adventurer = new Adventurer({
-            position: {x: 0, y: 0},
-            game: this.game
-        })
-        this.game.adventurer = adventurer
-        this.game.camera.center(adventurer)
+        this.game.restart()
     }
     onHasMoved() {
+        if(this.position.x == this.game.dungeon.stairs.position.x
+        && this.position.y == this.game.dungeon.stairs.position.y) {
+            this.game.advance()
+        }
+        
         this.game.camera.center(this.position)
-        this.game.monsters.forEach((monster) => {
+        this.game.dungeon.monsters.forEach((monster) => {
             if(!!monster.takeAction) {
                 monster.takeAction()
             }

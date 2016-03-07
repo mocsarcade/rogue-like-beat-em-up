@@ -1,7 +1,7 @@
 var Dungeon = require("./Dungeon.js")
 var Space = require("./Space.js")
 
-class DungeonGenerator {
+exports class DungeonGenerator {
     constructor() {
         this.maximumSpaces = 100
         this.minimumSpace = {
@@ -48,5 +48,3 @@ class DungeonGenerator {
         return Math.random() * (maximum - minimum) + minimum
     }
 }
-
-module.exports = DungeonGenerator

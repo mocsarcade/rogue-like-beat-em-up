@@ -7,11 +7,21 @@ var Media = {
                 2: require("../images/shapes/monsters/2.png"),
                 3: require("../images/shapes/monsters/3.png"),
                 127: require("../images/shapes/monsters/127.png"),
+                bats: {
+                    0: require("../images/shapes/monsters/82.png"),
+                    1: require("../images/shapes/monsters/101.png"),
+                },
             },
             effects: {
-                general: {
-                    0: require("../images/shapes/effects/general/0.png"),
-                },
+                general: [
+                    require("../images/shapes/effects/general/0.png"),
+                ],
+            },
+            terrain: {
+                stairs: [
+                    require("../images/shapes/terrain/tiles/30.png"),
+                    require("../images/shapes/terrain/tiles/31.png"),
+                ],
             },
         },
         textures: {
@@ -28,7 +38,7 @@ var Media = {
     },
     colors: {
         yellow: "#DEB74A",
-        red: "#D34328",
+        red: "#BF6960",
     },
 }
 
