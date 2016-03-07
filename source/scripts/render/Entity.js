@@ -7,9 +7,10 @@ var NULL_TEXTURE = Media.images.textures.null
 class Entity extends React.Component {
     render() {
         return React.createElement("div", {
-            // Idthis.props.data
+            // Identity
+            className: "entity",
             id: this.props.data.id,
-            key: this.props.data.id,
+            key: this.props.data.key,
             style: {
                 // Size
                 width: Math.ceil(this.props.data.width || 1) * UNIT + "px",

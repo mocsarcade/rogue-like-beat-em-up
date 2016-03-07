@@ -4,6 +4,8 @@ class Camera {
         this.height = protocamera.height || 9
         this.position = protocamera.position || {x: 0, y: 0}
         this.zoom = protocamera.zoom || 1
+        
+        this.key = 0
     }
     // Fixes the camera to
     // center on a position.
