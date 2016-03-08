@@ -37,8 +37,14 @@ var Media = {
         },
     },
     colors: {
-        yellow: "#DEB74A",
-        red: "#BF6960",
+        yellow: "#F9D300",
+        white: "#EEEEEE",
+        green: "#0ECB3E",
+        blue: "#00A7CB",
+        red: "#CB0000",
+        brown: "#8D4633",
+        gray: "#666666",
+        black: "#000000",
     },
 }
 

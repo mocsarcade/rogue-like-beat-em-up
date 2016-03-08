@@ -50,7 +50,7 @@ export class Monster extends Creature {
 
 export class Bat extends Monster {
     get color() {
-        return "#33C"
+        return Media.colors.blue
     }
     get shape() {
         if(!!this.isReady) {
@@ -70,7 +70,7 @@ export class Bat extends Monster {
 
 export class VampireBat extends Monster {
     get color() {
-        return "#C33"
+        return Media.colors.red
     }
     get shape() {
         return Media.images.shapes.monsters.bats[0]
@@ -84,7 +84,7 @@ export class VampireBat extends Monster {
 
 export class VampireBatKing extends Monster {
     get color() {
-        return "#3C3"
+        return Media.colors.green
     }
     get shape() {
         return Media.images.shapes.monsters.bats[0]
