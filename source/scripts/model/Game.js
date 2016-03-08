@@ -6,14 +6,14 @@ var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
 
 var Generator = require("./DungeonGenerator.js")
 
-export class Game {
+class Game {
     constructor(game) {
         this.dungeons = game.dungeons
 
         this.camera = new Camera({
             position: {x: 0, y: 0},
             width: 16, height: 9,
-            zoom: 0.75
+            zoom: 0.05//0.75
         })
 
         this.restart()
@@ -56,6 +56,19 @@ export class Game {
                 game: this
             })
 
+            var gen = new Generator()
+
+            this.dungeon.spaces = gen.generate(25)
+
+            //this.dungeon.spaces.forEach(s => console.log(s.position))
+
+            var pos = this.dungeon.spaces[0].position
+            pos.x += this.dungeon.spaces[0].width / 2
+            pos.y += this.dungeon.spaces[0].height / 2
+
+            this.adventurer.position.x = pos.x
+            this.adventurer.position.y = pos.y
+
             this.effects = new Array()
 
             this.camera.center(this.adventurer.position)
@@ -71,3 +84,5 @@ export class Game {
         this.start()
     }
 }
+
+module.exports = Game
