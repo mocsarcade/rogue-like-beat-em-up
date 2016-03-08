@@ -1,25 +1,73 @@
-var Dungeon = require("./Dungeon.js")
 var Space = require("./Space.js")
 
 class Agent {
     constructor(space) {
         this.space = space
         this.velocity = {x: 0, y: 0}
+        this.merged = false
     }
 
     centroid(space) {
         return {
-            x: this.space.position.x + this.space.width / 2,
-            y: this.space.position.y + this.space.height / 2
+            x: space.position.x + space.width / 2,
+            y: space.position.y + space.height / 2
         }
     }
 
     distance(other) {
         var center1 = this.centroid(this.space)
-        var center2 = this.centroid(other)
+        var center2 = this.centroid(other.space)
 
         return Math.pow(center1.x - center2.x, 2) +
             Math.pow(center1.y - center2.y, 2)
+    }
+
+    intersects(agent) {
+        var me = {
+            x: this.space.position.x,
+            y: this.space.position.y,
+            width: this.space.width,
+            height: this.space.height
+        }
+
+        var other = {
+            x: agent.space.position.x,
+            y: agent.space.position.y,
+            width: agent.space.width,
+            height: agent.space.height
+        }
+
+        return (other.x <= me.x + me.width &&
+            me.x <= other.x + other.width &&
+            other.y <= me.y + me.height &&
+            me.y <= other.y + other.height);
+	}
+    merge(other) {
+        var x1 = other.space.position.x
+        var y1 = other.space.position.y
+        var x2 = x1 + other.space.width
+        var y2 = y1 + other.space.height;
+
+        if (this.space.position.x > x1) {
+            x1 = this.space.position.x
+        }
+
+        if (this.space.position.y > y1) {
+            y1 = this.space.position.y
+        }
+
+        if (this.space.position.x + this.space.width < x2) {
+            x2 = this.space.position.x + this.space.width
+        }
+
+        if (this.space.position.y + this.space.height < y2) {
+            y2 = this.space.position.y + this.space.height
+        }
+
+        this.space.position.x = x1
+        this.space.position.y = y1
+        this.space.width = x2 - x1
+        this.space.height = y2 - y1
     }
 }
 
@@ -27,8 +75,8 @@ class DungeonGenerator {
     constructor() {
         this.maximumSpaces = 250
         this.minimumSpace = {
-            width: 2,
-            height: 2
+            width: 3,
+            height: 3
         }
         this.maximumSpace = {
             width: 20,
@@ -49,44 +97,37 @@ class DungeonGenerator {
             })))
         }
 
-        this.separate()
+        this.flock()
         this.cull()
+        this.trim()
+        this.buildGraph()
+        this.linkSpaces()
 
         return this.agents.map(a => a.space)
     }
 
-    separate() {
-        for (var i = 0; i < 15; ++i) {
-            this.agents.forEach(a => this.separationStep(a))
+    flock() {
+        for (var i = 0; i < 25; ++i) {
+            this.agents.forEach(a => this.flockStep(a))
         }
     }
 
-    separationStep(space) {
-        var {alignment, cohesion, separation} = this.computeFlock(space)
+    flockStep(agent) {
+        var {alignment, cohesion, separation} = this.computeFlock(agent)
 
         var alignmentWeight = 1
         var cohesionWeight = 0.95
         var separationWeight = 1
 
-        space.velocity.x += alignmentWeight * alignment.x +
+        agent.velocity.x += alignmentWeight * alignment.x +
             cohesionWeight * cohesion.x +
             separationWeight * separation.x
-        space.velocity.y += alignmentWeight * alignment.y +
+        agent.velocity.y += alignmentWeight * alignment.y +
             cohesionWeight * cohesion.y +
             separationWeight * separation.y
 
-        if (this.space === undefined) {
-            this.space = space
-        }
-
-        if (space == this.space) {
-            //console.log(space.velocity)
-        }
-
-        space.space.position.x += space.velocity.x
-        space.space.position.y += space.velocity.y
-
-        //console.log(space.velocity)
+        agent.space.position.x += agent.velocity.x
+        agent.space.position.y += agent.velocity.y
     }
 
     normalize(v) {
@@ -98,26 +139,25 @@ class DungeonGenerator {
         return v
     }
 
-    computeFlock(space) {
+    computeFlock(agent) {
         var alignment = {x: 0, y: 0}
         var cohesion = {x: 0, y: 0}
         var separation = {x: 0, y: 0}
 
         var neighborCount = 0
 
-        this.agents.forEach(agent => {
-            //console.log(space.distance(agent))
-            if (agent != space && space.distance(agent) < 25) {
+        this.agents.forEach(other => {
+            if (other != agent && agent.distance(agent) < 400) {
                 ++neighborCount
 
-                alignment.x += agent.velocity.x
-                alignment.y += agent.velocity.y
+                alignment.x += other.velocity.x
+                alignment.y += other.velocity.y
 
-                cohesion.x += agent.space.position.x
-                cohesion.y += agent.space.position.y
+                cohesion.x += other.space.position.x
+                cohesion.y += other.space.position.y
 
-                separation.x += agent.space.position.x - space.space.position.x
-                separation.y += agent.space.position.y - space.space.position.y
+                separation.x += other.space.position.x - agent.space.position.x
+                separation.y += other.space.position.y - agent.space.position.y
             }
         })
 
@@ -130,8 +170,8 @@ class DungeonGenerator {
 
             cohesion.x /= neighborCount
             cohesion.y /= neighborCount
-            cohesion.x -= space.space.position.x
-            cohesion.y -= space.space.position.y
+            cohesion.x -= agent.space.position.x
+            cohesion.y -= agent.space.position.y
             cohesion = this.normalize(cohesion)
 
             separation.x /= -neighborCount
@@ -146,13 +186,73 @@ class DungeonGenerator {
     }
 
     cull() {
-        var AREA_MIN = 8
-        var AREA_MAX = 30
+        var AREA_MIN = 12
+        var AREA_MAX = 50
 
         this.agents = this.agents.filter(s => {
             var area = s.space.width * s.space.height
             return area >= AREA_MIN && area <= AREA_MAX
         })
+    }
+
+    trim() {
+        this.agents.forEach(agent => {
+            this.agents.forEach(other => {
+                if (!agent.merged && !other.merged && agent.intersects(other)) {
+                    agent.merge(other)
+                    other.merged = true
+                }
+            })
+        })
+
+        this.agents.filter(agent => agent.merged)
+    }
+
+    // builds a relative neighbor graph
+    buildGraph() {
+        this.adjacencyMatrix = new Array()
+        this.adjacencyMatrix.fill(new Array(), 0, this.agents.length)
+        this.adjacencyMatrix.forEach(a => a.fill(false, 0, this.agents.length))
+
+        for ( var i = 0; i < this.agents.length; ++i) {
+            for (var j = 0; j < this.agents.length; ++j) {
+                var addEdge = true
+
+                var agentI = this.agents[i]
+                var agentJ = this.agents[j]
+
+                var dist = agentI.distance(agentJ)
+
+                if (!agentI.intersects(agentJ)) {
+                    for (var z = 0; z < this.agents.length; ++z) {
+                        var agentZ = this.agents[z]
+                        if (agentI.distance(agentZ) < dist &&
+                            agentJ.distance(agentZ) < dist) {
+                                addEdge = false
+                                break;
+                        }
+                    }
+
+                    if (addEdge) {
+                        this.adjacencyMatrix[i, j] = true
+                    }
+                }
+            }
+        }
+    }
+
+    linkSpaces() {
+        for ( var i = 0; i < this.agents.length; ++i) {
+            for ( var j = 0; j < this.agents.length; ++j) {
+                if (this.adjacencyMatrix[i, j]) {
+                    this.buildLink(this.agents[i].space, this.agents[j].space)
+                }
+            }
+        }
+    }
+
+    buildLink (space1, space2) {
+
     }
 
     getRandomPointInCircle(radius) {

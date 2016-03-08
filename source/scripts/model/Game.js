@@ -13,7 +13,7 @@ class Game {
         this.camera = new Camera({
             position: {x: 0, y: 0},
             width: 16, height: 9,
-            zoom: 0.05//0.75
+            zoom: 0.075//0.75
         })
 
         this.restart()
@@ -56,9 +56,9 @@ class Game {
                 game: this
             })
 
-            var gen = new Generator()
+            this.gen = new Generator()
 
-            this.dungeon.spaces = gen.generate(25)
+            this.dungeon.spaces = this.gen.generate(25)
 
             //this.dungeon.spaces.forEach(s => console.log(s.position))
 

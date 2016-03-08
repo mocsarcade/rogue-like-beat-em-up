@@ -6,9 +6,9 @@ export class Monster extends Creature {
     constructor(monster) {
         super(monster)
         this.type = "Monster"
-        
+
         this.transition = true
-        this.stack = 1
+        this.stack = 5
     }
     onCollide(entity) {
         if(entity.type == "Adventurer") {
@@ -33,7 +33,7 @@ export class Monster extends Creature {
                 y: this.position.y + (movement.y || 0)
             })
         })
-        
+
         if(movements.length > 0) {
             return movements[Math.floor(Math.random() * movements.length)]
         } else {
