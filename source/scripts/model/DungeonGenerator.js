@@ -77,7 +77,7 @@ class Agent {
 
 class DungeonGenerator {
     constructor() {
-        this.maximumSpaces = 250
+        this.maximumSpaces = 300
         this.minimumSpace = {
             width: 3,
             height: 3
@@ -119,9 +119,9 @@ class DungeonGenerator {
     flockStep(agent) {
         var {alignment, cohesion, separation} = this.computeFlock(agent)
 
-        var alignmentWeight = 1
+        var alignmentWeight = 2
         var cohesionWeight = 0.95
-        var separationWeight = 1
+        var separationWeight = 1.1
 
         agent.velocity.x += alignmentWeight * alignment.x +
             cohesionWeight * cohesion.x +
@@ -151,7 +151,7 @@ class DungeonGenerator {
         var neighborCount = 0
 
         this.agents.forEach(other => {
-            if (other != agent && agent.distance(agent) < 400) {
+            if (other != agent && agent.distance(agent) < 20) {
                 ++neighborCount
 
                 alignment.x += other.velocity.x
@@ -166,10 +166,8 @@ class DungeonGenerator {
         })
 
         if (neighborCount > 0) {
-            //console.log(alignment)
             alignment.x /= neighborCount
             alignment.y /= neighborCount
-            //console.log(alignment)
             alignment = this.normalize(alignment)
 
             cohesion.x /= neighborCount
@@ -183,15 +181,17 @@ class DungeonGenerator {
             separation = this.normalize(separation)
         }
 
-        //cohesion = {x: 0, y: 0}
-
         return {alignment: alignment, cohesion: cohesion,
             separation: separation}
     }
 
     cull() {
-        var AREA_MIN = 12
-        var AREA_MAX = 50
+        var AREA_MIN = 50
+        var AREA_MAX = 120
+
+        //var meanArea = this.agents.map(
+        //    (agent) => agent.space.width * agent.space.height).reduce(
+        //    (prev, curr) => prev + curr) / this.agents.length
 
         this.agents = this.agents.filter(s => {
             var area = s.space.width * s.space.height
@@ -202,9 +202,13 @@ class DungeonGenerator {
     trim() {
         this.agents.forEach(agent => {
             this.agents.forEach(other => {
-                if (!agent.merged && !other.merged && agent.intersects(other)) {
-                    agent.merge(other)
-                    other.merged = true
+                if (!agent.merged && !other.merged) {
+                    if (agent.space.contains(other.space)) {
+                        other.merged
+                    } else if (agent.intersects(other)) {
+                        agent.merge(other)
+                        other.merged = true
+                    }
                 }
             })
         })
