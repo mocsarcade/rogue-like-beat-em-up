@@ -7,7 +7,11 @@ class Agent {
         this.merged = false
     }
 
-    centroid(space) {
+    centroid(space = null) {
+        if (space == null) {
+            space = this.space
+        }
+
         return {
             x: space.position.x + space.width / 2,
             y: space.position.y + space.height / 2
@@ -101,7 +105,7 @@ class DungeonGenerator {
         this.cull()
         this.trim()
         this.buildGraph()
-        this.linkSpaces()
+        //this.linkSpaces()
 
         return this.agents.map(a => a.space)
     }
@@ -211,8 +215,14 @@ class DungeonGenerator {
     // builds a relative neighbor graph
     buildGraph() {
         this.adjacencyMatrix = new Array()
-        this.adjacencyMatrix.fill(new Array(), 0, this.agents.length)
-        this.adjacencyMatrix.forEach(a => a.fill(false, 0, this.agents.length))
+
+        for (var i = 0; i < this.agents.length; ++i) {
+            this.adjacencyMatrix.push(new Array())
+
+            for (var j = 0; j < this.agents.length; ++j) {
+                this.adjacencyMatrix[i][j] = false
+            }
+        }
 
         for ( var i = 0; i < this.agents.length; ++i) {
             for (var j = 0; j < this.agents.length; ++j) {
@@ -234,7 +244,7 @@ class DungeonGenerator {
                     }
 
                     if (addEdge) {
-                        this.adjacencyMatrix[i, j] = true
+                        this.adjacencyMatrix[i][j] = true
                     }
                 }
             }
@@ -242,16 +252,93 @@ class DungeonGenerator {
     }
 
     linkSpaces() {
-        for ( var i = 0; i < this.agents.length; ++i) {
-            for ( var j = 0; j < this.agents.length; ++j) {
-                if (this.adjacencyMatrix[i, j]) {
-                    this.buildLink(this.agents[i].space, this.agents[j].space)
+        var agentLength = this.agents.length
+
+        for ( var i = 0; i < agentLength; ++i) {
+            for ( var j = 0; j < agentLength; ++j) {
+                if (this.adjacencyMatrix[i][j]) {
+                    this.buildLink(this.agents[i], this.agents[j])
                 }
             }
         }
     }
 
-    buildLink (space1, space2) {
+    buildLink (agent1, agent2) {
+        if (agent1.intersects(agent2)) {
+            return
+        }
+
+        var addLink = (x, y, width, height) => {
+            this.agents.push(new Agent(new Space({
+                position: {x: x, y: y},
+                width: width,
+                height: height,
+                color: "#FFF"
+            })))
+        }
+
+        var space1 = agent1.space
+        var space2 = agent2.space
+
+        // determine relative position
+        var centroid1 = agent1.centroid()
+        var centroid2 = agent2.centroid()
+
+        var offset = 5
+
+        // is reasonably above or below?
+        var isVerticalLeft = space2.position.x + space2.width <=
+            space1.position.x - offset
+        var isVerticalRight = space2.position.x + offset <=
+            space1.position.x + space1.width
+
+        if (isVerticalRight || isVerticalLeft) {
+            var top = space2
+            var bottom = space1
+
+            if (space1.position.y < space2.position.y) {
+                top = space1
+                bottom = space2
+            }
+
+            var x = (space2.position.x + space2.width + space1.position.x) / 2
+            var width = 3
+
+            if (isVerticalRight) {
+                x = (space2.position.x + space1.position.x + space1.width) / 2
+            }
+
+            addLink(x, top.position.y + top.height - 1, width,
+                bottom.position.y - top.position.y + top.height + 1)
+            return
+        }
+
+        var isHorizontalTop = space2.position.y + space2.height <=
+            space1.position.y - offset
+        var isHorizontalBottom = space2.position.y + offset <=
+            space1.position.y + space1.height
+
+        if (isHorizontalTop || isHorizontalBottom) {
+            var left = space2
+            var right = space1
+
+            var y = (space2.position.y + space2.height + space1.position.y) / 2
+            var height = 3 //y - space1.position.y
+
+            if (isHorizontalBottom) {
+                y = (space2.position.y + space1.position.y + space1.height) / 2
+                //height = y - space2.position.y
+            }
+
+            if (space1.position.x < space2.position.x) {
+                left = space1
+                right = space2
+            }
+
+            addLink(left.position.x + left.width - 1, y,
+                right.position.x - left.position.x + left.width + 1, height)
+            return
+        }
 
     }
 

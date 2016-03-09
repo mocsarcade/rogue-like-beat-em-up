@@ -60,6 +60,8 @@ class Game {
 
             this.dungeon.spaces = this.gen.generate(25)
 
+            this.gen.linkSpaces()
+
             //this.dungeon.spaces.forEach(s => console.log(s.position))
 
             var pos = this.dungeon.spaces[0].position
