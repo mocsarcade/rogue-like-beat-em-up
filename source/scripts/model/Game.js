@@ -1,7 +1,7 @@
 var Camera = require("./Camera.js")
 var Adventurer = require("./Adventurer.js")
 
-var PlaygroundDungeon = require("./Dungeon.js").PlaygroundDungeon
+var StaticDungeon = require("./Dungeon.js").StaticDungeon
 var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
 
 class Game {
@@ -48,7 +48,7 @@ class Game {
             this.adventurer.position.x = 0
             this.adventurer.position.y = 0
             var dungeon = this.dungeons[this.adventurer.stage]
-            this.dungeon = new StupidRandomDungeon({
+            this.dungeon = new StaticDungeon({
                 colors: dungeon.colors,
                 size: dungeon.size,
                 game: this

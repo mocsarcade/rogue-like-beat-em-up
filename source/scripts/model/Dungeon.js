@@ -3,6 +3,7 @@ var Space = require("./Space.js")
 var Bat = require("./Monster.js").Bat
 var VampireBat = require("./Monster.js").VampireBat
 var VampireBatKing = require("./Monster.js").VampireBatKing
+var TestMonster = require("./Monster.js").TestMonster
 
 export class Dungeon {
     constructor(dungeon = new Object()) {
@@ -57,19 +58,26 @@ export class StaticDungeon extends Dungeon {
             }),
         ]
         this.monsters = [
-            new Bat({
+            new TestMonster({
                 game: this.game,
                 position: {x: -3, y: -3},
             }),
-            new VampireBat({
-                game: this.game,
-                position: {x: +3, y: -3},
-            }),
-            new VampireBatKing({
+            new TestMonster({
                 game: this.game,
                 position: {x: 0, y: -6},
             }),
+            new TestMonster({
+                game: this.game,
+                position: {x: +6, y: -3},
+            })
         ]
+        
+        this.stairs = {
+            id: "stairs",
+            color: "#222",
+            position: {x: -6, y: -9},
+            shape: Media.images.shapes.terrain.stairs[0],
+        }
     }
 }
 
