@@ -4,11 +4,13 @@ var Bat = require("./Monster.js").Bat
 var VampireBat = require("./Monster.js").VampireBat
 var VampireBatKing = require("./Monster.js").VampireBatKing
 var TestMonster = require("./Monster.js").TestMonster
+var Monster = require("./Monster.js").Monster
+var Monsters = require("./Monster.js").Monsters
 
 export class Dungeon {
     constructor(dungeon = new Object()) {
         this.game = dungeon.game || undefined
-        
+            
         this.size = dungeon.size || 5
         
         this.spaces = new Array()
@@ -29,52 +31,60 @@ export class StaticDungeon extends Dungeon {
             new Space({
                 position: {x: -3, y: -3},
                 width: 7, height: 7,
-                color: "#444",
+                color: "#111",
             }),
             new Space({
                 position: {x: -9, y: -6},
                 width: 6, height: 6,
-                color: "#555",
+                color: "#111",
             }),
             new Space({
                 position: {x: -3, y: -12},
                 width: 9, height: 9,
-                color: "#333",
+                color: "#111",
             }),
             new Space({
                 position: {x: 4, y: -3},
                 width: 5, height: 5,
-                color: "#666",
+                color: "#111",
             }),
             new Space({
                 position: {x: 6, y: -9},
                 width: 6, height: 6,
-                color: "#555",
+                color: "#111",
             }),
             new Space({
                 position: {x: -7, y: -10},
                 width: 4, height: 4,
-                color: "#444",
+                color: "#111",
             }),
         ]
         this.monsters = [
-            new TestMonster({
+            // new Monster(Monsters["far bat"], {
+            //     position: {x: -3, y: -3},
+            //     game: this.game,
+            // }),
+            // new Monster(Monsters["fast bat"], {
+            //     position: {x: 0, y: -6},
+            //     game: this.game,
+            // }),
+            // new Monster(Monsters["vampire bat"], {
+            //     position: {x: +3, y: -3},
+            //     game: this.game,
+            // }),
+            // new Monster(Monsters["bat"], {
+            //     position: {x: +3, y: -6},
+            //     game: this.game,
+            // }),
+            new Monster(Monsters["test"], {
+                position: {x: 0, y: -3},
                 game: this.game,
-                position: {x: -3, y: -3},
-            }),
-            new TestMonster({
-                game: this.game,
-                position: {x: 0, y: -6},
-            }),
-            new TestMonster({
-                game: this.game,
-                position: {x: +6, y: -3},
             })
         ]
         
         this.stairs = {
             id: "stairs",
-            color: "#222",
+            color: "#111",
             position: {x: -6, y: -9},
             shape: Media.images.shapes.terrain.stairs[0],
         }
@@ -101,7 +111,7 @@ export class StupidRandomDungeon extends Dungeon {
         
         this.stairs = {
             id: "stairs",
-            color: "#222",
+            color: "#111",
             position: {x: 0, y: (this.size - 1) * -7},
             shape: Media.images.shapes.terrain.stairs[0],
         }
