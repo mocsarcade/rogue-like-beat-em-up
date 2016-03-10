@@ -36,8 +36,10 @@ class Adventurer extends Creature {
         if(Keyb.isJustDown("<space>")) {
             this.move()
 
-            if (state.game.dungeon.spaces.some(s => s.color == "#FFF")) {
-                state.game.dungeon.spaces = state.game.dungeon.spaces.filter(s => s.color != "#FFF")
+            if (state.game.dungeon.spaces.some(
+                    s => s.color == "#FFF" || s.color == "#F00")) {
+                state.game.dungeon.spaces = state.game.dungeon.spaces.filter(
+                    s => s.color != "#FFF" && s.color != "#F00")
             } else {
                 state.game.dungeon.spaces = state.game.gen.agents.map(s => s.space)
             }

@@ -105,13 +105,15 @@ class DungeonGenerator {
         this.cull()
         this.trim()
         this.buildGraph()
-        //this.linkSpaces()
+        this.linkSpaces()
+        //this.trim()
 
         return this.agents.map(a => a.space)
     }
 
     flock() {
-        for (let i = 0; i < 25; ++i) {
+        let limit = Math.floor(this.maximumSpaces / 12)
+        for (let i = 0; i < limit; ++i) {
             this.agents.forEach(a => this.flockStep(a))
         }
     }
@@ -274,12 +276,16 @@ class DungeonGenerator {
         }
 
         let addLink = (x, y, width, height) => {
-            this.agents.push(new Agent(new Space({
+            let newAgent = new Agent(new Space({
                 position: {x: x, y: y},
                 width: width,
                 height: height,
                 color: "#FFF"
-            })))
+            }))
+
+            this.agents.push(newAgent)
+
+            return newAgent
         }
 
         let space1 = agent1.space
@@ -291,9 +297,21 @@ class DungeonGenerator {
 
         let offset = Math.random() * (5 - 2) + 2
 
+        // cut space into four diagonal quadrants
+        let x2 = space1.position.x + space1.width
+        let y2 = space1.position.y + space1.height
+
+        let m = Math.abs((y2 - space1.position.y) /
+            (x2 - space1.position.x))
+
+        let xc = (space1.position.x + x2) / 2
+        let yc = (space1.position.y + y2) / 2
+
         // is reasonably above or below?
-        let isVerticalCenter = centroid2.x >= centroid1.x - offset &&
-            centroid2.x <= centroid1.x + offset
+        //let isVerticalCenter = centroid2.x >= centroid1.x - offset &&
+        //    centroid2.x <= centroid1.x + offset
+        let isVerticalCenter = Math.abs(space2.position.y - yc) >
+            m * Math.abs(space2.position.x - xc)
 
         if (isVerticalCenter) {
             let top = space2
@@ -307,14 +325,42 @@ class DungeonGenerator {
             let x = centroid1.x - offset / 2
             let y = top.position.y + top.height - 1
             let width = offset
-            let height = bottom.position.y - y
+            let height = bottom.position.y - y + 1
 
-            addLink(x, y, width, height)
+            var bridge = addLink(x, y, width, height)
+
+            if (!bridge.intersects(agent2)) {
+                let spaceB = bridge.space
+                let left = space2
+                let right = spaceB
+
+                if (spaceB.position.x < space2.position.x) {
+                    left = spaceB
+                    right = space2
+                }
+
+                let x = left.position.x - 1
+                let y = spaceB.position.y
+                let width = right.position.x - x + 1
+                let height = offset
+
+                if (left != spaceB) {
+                    // the new bridge should extend across the old one
+                    x += left.width
+                    width += spaceB.width - left.width
+                }
+
+                let yay = addLink(x, y, width, height)
+                yay.space.color = "#F00"
+            }
+
             return
         }
 
-        let isHorizontalCenter = centroid2.y >= centroid1.y - offset &&
-            centroid2.y <= centroid1.y + offset
+        //let isHorizontalCenter = centroid2.y >= centroid1.y - offset &&
+        //    centroid2.y <= centroid1.y + offset
+        let isHorizontalCenter = Math.abs(space2.position.y - yc) <
+            m * Math.abs(space2.position.x - xc)
 
         if (isHorizontalCenter) {
             let left = space2
@@ -327,16 +373,41 @@ class DungeonGenerator {
 
             let x = left.position.x + left.width - 1
             let y = centroid1.y - offset / 2
-            let width = right.position.x - x
+            let width = right.position.x - x + 1
             let height = offset
 
-            addLink(x, y, width, height)
+            let bridge = addLink(x, y, width, height)
+
+            if (!bridge.intersects(agent2)) {
+                let spaceB = bridge.space
+                let top = space2
+                let bottom = spaceB
+
+                if (spaceB.position.y < space2.position.y) {
+                    top = spaceB
+                    bottom = space2
+                }
+
+                let x = spaceB.position.x
+                let y = top.position.y + top.height - 1
+                let width = offset
+                let height = bottom.position.y - y + 1
+
+                if (top != spaceB) {
+                    y += top.height
+                    height += spaceB.height - top.height
+                }
+
+                let yay = addLink(x, y, width, height)
+                yay.space.color = "#F00"
+            }
             return
         }
 
         // if here, then the connecting space is diagonally off-center
         // so, let's figure out if this thing is more vertial or more horizontal
-        
+
+
     }
 
     getRandomPointInCircle(radius) {
