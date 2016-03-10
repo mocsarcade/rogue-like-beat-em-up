@@ -1,4 +1,4 @@
-var Space = require("./Space.js")
+let Space = require("./Space.js")
 
 class Agent {
     constructor(space) {
@@ -19,22 +19,22 @@ class Agent {
     }
 
     distance(other) {
-        var center1 = this.centroid(this.space)
-        var center2 = this.centroid(other.space)
+        let center1 = this.centroid(this.space)
+        let center2 = this.centroid(other.space)
 
         return Math.pow(center1.x - center2.x, 2) +
             Math.pow(center1.y - center2.y, 2)
     }
 
     intersects(agent) {
-        var me = {
+        let me = {
             x: this.space.position.x,
             y: this.space.position.y,
             width: this.space.width,
             height: this.space.height
         }
 
-        var other = {
+        let other = {
             x: agent.space.position.x,
             y: agent.space.position.y,
             width: agent.space.width,
@@ -47,24 +47,24 @@ class Agent {
             me.y <= other.y + other.height);
 	}
     merge(other) {
-        var x1 = other.space.position.x
-        var y1 = other.space.position.y
-        var x2 = x1 + other.space.width
-        var y2 = y1 + other.space.height;
+        let x1 = other.space.position.x
+        let y1 = other.space.position.y
+        let x2 = x1 + other.space.width
+        let y2 = y1 + other.space.height;
 
-        if (this.space.position.x > x1) {
+        if (this.space.position.x < x1) {
             x1 = this.space.position.x
         }
 
-        if (this.space.position.y > y1) {
+        if (this.space.position.y < y1) {
             y1 = this.space.position.y
         }
 
-        if (this.space.position.x + this.space.width < x2) {
+        if (this.space.position.x + this.space.width > x2) {
             x2 = this.space.position.x + this.space.width
         }
 
-        if (this.space.position.y + this.space.height < y2) {
+        if (this.space.position.y + this.space.height > y2) {
             y2 = this.space.position.y + this.space.height
         }
 
@@ -91,8 +91,8 @@ class DungeonGenerator {
 
     generate(radius) {
         // would be cool to parallelize this
-        for (var i = 0; i < this.maximumSpaces; ++i) {
-            var dimensions = this.getRandomDimensions()
+        for (let i = 0; i < this.maximumSpaces; ++i) {
+            let dimensions = this.getRandomDimensions()
 
             this.agents.push(new Agent(new Space({
                 position: this.getRandomPointInCircle(radius),
@@ -111,17 +111,17 @@ class DungeonGenerator {
     }
 
     flock() {
-        for (var i = 0; i < 25; ++i) {
+        for (let i = 0; i < 25; ++i) {
             this.agents.forEach(a => this.flockStep(a))
         }
     }
 
     flockStep(agent) {
-        var {alignment, cohesion, separation} = this.computeFlock(agent)
+        let {alignment, cohesion, separation} = this.computeFlock(agent)
 
-        var alignmentWeight = 2
-        var cohesionWeight = 0.95
-        var separationWeight = 1.1
+        let alignmentWeight = 2
+        let cohesionWeight = 0.95
+        let separationWeight = 1.1
 
         agent.velocity.x += alignmentWeight * alignment.x +
             cohesionWeight * cohesion.x +
@@ -136,7 +136,7 @@ class DungeonGenerator {
 
     normalize(v) {
         if (v.x != 0 || v.y != 0) {
-            var norm = Math.sqrt(v.x * v.x + v.y * v.y)
+            let norm = Math.sqrt(v.x * v.x + v.y * v.y)
             v.x /= norm
             v.y /= norm
         }
@@ -144,11 +144,11 @@ class DungeonGenerator {
     }
 
     computeFlock(agent) {
-        var alignment = {x: 0, y: 0}
-        var cohesion = {x: 0, y: 0}
-        var separation = {x: 0, y: 0}
+        let alignment = {x: 0, y: 0}
+        let cohesion = {x: 0, y: 0}
+        let separation = {x: 0, y: 0}
 
-        var neighborCount = 0
+        let neighborCount = 0
 
         this.agents.forEach(other => {
             if (other != agent && agent.distance(agent) < 20) {
@@ -186,15 +186,15 @@ class DungeonGenerator {
     }
 
     cull() {
-        var AREA_MIN = 50
-        var AREA_MAX = 120
+        let AREA_MIN = 50
+        let AREA_MAX = 120
 
-        //var meanArea = this.agents.map(
+        //let meanArea = this.agents.map(
         //    (agent) => agent.space.width * agent.space.height).reduce(
         //    (prev, curr) => prev + curr) / this.agents.length
 
         this.agents = this.agents.filter(s => {
-            var area = s.space.width * s.space.height
+            let area = s.space.width * s.space.height
             return area >= AREA_MIN && area <= AREA_MAX
         })
     }
@@ -202,44 +202,45 @@ class DungeonGenerator {
     trim() {
         this.agents.forEach(agent => {
             this.agents.forEach(other => {
-                if (!agent.merged && !other.merged) {
+                if (!agent.merged && !other.merged && agent != other) {
                     if (agent.space.contains(other.space)) {
-                        other.merged
-                    } else if (agent.intersects(other)) {
-                        agent.merge(other)
                         other.merged = true
+                    } else if (agent.intersects(other)) {
+                        // this just produces a few giant blobs
+                        //agent.merge(other)
+                        //other.merged = true
                     }
                 }
             })
         })
 
-        this.agents.filter(agent => agent.merged)
+        this.agents = this.agents.filter(agent => !agent.merged)
     }
 
     // builds a relative neighbor graph
     buildGraph() {
         this.adjacencyMatrix = new Array()
 
-        for (var i = 0; i < this.agents.length; ++i) {
+        for (let i = 0; i < this.agents.length; ++i) {
             this.adjacencyMatrix.push(new Array())
 
-            for (var j = 0; j < this.agents.length; ++j) {
+            for (let j = 0; j < this.agents.length; ++j) {
                 this.adjacencyMatrix[i][j] = false
             }
         }
 
-        for ( var i = 0; i < this.agents.length; ++i) {
-            for (var j = 0; j < this.agents.length; ++j) {
-                var addEdge = true
+        for ( let i = 0; i < this.agents.length; ++i) {
+            for (let j = 0; j < this.agents.length; ++j) {
+                let addEdge = true
 
-                var agentI = this.agents[i]
-                var agentJ = this.agents[j]
+                let agentI = this.agents[i]
+                let agentJ = this.agents[j]
 
-                var dist = agentI.distance(agentJ)
+                let dist = agentI.distance(agentJ)
 
                 if (!agentI.intersects(agentJ)) {
-                    for (var z = 0; z < this.agents.length; ++z) {
-                        var agentZ = this.agents[z]
+                    for (let z = 0; z < this.agents.length; ++z) {
+                        let agentZ = this.agents[z]
                         if (agentI.distance(agentZ) < dist &&
                             agentJ.distance(agentZ) < dist) {
                                 addEdge = false
@@ -256,10 +257,10 @@ class DungeonGenerator {
     }
 
     linkSpaces() {
-        var agentLength = this.agents.length
+        let agentLength = this.agents.length
 
-        for ( var i = 0; i < agentLength; ++i) {
-            for ( var j = 0; j < agentLength; ++j) {
+        for ( let i = 0; i < agentLength; ++i) {
+            for ( let j = 0; j < agentLength; ++j) {
                 if (this.adjacencyMatrix[i][j]) {
                     this.buildLink(this.agents[i], this.agents[j])
                 }
@@ -272,7 +273,7 @@ class DungeonGenerator {
             return
         }
 
-        var addLink = (x, y, width, height) => {
+        let addLink = (x, y, width, height) => {
             this.agents.push(new Agent(new Space({
                 position: {x: x, y: y},
                 width: width,
@@ -281,75 +282,67 @@ class DungeonGenerator {
             })))
         }
 
-        var space1 = agent1.space
-        var space2 = agent2.space
+        let space1 = agent1.space
+        let space2 = agent2.space
 
         // determine relative position
-        var centroid1 = agent1.centroid()
-        var centroid2 = agent2.centroid()
+        let centroid1 = agent1.centroid()
+        let centroid2 = agent2.centroid()
 
-        var offset = 5
+        let offset = Math.random() * (5 - 2) + 2
 
         // is reasonably above or below?
-        var isVerticalLeft = space2.position.x + space2.width <=
-            space1.position.x - offset
-        var isVerticalRight = space2.position.x + offset <=
-            space1.position.x + space1.width
+        let isVerticalCenter = centroid2.x >= centroid1.x - offset &&
+            centroid2.x <= centroid1.x + offset
 
-        if (isVerticalRight || isVerticalLeft) {
-            var top = space2
-            var bottom = space1
+        if (isVerticalCenter) {
+            let top = space2
+            let bottom = space1
 
             if (space1.position.y < space2.position.y) {
                 top = space1
                 bottom = space2
             }
 
-            var x = (space2.position.x + space2.width + space1.position.x) / 2
-            var width = 3
+            let x = centroid1.x - offset / 2
+            let y = top.position.y + top.height - 1
+            let width = offset
+            let height = bottom.position.y - y
 
-            if (isVerticalRight) {
-                x = (space2.position.x + space1.position.x + space1.width) / 2
-            }
-
-            addLink(x, top.position.y + top.height - 1, width,
-                bottom.position.y - top.position.y + top.height + 1)
+            addLink(x, y, width, height)
             return
         }
 
-        var isHorizontalTop = space2.position.y + space2.height <=
-            space1.position.y - offset
-        var isHorizontalBottom = space2.position.y + offset <=
-            space1.position.y + space1.height
+        let isHorizontalCenter = centroid2.y >= centroid1.y - offset &&
+            centroid2.y <= centroid1.y + offset
 
-        if (isHorizontalTop || isHorizontalBottom) {
-            var left = space2
-            var right = space1
-
-            var y = (space2.position.y + space2.height + space1.position.y) / 2
-            var height = 3 //y - space1.position.y
-
-            if (isHorizontalBottom) {
-                y = (space2.position.y + space1.position.y + space1.height) / 2
-                //height = y - space2.position.y
-            }
+        if (isHorizontalCenter) {
+            let left = space2
+            let right = space1
 
             if (space1.position.x < space2.position.x) {
                 left = space1
                 right = space2
             }
 
-            addLink(left.position.x + left.width - 1, y,
-                right.position.x - left.position.x + left.width + 1, height)
+            let x = left.position.x + left.width - 1
+            let y = centroid1.y - offset / 2
+            let width = right.position.x - x
+            let height = offset
+
+            addLink(x, y, width, height)
             return
         }
 
+        // if here, then the connecting space is diagonally off-center
+        // so, let's figure out if this thing is more vertial or more horizontal
+        
     }
 
     getRandomPointInCircle(radius) {
-        var t = 2 * Math.PI * Math.random()
-        var u = Math.random() + Math.random()
-        var r = u > 1 ? 2 - u : u
+        let t = 2 * Math.PI * Math.random()
+        let u = Math.random() + Math.random()
+        let r = u > 1 ? 2 - u : u
         return {x: radius * r * Math.cos(t), y: radius * r * Math.sin(t)}
     }
 
