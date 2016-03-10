@@ -24,8 +24,8 @@ class Game {
         // useful for rendering.
         return (
             new Array()
-                .concat(this.adventurer)
                 .concat(this.dungeon.spaces)
+                .concat(this.adventurer)
                 .concat(this.dungeon.monsters)
                 .concat(this.dungeon.stairs)
                 .concat(this.effects)
