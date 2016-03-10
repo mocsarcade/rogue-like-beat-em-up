@@ -59,28 +59,22 @@ export class StaticDungeon extends Dungeon {
                 color: "#111",
             }),
         ]
-        this.monsters = [
-            // new Monster(Monsters["far bat"], {
-            //     position: {x: -3, y: -3},
-            //     game: this.game,
-            // }),
-            // new Monster(Monsters["fast bat"], {
-            //     position: {x: 0, y: -6},
-            //     game: this.game,
-            // }),
-            // new Monster(Monsters["vampire bat"], {
-            //     position: {x: +3, y: -3},
-            //     game: this.game,
-            // }),
-            // new Monster(Monsters["bat"], {
-            //     position: {x: +3, y: -6},
-            //     game: this.game,
-            // }),
-            new Monster(Monsters["test"], {
-                position: {x: 0, y: -3},
+        this.monsters = new Array()
+        var monsters = Object.keys(Monsters).map((key) => {
+            return Monsters[key]
+        })
+        // yuck! look at this bad spawning code
+        for(var index in monsters) {
+            var monster = monsters[index]
+            var space = this.spaces[index % this.spaces.length]
+            this.monsters.push(new Monster(monster, {
                 game: this.game,
-            })
-        ]
+                position: {
+                    x: space.position.x + Math.floor(Math.random() * space.width),
+                    y: space.position.y + Math.floor(Math.random() * space.height),
+                }
+            }))
+        }
         
         this.stairs = {
             id: "stairs",

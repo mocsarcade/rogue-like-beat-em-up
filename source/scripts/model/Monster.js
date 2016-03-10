@@ -16,6 +16,10 @@ export class Monster extends Creature {
                 this[key] = template[key]
             }
         }
+        
+        if(this.initiate) {
+            this.initiate()
+        }
     }
     onCollide(entity) {
         if(entity.type == "adventurer") {
@@ -55,6 +59,30 @@ export class Monster extends Creature {
             x: this.position.x + (movement.x || 0),
             y: this.position.y + (movement.y || 0),
         })
+    }
+    getMovementTowardsAdventurer() {
+        if(Math.abs(this.position.y - this.game.adventurer.position.y)
+        > Math.abs(this.position.x - this.game.adventurer.position.x)) {
+            if(this.position.y < this.game.adventurer.position.y) {
+                return {y: +1}
+            } else if(this.position.y > this.game.adventurer.position.y) {
+                return {y: -1}
+            } else if(this.position.x < this.game.adventurer.position.x) {
+                return {x: +1}
+            } else if(this.position.x > this.game.adventurer.position.x) {
+                return {x: -1}
+            }
+        } else {
+            if(this.position.x < this.game.adventurer.position.x) {
+                return {x: +1}
+            } else if(this.position.x > this.game.adventurer.position.x) {
+                return {x: -1}
+            } else if(this.position.y < this.game.adventurer.position.y) {
+                return {y: +1}
+            } else if(this.position.y > this.game.adventurer.position.y) {
+                return {y: -1}
+            }
+        }
     }
 }
 
@@ -123,318 +151,468 @@ export var Monsters = {
             ]))
         },
     },
-    "frog": {
-        color: Colors.green,
-        shape: Shapes.frog[0],
-    },
-    "golden frog": {
-        color: Colors.yellow,
-        shape: Shapes.frog[0],
-    },
     "crab": {
+        health: 1,
+        strength: 1,
         color: Colors.red,
         shape: Shapes.crab[0],
+        initiate: function() {
+            this.direction = Math.random() < 0.5 ? +1 : -1
+        },
+        action: function() {
+            if(this.canMove({x: this.direction})) {
+                this.move({x: this.direction})
+            } else {
+                this.direction = this.direction < 0 ? +1 : -1
+            }
+        }
     },
     "strong crab": {
+        health: 1,
+        strength: 10,
         color: Colors.blue,
         shape: Shapes.crab[0],
-    },
-    "owlbear": {
-        color: Colors.brown,
-        shape: Shapes.owlbear[0],
-    },
-    "owlbear warrior": {
-        color: Colors.brown,
-        shape: Shapes.owlbear[1],
-        // increased attack
-    },
-    "owlbear shielded warrior": {
-        color: Colors.brown,
-        shape: Shapes.owlbear[2],
-        // maybe hit after first hit drops shield
-        // increased attack
-    },
-    "owlbear leader": {
-        color: Colors.brown,
-        shape: Shapes.owlbear[3],
-        // ooh ooh! maybe bigger?
-        // can cast magic?
-    },
-    "spider": {
-        color: Colors.gray,
-        shape: Shapes.spider[0],
-    },
-    "venomous spider": {
-        color: Colors.green,
-        shape: Shapes.spider[0],
-    },
-    "scuttle spider": {
-        color: Colors.gray,
-        shape: Shapes.spider[1],
-    },
-    "stealth spider": {
-        color: Colors.black,
-        shape: Shapes.spider[1],
-    },
-    "spider queen": {
-        color: "rainbow",
-        shape: Shapes.spider[2],
-    },
-    "green troll": {
-        color: Colors.green,
-        shape: Shapes.troll[0],
-    },
-    "green troll chief": {
-        color: Colors.green,
-        shape: Shapes.troll[3],
-    },
-    "red troll": {
-        color: Colors.red,
-        shape: Shapes.troll[1],
-    },
-    "imp": {
-        color: Colors.red,
-        shape: Shapes.imp[0],
-    },
-    "ghost": {
-        color: Colors.white,
-        shape: function() {
-            if(!!this.isHidden) {
-                return Shapes.ghost[1]
-            } else if(!this.isHidden) {
-                return Shapes.ghost[0]
+        initiate: function() {
+            this.direction = Math.random() < 0.5 ? +1 : -1
+        },
+        action: function() {
+            if(this.canMove({x: this.direction})) {
+                this.move({x: this.direction})
+            } else {
+                this.direction = this.direction < 0 ? +1 : -1
             }
-        },
-    },
-    "fire elemental": {
-        color: Colors.red,
-        shape: function() {
-            return Shapes.elemental[0]
-            return Shapes.elemental[2]
-        },
-    },
-    "ice elemental": {
-        color: Colors.blue,
-        shape: function() {
-            return Shapes.elemental[0]
-            return Shapes.elemental[2]
-        },
-    },
-    "rock elemental": {
-        color: Colors.brown,
-        shape: Shapes.elemental[3],
-    },
-    "demon": {
-        color: Colors.red,
-        shape: Shapes.demon[0],
-    },
-    "bard": {
-        color: Colors.green,
-        shape: Shapes.bard[0],
-    },
-    "skeleton": {
-        color: Colors.white,
-        shape: Shapes.skeleton[0],
-    },
-    "skeleton swordsman": {
-        color: Colors.white,
-        shape: Shapes.skeleton[1],
-    },
-    "skeleton elite swordsman": {
-        color: Colors.white,
-        shape: Shapes.skeleton[2],
-    },
-    "skeleton archer": {
-        color: Colors.white,
-        shape: Shapes.skeleton[0],
-    },
-    "skeleton necromancer": {
-        color: Colors.white,
-        shape: Shapes.skeleton[5],
-    },
-    "skeleton warlord": {
-        width: 2,
-        color: Colors.white,
-        shape: Shapes.skeleton[7],
+        }
     },
     "werewolf": {
-        color: Colors.brown,
+        health: 1,
+        strength: 2,
+        color: Media.colors.brown,
         shape: function() {
-            return Shapes.werewolf[0]
-            return Shapes.man[0]
+            if(this.movement.x == 0 && this.movement.y == 0) {
+                return Media.images.shapes.monsters.man[0]
+            } else {
+                return Media.images.shapes.monsters.werewolf[0]
+            }
         },
+        direction: function() {
+            return this.movement.x <= 0 ? +1 : -1
+        },
+        movement: {x: 0, y: 0},
+        action: function() {
+            if(this.movement.x == 0 && this.movement.y == 0) {
+                if(this.position.x == this.game.adventurer.position.x) {
+                    this.movement.y = this.position.y < this.game.adventurer.position.y ? +1 : -1
+                } else if(this.position.y == this.game.adventurer.position.y) {
+                    this.movement.x = this.position.x < this.game.adventurer.position.x ? +1 : -1
+                }
+            }
+            
+            if(this.canMove(this.movement)) {
+                this.move(this.movement)
+            } else {
+                this.movement = {x: 0, y: 0}
+            }
+        }
     },
     "alpha werewolf": {
-        color: "rainbow",
-        shape: function() {
-            return Shapes.werewolf[1]
-            return Shapes.man[0]
+        health: 2,
+        strength: 2,
+        color: function() {
+            if(this.movement.x == 0 && this.movement.y == 0) {
+                return Media.colors.brown
+            } else {
+                return Media.colors.gray
+            }
         },
+        shape: function() {
+            if(this.movement.x == 0 && this.movement.y == 0) {
+                return Media.images.shapes.monsters.man[0]
+            } else {
+                return Shapes.werewolf[0]
+            }
+        },
+        direction: function() {
+            return this.movement.x <= 0 ? +1 : -1
+        },
+        movement: {x: 0, y: 0},
+        action: function() {
+            if(this.movement.x == 0 && this.movement.y == 0) {
+                if(this.position.x == this.game.adventurer.position.x) {
+                    this.movement.y = this.position.y < this.game.adventurer.position.y ? +1 : -1
+                } else if(this.position.y == this.game.adventurer.position.y) {
+                    this.movement.x = this.position.x < this.game.adventurer.position.x ? +1 : -1
+                }
+            }
+            
+            if(this.canMove(this.movement)) {
+                this.move(this.movement)
+            } else {
+                this.movement = {x: 0, y: 0}
+            }
+        }
     },
-    "death": {
+    "skeleton": {
+        health: 1,
+        strength: 1,
         color: Colors.white,
         shape: function() {
-            return Shapes.death[0]
-            return Shapes.death[1]
+            var readiness = this.isReady ? 7 : 0
+            var health = Math.min(this.health, 3) - 1
+            return Shapes.skeleton[health + readiness]
         },
-        opacity: function() {
-            return 1
-            return 0.1
+        initiate: function() {
+            this.isReady = Math.random() < 0.5
+        },
+        action: function() {
+            if(this.getReady()) {
+                this.move(this.getMovementTowardsAdventurer())
+            }
+        }
+    },
+    "skeleton swordsman": {
+        health: 2,
+        strength: 1,
+        color: Colors.white,
+        shape: function() {
+            var readiness = this.isReady ? 7 : 0
+            var health = Math.min(this.health, 3) - 1
+            return Shapes.skeleton[health + readiness]
+        },
+        initiate: function() {
+            this.isReady = Math.random() < 0.5
+        },
+        action: function() {
+            if(this.getReady()) {
+                this.move(this.getMovementTowardsAdventurer())
+            }
+        }
+    },
+    "skeleton elite swordsman": {
+        health: 3,
+        strength: 1,
+        color: Colors.white,
+        shape: function() {
+            var readiness = this.isReady ? 7 : 0
+            var health = Math.min(this.health, 3) - 1
+            return Shapes.skeleton[health + readiness]
+        },
+        initiate: function() {
+            this.isReady = Math.random() < 0.5
+        },
+        action: function() {
+            if(this.getReady()) {
+                this.move(this.getMovementTowardsAdventurer())
+            }
+        }
+    },
+    "frog": {
+        health: 10,
+        strength: 5,
+        color: function() {
+            if(this.state >= 0) {
+                return Colors.green
+            } else if(this.state < 0) {
+                return Colors.red
+            }
+        },
+        shape: Shapes.frog[0],
+        transition: function() {
+            if(this.state >= 0) {
+                return {duration: 1.5}
+            } else if(this.state < 0) {
+                return {duration: 0.5}
+            }
+        },
+        state: 0,
+        action: function() {
+            if(this.state >= 0) {
+                this.state += 1
+                this.state %= 3
+                if(this.state == 2) {
+                    var movement = this.getRandomMovement([
+                        {y: -1}, {y: +1},
+                        {x: -1}, {x: +1},
+                    ])
+                    if(this.position.x + (movement.x || 0) == this.game.adventurer.position.x
+                    && this.position.y + (movement.y || 0) == this.game.adventurer.position.y) {
+                        movement = {x: 0, y: 0}
+                    }
+                    this.move(movement)
+                }
+            } else {
+                if(this.state == -1) {
+                    this.state = -2
+                } else {
+                    this.move(this.getMovementTowardsAdventurer())
+                }
+            }
+        },
+        onTakeDamage: function() {
+            if(this.state >= 0) {
+                this.state = -1
+            }
+        }
+    },
+    "golden frog": {
+        health: 10,
+        strength: 5,
+        color: function() {
+            if(this.state >= 0) {
+                return Colors.yellow
+            } else if(this.state < 0) {
+                return Colors.red
+            }
+        },
+        shape: Shapes.frog[0],
+        transition: function() {
+            if(this.state >= 0) {
+                return {duration: 1.5}
+            } else if(this.state < 0) {
+                return {duration: 0.5}
+            }
+        },
+        initiate: function() {
+            this.state = Math.floor(Math.random() * 3)
+        },
+        action: function() {
+            if(this.state >= 0) {
+                this.state += 1
+                this.state %= 3
+                if(this.state == 2) {
+                    var movement = this.getRandomMovement([
+                        {y: -1}, {y: +1},
+                        {x: -1}, {x: +1},
+                    ])
+                    if(this.position.x + (movement.x || 0) == this.game.adventurer.position.x
+                    && this.position.y + (movement.y || 0) == this.game.adventurer.position.y) {
+                        movement = {x: 0, y: 0}
+                    }
+                    this.move(movement)
+                }
+            } else {
+                if(this.state == -1) {
+                    this.state = -2
+                } else {
+                    this.move(this.getMovementTowardsAdventurer())
+                }
+            }
+        },
+        onTakeDamage: function() {
+            if(this.state >= 0) {
+                this.state = -1
+            }
+        },
+        drops: {
+            gold: 100
+        }
+    },
+    "spider": {
+        health: 1,
+        strength: 1,
+        color: Colors.gray,
+        shape: Shapes.spider[0],
+        movement: {y: +1},
+        rotation: function() {
+            if(!!this.movement.y) {
+                if(this.movement.y < 0) {
+                    return 180
+                } else {
+                    return 0
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x < 0) {
+                    return +90
+                } else {
+                    return -90
+                }
+            }
+        },
+        action: function() {
+            var movement = this.getMovementTowardsAdventurer()
+            if(!!this.movement.y) {
+                if(this.movement.y != movement.y) {
+                    if(!!movement.y) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x != movement.x) {
+                    if(!!movement.x) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            }
         },
     },
-    "pheonix": {
-        color: Colors.red,
-        shape: Shapes.pheonix[0],
-    },
-    "statue": {
+    "scuttle spider": {
+        health: 2,
+        strength: 1,
         color: Colors.gray,
-        shape: Shapes.statue[0],
+        shape: Shapes.spider[1],
+        movement: {y: +1},
+        rotation: function() {
+            if(!!this.movement.y) {
+                if(this.movement.y < 0) {
+                    return 180
+                } else {
+                    return 0
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x < 0) {
+                    return +90
+                } else {
+                    return -90
+                }
+            }
+        },
+        action: function() {
+            var movement = this.getMovementTowardsAdventurer()
+            if(!!this.movement.y) {
+                if(this.movement.y != movement.y) {
+                    if(!!movement.y) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x != movement.x) {
+                    if(!!movement.x) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            }
+        },
     },
-    "\"statue\"": {
-        color: Colors.gray,
-        shape: Shapes.statue[1],
+    "stealth spider": {
+        health: 2,
+        strength: 1,
+        color: function() {
+            if(this.stage == 0) {
+                return Colors.gray
+            } else {
+                return Colors.black
+            }
+        },
+        shape: Shapes.spider[1],
+        movement: {y: +1},
+        rotation: function() {
+            if(!!this.movement.y) {
+                if(this.movement.y < 0) {
+                    return 180
+                } else {
+                    return 0
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x < 0) {
+                    return +90
+                } else {
+                    return -90
+                }
+            }
+        },
+        stage: 0,
+        action: function() {
+            this.stage += 1
+            this.stage %= 2
+            var movement = this.getMovementTowardsAdventurer()
+            if(!!this.movement.y) {
+                if(this.movement.y != movement.y) {
+                    if(!!movement.y) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x != movement.x) {
+                    if(!!movement.x) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            }
+        },
     },
-    "centaur": {
-        color: Colors.green,
-        shape: Shapes.centaur[0]
-    },
-    "centaur knight": {
-        color: Colors.green,
-        shape: Shapes.centaur[2]
-    },
-    "centaur archer": {
-        color: Colors.green,
-        shape: Shapes.centaur[1]
-    },
-    "centaur lord": {
+    "spider queen": {
+        health: 3,
+        strength: 2,
         color: "rainbow",
-        shape: Shapes.centaur[3]
-    }
-}
-
-var PaceLeftAndRight = function() {
-    if(this.direction == undefined) {
-        this.direction = +1
-    }
-    
-    if(this.canMove({x: this.direction})) {
-        this.move({x: this.direction})
-    } else {
-        this.direction = this.direction < 0 ? +1 : -1
-    }
-}
-
-var MoveInSquare = function() {
-    if(this.pattern == undefined) {
-        this.pattern = 0
-    }
-    
-    this.pattern += 1
-    this.pattern %= 4
-    
-    if(this.pattern == 0) {
-        this.move({y: -1})
-    } else if(this.pattern == 1) {
-        this.move({x: -1})
-    } else if(this.pattern == 2) {
-        this.move({y: +1})
-    } else if(this.pattern == 3) {
-        this.move({x: +1})
-    }
-}
-
-var MoveUpAndDown = function() {
-    if(this.pattern == undefined) {
-        this.pattern = 0
-    }
-    
-    this.pattern += 1
-    this.pattern %= 4
-    
-    if(this.pattern == 0) {
-        this.move({y: -1})
-    } else if(this.pattern == 2) {
-        this.move({y: +1})
-    }
-}
-
-var MoveInDiamond = function() {    
-    if(this.pattern == undefined) {
-        this.pattern = 0
-    }
-    
-    this.pattern += 1
-    this.pattern %= 4
-    
-    if(this.pattern == 0) {
-        this.move({x: -1, y: -1})
-    } else if(this.pattern == 1) {
-        this.move({x: -1, y: +1})
-    } else if(this.pattern == 2) {
-        this.move({x: +1, y: +1})
-    } else if(this.pattern == 3) {
-        this.move({x: +1, y: -1})
-    }
-}
-
-var ChargesOnLineOfSight = function() {
-    if(this.movement == undefined) {
-        this.movement = {x: 0, y: 0}
-    }
-    
-    if(this.movement.x == 0 && this.movement.y == 0) {
-        if(this.position.x == this.game.adventurer.position.x) {
-            this.movement.y = this.position.y < this.game.adventurer.position.y ? +1 : -1
-        } else if(this.position.y == this.game.adventurer.position.y) {
-            this.movement.x = this.position.x < this.game.adventurer.position.x ? +1 : -1
-        }
-    }
-    
-    if(this.canMove(this.movement)) {
-        this.move(this.movement)
-    } else {
-        this.movement = {x: 0, y: 0}
-    }
-}
-
-export class TestMonster extends Monster {
-    get color() {
-        return Media.colors.white
-    }
-    get shape() {
-        return Media.images.shapes.monsters.owlbear
-    }
-    takeAction() {
-        this.move(this.getMovementTowardsAdventurer())
-    }
-    getMovementTowardsAdventurer() {
-        if(Math.abs(this.position.y - this.game.adventurer.position.y)
-        > Math.abs(this.position.x - this.game.adventurer.position.x)) {
-            if(this.position.y < this.game.adventurer.position.y) {
-                return {y: +1}
-            } else if(this.position.y > this.game.adventurer.position.y) {
-                return {y: -1}
-            } else if(this.position.x < this.game.adventurer.position.x) {
-                return {x: +1}
-            } else if(this.position.x > this.game.adventurer.position.x) {
-                return {x: -1}
+        shape: Shapes.spider[2],
+        movement: {y: +1},
+        rotation: function() {
+            if(!!this.movement.y) {
+                if(this.movement.y < 0) {
+                    return 180
+                } else {
+                    return 0
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x < 0) {
+                    return +90
+                } else {
+                    return -90
+                }
             }
-        } else {
-            if(this.position.x < this.game.adventurer.position.x) {
-                return {x: +1}
-            } else if(this.position.x > this.game.adventurer.position.x) {
-                return {x: -1}
-            } else if(this.position.y < this.game.adventurer.position.y) {
-                return {y: +1}
-            } else if(this.position.y > this.game.adventurer.position.y) {
-                return {y: -1}
+        },
+        action: function() {
+            var movement = this.getMovementTowardsAdventurer()
+            if(!!this.movement.y) {
+                if(this.movement.y != movement.y) {
+                    if(!!movement.y) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
+            } else if(!!this.movement.x) {
+                if(this.movement.x != movement.x) {
+                    if(!!movement.x) {
+                        this.movement = {
+                            x: Math.random() < 0.5 ? +1 : -1
+                        }
+                    } else {
+                        this.movement = movement
+                    }
+                } else {
+                    this.move(movement)
+                }
             }
-        }
-    }
+        },
+    },
 }
-
-// Stands still
-// Stands still until player is near then chases
-// Stands still until attacked then chases
-// Wanders randomly until attacked
-// Follows wall?

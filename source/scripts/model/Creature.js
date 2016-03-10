@@ -88,6 +88,10 @@ class Creature extends Entity {
                 this.onDeath()
             }
         }
+        
+        if(this.onTakeDamage) {
+            this.onTakeDamage(damage)
+        }
     }
 }
 

@@ -38,7 +38,6 @@ class Game {
     restart() {
         this.adventurer = new Adventurer({
             position: {x: 0, y: 0},
-            health: 1,
             game: this
         })
         this.start()
