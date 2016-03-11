@@ -13,7 +13,7 @@ class Adventurer extends Creature {
         this.transition = true
         this.stack = 2
         
-        this.type = "Adventurer"
+        this.type = "adventurer"
         this.stage = 0
     }
     onLoop() {
@@ -38,7 +38,7 @@ class Adventurer extends Creature {
         }
     }
     onCollide(entity) {
-        if(entity.type == "Monster") {
+        if(entity.type == "monster") {
             entity.takeDamage(this.strength)
             this.game.effects.push(new Effect({
                 position: entity.position,
@@ -59,6 +59,8 @@ class Adventurer extends Creature {
         this.game.dungeon.monsters.forEach((monster) => {
             if(!!monster.takeAction) {
                 monster.takeAction()
+            } else if(!!monster.action) {
+                monster.action()
             }
         })
     }

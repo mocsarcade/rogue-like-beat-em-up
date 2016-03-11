@@ -9,6 +9,9 @@ class Creature extends Entity {
         
         this.health = creature.health || 1
         this.strength = creature.strength || 1
+        
+        this.transition = true
+        this.stack = 1
     }
     move(movement = new Object()) {
         movement.x = movement.x || 0
@@ -84,6 +87,10 @@ class Creature extends Entity {
             if(!!this.onDeath) {
                 this.onDeath()
             }
+        }
+        
+        if(this.onTakeDamage) {
+            this.onTakeDamage(damage)
         }
     }
 }
