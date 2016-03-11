@@ -4,7 +4,7 @@ class Space extends Entity {
     constructor(space) {
         super(space)
 
-        this.color = space.color || "#444"
+        this.color = space.color || "#000"
         this.stack = 0
     }
     contains(position) {

@@ -1,10 +1,7 @@
 var Camera = require("./Camera.js")
 var Adventurer = require("./Adventurer.js")
 
-var PlaygroundDungeon = require("./Dungeon.js").PlaygroundDungeon
-var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
-
-var Generator = require("./DungeonGenerator.js")
+var RandomDungeon = require("./Dungeon.js").RandomDungeon
 
 class Game {
     constructor(game) {
@@ -13,7 +10,7 @@ class Game {
         this.camera = new Camera({
             position: {x: 0, y: 0},
             width: 16, height: 9,
-            zoom: 0.075//0.75
+            zoom: 0.75
         })
 
         this.restart()
@@ -50,19 +47,10 @@ class Game {
             this.adventurer.position.x = 0
             this.adventurer.position.y = 0
             var dungeon = this.dungeons[this.adventurer.stage]
-            this.dungeon = new StupidRandomDungeon({
-                colors: dungeon.colors,
-                size: dungeon.size,
-                game: this
+            this.dungeon = new RandomDungeon({
+                game: this,
+                size: dungeon.size
             })
-
-            this.gen = new Generator()
-
-            this.dungeon.spaces = this.gen.generate(25)
-
-            //this.gen.linkSpaces()
-
-            //this.dungeon.spaces.forEach(s => console.log(s.position))
 
             var pos = this.dungeon.spaces[0].position
             pos.x += this.dungeon.spaces[0].width / 2
