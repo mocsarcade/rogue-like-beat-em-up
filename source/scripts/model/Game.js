@@ -2,6 +2,8 @@ var Camera = require("./Camera.js")
 var Adventurer = require("./Adventurer.js")
 
 var RandomDungeon = require("./Dungeon.js").RandomDungeon
+var StaticDungeon = require("./Dungeon.js").StaticDungeon
+var StupidRandomDungeon = require("./Dungeon.js").StupidRandomDungeon
 
 class Game {
     constructor(game) {
@@ -37,7 +39,6 @@ class Game {
     restart() {
         this.adventurer = new Adventurer({
             position: {x: 0, y: 0},
-            health: 1,
             game: this
         })
         this.start()
@@ -47,10 +48,17 @@ class Game {
             this.adventurer.position.x = 0
             this.adventurer.position.y = 0
             var dungeon = this.dungeons[this.adventurer.stage]
+
             this.dungeon = new RandomDungeon({
                 game: this,
                 size: dungeon.size
             })
+
+            //this.dungeon = new StaticDungeon({
+            //    colors: dungeon.colors,
+            //    size: dungeon.size,
+            //    game: this
+            //})
 
             var pos = this.dungeon.spaces[0].position
             pos.x += this.dungeon.spaces[0].width / 2

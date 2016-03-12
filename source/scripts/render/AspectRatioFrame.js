@@ -19,7 +19,7 @@ class AspectRatioFrame extends React.Component {
             overflow: "hidden",
             width: this.props.width + "px",
             height: this.props.height + "px",
-            backgroundColor: this.props.color || "#222",
+            backgroundColor: this.props.color || "#111",
             transform: "scale(" + Math.min(
                 window.innerWidth / this.props.width,
                 window.innerHeight / this.props.height

@@ -8,7 +8,10 @@ class Entity extends React.Component {
     render() {
         return React.createElement("div", {
             // Identity
-            className: "entity",
+            className: [
+                "entity",
+                this.props.data.color == "rainbow" ? "rainbow" : null
+            ].join(" "),
             id: this.props.data.id,
             key: this.props.data.key,
             style: {

@@ -81,9 +81,9 @@ class DungeonGenerator {
      * @param {width, height} minSpace - Minimum dimensions for a space.
      * @param {width, height} maxSpace - Maximum dimensions for a space.
      */
-    constructor(maxSpaces = null, minSpace = null, maxSpace = null) {
+    constructor(maxSpaces = 30, minSpace = null, maxSpace = null) {
         // arbitrary default value because I'm testing
-        this.maximumSpaces = maxSpaces || 30
+        this.maximumSpaces = maxSpaces
         this.minimumSpace = minSpace || {
             width: 3,
             height: 3

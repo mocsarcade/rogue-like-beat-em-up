@@ -1,0 +1,11 @@
+.rainbow {
+    background: linear-gradient(136deg, #f9d300, #cb0000, #00a7cb, #0ecb3e);
+    animation: rainbow 7s ease infinite;
+    background-size: 800% 800%;
+    
+    @keyframes rainbow {
+        0%{background-position:0% 4%}
+        50%{background-position:100% 97%}
+        100%{background-position:0% 4%}
+    }
+}

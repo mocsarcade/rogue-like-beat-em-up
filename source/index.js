@@ -24,7 +24,7 @@ var Game = require("./scripts/model/Game.js")
 var state = new Object({
     game: new Game({
         dungeons: [
-            {colors: ["#444", "#555"], size: 50},
+            {colors: ["#666", "#555"], size: 50},
             {colors: ["#400", "#500"], size: 70},
             {colors: ["#040", "#050"], size: 100},
             {colors: ["#004", "#005"], size: 200},
@@ -56,7 +56,7 @@ class Mount extends React.Component {
     render() {
         if(!!this.state) {
             return (
-                <AspectRatioFrame width={320} height={180}>
+                <AspectRatioFrame width={320} height={180} color={"#222"}>
                     <Camera data={this.state.game.camera}>
                         {this.state.game.entities.map((entity) => {
                             return <Entity data={entity} key={entity.id}/>

@@ -11,9 +11,8 @@ class Adventurer extends Creature {
         this.shape = Media.images.shapes.monsters[3]
         this.color = Media.colors.yellow
         this.transition = true
-        this.stack = 5
-
-        this.type = "Adventurer"
+        this.stack = 2
+        this.type = "adventurer"
         this.stage = 0
     }
     onLoop() {
@@ -35,19 +34,10 @@ class Adventurer extends Creature {
         }
         if(Keyb.isJustDown("<space>")) {
             this.move()
-
-            // code used to test space linking
-            //if (state.game.dungeon.spaces.some(
-            //        s => s.color == "#FFF" || s.color == "#F00")) {
-            //    state.game.dungeon.spaces = state.game.dungeon.spaces.filter(
-            //        s => s.color != "#FFF" && s.color != "#F00")
-            //} else {
-            //    state.game.dungeon.spaces = state.game.gen.agents.map(s => s.space)
-            //}
         }
     }
     onCollide(entity) {
-        if(entity.type == "Monster") {
+        if(entity.type == "monster") {
             entity.takeDamage(this.strength)
             this.game.effects.push(new Effect({
                 position: entity.position,
@@ -68,6 +58,8 @@ class Adventurer extends Creature {
         this.game.dungeon.monsters.forEach((monster) => {
             if(!!monster.takeAction) {
                 monster.takeAction()
+            } else if(!!monster.action) {
+                monster.action()
             }
         })
     }
