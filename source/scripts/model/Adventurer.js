@@ -14,26 +14,33 @@ class Adventurer extends Creature {
         this.stack = 2
         this.type = "adventurer"
         this.stage = 0
+        this.turnsPerSecond = adventurer.turnsPerSecond || 5
+        this.runningDelta = 0
     }
-    onLoop() {
-        if(Keyb.isJustDown("W")
-        || Keyb.isJustDown("<up>")) {
-            this.move({y: -1})
-        }
-        if(Keyb.isJustDown("S")
-        || Keyb.isJustDown("<down>")) {
-            this.move({y: +1})
-        }
-        if(Keyb.isJustDown("A")
-        || Keyb.isJustDown("<left>")) {
-            this.move({x: -1})
-        }
-        if(Keyb.isJustDown("D")
-        || Keyb.isJustDown("<right>")) {
-            this.move({x: +1})
-        }
-        if(Keyb.isJustDown("<space>")) {
-            this.move()
+    onLoop(delta) {
+        this.runningDelta += delta
+        if (this.runningDelta >= 1 / this.turnsPerSecond) {
+            this.runningDelta = 0
+
+            if (Keyb.isDown("W") ||
+                Keyb.isDown("<up>")) {
+                this.move({y: -1})
+            }
+            if (Keyb.isDown("S") ||
+                Keyb.isDown("<down>")) {
+                this.move({y: +1})
+            }
+            if (Keyb.isDown("A") ||
+                Keyb.isDown("<left>")) {
+                this.move({x: -1})
+            }
+            if (Keyb.isDown("D") ||
+                Keyb.isDown("<right>")) {
+                this.move({x: +1})
+            }
+            if (Keyb.isDown("<space>")) {
+                this.move()
+            }
         }
     }
     onCollide(entity) {
