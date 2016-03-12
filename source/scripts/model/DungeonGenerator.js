@@ -3,7 +3,6 @@ let Space = require("./Space.js")
 /**
  * Class represents an agent used to generate the random dungeon.
  * Encapsulates the space that is ultimately part of the dungeon.
- * @todo Ensure that the intersects method actually works...
  */
 class Agent {
     /**
@@ -57,22 +56,17 @@ class Agent {
             bottom: agent.space.position.y + agent.space.height
         }
 
-        return (r1.left < r2.right &&
-            r1.right > r2.left &&
-            r1.top > r2.bottom &&
-            r1.bottom < r2.top )
-
-        //return !(r2.left > r1.right ||
-        //   r2.right < r1.left ||
-        //   r2.top > r1.bottom ||
-        //   r2.bottom < r1.top);
+        return !(r2.left > r1.right ||
+            r2.right < r1.left ||
+            r2.top > r1.bottom ||
+            r2.bottom < r1.top)
 	}
 }
 
 /**
  * Class to generate a random dungeon.
  * @todo Fix trimming
- * @todo Make more robust against islands
+ * @todo Make more robust against islands/orphans
  */
 class DungeonGenerator {
     /**
@@ -94,6 +88,10 @@ class DungeonGenerator {
         }
         this.agents = new Array()
 
+        // minimum and maximum areas
+        this.areaMin = 50
+        this.areaMax = 120
+
         // flocking radius for the flocking behavior simulation
         // can be changed to manipulate stuff
         this.flockingRadius = 20
@@ -110,23 +108,28 @@ class DungeonGenerator {
      * @return {Array<Space>} Array of Space objects that represent the dungeon.
      */
     generate(radius) {
-        // would be cool to parallelize this
-        for (let i = 0; i < this.maximumSpaces; ++i) {
-            let dimensions = this.getRandomDimensions()
+        do {
+            this.agents = new Array()
 
-            this.agents.push(new Agent(new Space({
-                position: this.getRandomPointInCircle(radius),
-                width: dimensions.width,
-                height: dimensions.height
-            })))
-        }
+            // would be cool to parallelize this
+            for (let i = 0; i < this.maximumSpaces; ++i) {
+                let dimensions = this.getRandomDimensions()
 
-        // I hate all of these side effects, but development time is short :(
-        this.flock()
-        this.cull()
-        this.buildGraph()
-        this.linkSpaces()
-        //this.trim()
+                this.agents.push(new Agent(new Space({
+                    position: this.getRandomPointInCircle(radius),
+                    width: dimensions.width,
+                    height: dimensions.height
+                })))
+            }
+
+            // I hate all of these side effects, but development time is short :(
+            this.flock()
+            this.cull()
+            this.buildGraph()
+            this.linkSpaces()
+            //this.trim()
+        } while (this.agents.length == 0 ||
+            this.agents[0].space === undefined)
 
         return this.agents.map(a => a.space)
     }
@@ -225,16 +228,13 @@ class DungeonGenerator {
      * Updates this.agents.
      */
     cull() {
-        let AREA_MIN = 50
-        let AREA_MAX = 120
-
         //let meanArea = this.agents.map(
         //    (agent) => agent.space.width * agent.space.height).reduce(
         //    (prev, curr) => prev + curr) / this.agents.length
 
         this.agents = this.agents.filter(s => {
             let area = s.space.width * s.space.height
-            return area >= AREA_MIN && area <= AREA_MAX
+            return area >= this.areaMin && area <= this.areaMax
         })
     }
     /**
@@ -264,7 +264,9 @@ class DungeonGenerator {
 
                     for (let z = 0; z < this.agents.length; ++z) {
                         let agentZ = this.agents[z]
-                        if (agentI.distanceSquare(agentZ) < dist &&
+                        if (//!this.adjacencyMatrix[i][z] &&
+                            //!this.adjacencyMatrix[z][i] &&
+                            agentI.distanceSquare(agentZ) < dist &&
                             agentJ.distanceSquare(agentZ) < dist) {
                                 addEdge = false
                                 break;
@@ -285,7 +287,6 @@ class DungeonGenerator {
      */
     linkSpaces() {
         let agentLength = this.agents.length
-
         for ( let i = 0; i < agentLength; ++i) {
             for ( let j = 0; j < agentLength; ++j) {
                 if (i != j && this.adjacencyMatrix[i][j]) {
@@ -454,20 +455,24 @@ class DungeonGenerator {
      * @todo Not convinced the intesection method is reliable...
      */
     trim() {
-        this.agents.forEach(agent => {
-            let intersected = false
-            this.agents.forEach(other => {
-                if (agent != other && other.intersects(agent)) {
-                    intersected = true
-                }
-            })
-
-            if (!intersected) {
-                agent.delete = true
+        // this isn't working well either
+        let mid = Math.floor(this.agents.length / 2)
+        for (let i = 0; i < mid; ++i) {
+            let orphan = true
+            for (let j = mid; j < this.agents.length; ++j) {
+                if (this.adjacencyMatrix[i][j]) {
+                        orphan = false
+                    }
             }
-        })
 
+            if (!orphan) {
+                this.agents[i].delete = true
+            }
+        }
+
+        console.log(this.agents.length)
         this.agents = this.agents.filter(a => !a.delete)
+        console.log(this.agents.length)
     }
     /**
      * Generates a random point within the circle defined by the given radius.
