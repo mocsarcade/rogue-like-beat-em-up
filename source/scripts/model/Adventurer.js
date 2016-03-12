@@ -7,12 +7,11 @@ class Adventurer extends Creature {
     constructor(adventurer = new Object()) {
         adventurer.health = adventurer.health || 3
         super(adventurer)
-        
+
         this.shape = Media.images.shapes.monsters[3]
         this.color = Media.colors.yellow
         this.transition = true
         this.stack = 2
-        
         this.type = "adventurer"
         this.stage = 0
     }
@@ -54,7 +53,7 @@ class Adventurer extends Creature {
         && this.position.y == this.game.dungeon.stairs.position.y) {
             this.game.advance()
         }
-        
+
         this.game.camera.center(this.position)
         this.game.dungeon.monsters.forEach((monster) => {
             if(!!monster.takeAction) {

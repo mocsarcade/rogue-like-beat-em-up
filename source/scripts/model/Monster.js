@@ -6,7 +6,7 @@ export class Monster extends Creature {
     constructor(template, data) {
         super(data)
         this.type = "monster"
-        
+
         for(var key in template) {
             if(template[key] instanceof Function) {
                 Object.defineProperty(this, key, {
@@ -16,7 +16,7 @@ export class Monster extends Creature {
                 this[key] = template[key]
             }
         }
-        
+
         if(this.initiate) {
             this.initiate()
         }
@@ -41,7 +41,7 @@ export class Monster extends Creature {
         movements = movements.filter((movement) => {
             return this.canMove(movement)
         })
-        
+
         if(movements.length > 0) {
             return movements[Math.floor(Math.random() * movements.length)]
         } else {
@@ -206,7 +206,7 @@ export var Monsters = {
                     this.movement.x = this.position.x < this.game.adventurer.position.x ? +1 : -1
                 }
             }
-            
+
             if(this.canMove(this.movement)) {
                 this.move(this.movement)
             } else {
@@ -243,7 +243,7 @@ export var Monsters = {
                     this.movement.x = this.position.x < this.game.adventurer.position.x ? +1 : -1
                 }
             }
-            
+
             if(this.canMove(this.movement)) {
                 this.move(this.movement)
             } else {

@@ -1,5 +1,6 @@
 var Media = require("../Media.js")
 var Space = require("./Space.js")
+var Generator = require("./DungeonGenerator.js")
 var Bat = require("./Monster.js").Bat
 var VampireBat = require("./Monster.js").VampireBat
 var VampireBatKing = require("./Monster.js").VampireBatKing
@@ -10,9 +11,7 @@ var Monsters = require("./Monster.js").Monsters
 export class Dungeon {
     constructor(dungeon = new Object()) {
         this.game = dungeon.game || undefined
-            
         this.size = dungeon.size || 5
-        
         this.spaces = new Array()
         this.monsters = new Array()
     }
@@ -22,11 +21,36 @@ export class Dungeon {
         })
     }
 }
+/**
+ * Class creates a random dungeon.
+ * @todo Position the stairs better.
+ */
+export class RandomDungeon extends Dungeon {
+    constructor(dungeon) {
+        super(dungeon)
+
+        let gen = new Generator()
+
+        this.spaces = gen.generate(this.size)
+        this.size = this.spaces.length
+
+        // needs to be sufficiently far away from the adventurer
+        let index = Math.ceil(gen.getRandom(1, this.size))
+        let pos = this.spaces[index].position
+
+        this.stairs = {
+            id: "stairs",
+            color: "#222",
+            position: {x: pos.x, y: pos.y},
+            shape: Media.images.shapes.terrain.stairs[0],
+        }
+    }
+}
 
 export class StaticDungeon extends Dungeon {
     constructor(dungeon) {
         super(dungeon)
-        
+
         this.spaces = [
             new Space({
                 position: {x: -3, y: -3},
@@ -75,7 +99,7 @@ export class StaticDungeon extends Dungeon {
                 }
             }))
         }
-        
+
         this.stairs = {
             id: "stairs",
             color: "#111",
@@ -88,7 +112,7 @@ export class StaticDungeon extends Dungeon {
 export class StupidRandomDungeon extends Dungeon {
     constructor(dungeon = new Object()) {
         super(dungeon)
-        
+
         for(var i = 0; i < this.size; i++) {
             this.spaces.push(new Space({
                 color: dungeon.colors[i % 2],
@@ -102,7 +126,7 @@ export class StupidRandomDungeon extends Dungeon {
                 }))
             }
         }
-        
+
         this.stairs = {
             id: "stairs",
             color: "#111",
