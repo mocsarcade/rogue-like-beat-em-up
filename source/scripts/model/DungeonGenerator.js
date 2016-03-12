@@ -449,28 +449,11 @@ class DungeonGenerator {
     /**
      * Attempts to trim the fat from the dungeon.
      * Updates this.agents.
-     * @todo Revisit and try to think of ways to improve.
-     * @todo Not convinced the intesection method is reliable...
+     * @todo Develop algorithm to detect and remove islands/orphans
      */
     trim() {
-        // this isn't working well either
-        let mid = Math.floor(this.agents.length / 2)
-        for (let i = 0; i < mid; ++i) {
-            let orphan = true
-            for (let j = mid; j < this.agents.length; ++j) {
-                if (this.adjacencyMatrix[i][j]) {
-                        orphan = false
-                    }
-            }
-
-            if (!orphan) {
-                this.agents[i].delete = true
-            }
-        }
-
-        console.log(this.agents.length)
+        // come up with an algorithm to find and remove islands/orphans
         this.agents = this.agents.filter(a => !a.delete)
-        console.log(this.agents.length)
     }
     /**
      * Generates a random point within the circle defined by the given radius.
