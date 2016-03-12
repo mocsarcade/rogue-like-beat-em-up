@@ -264,9 +264,7 @@ class DungeonGenerator {
 
                     for (let z = 0; z < this.agents.length; ++z) {
                         let agentZ = this.agents[z]
-                        if (//!this.adjacencyMatrix[i][z] &&
-                            //!this.adjacencyMatrix[z][i] &&
-                            agentI.distanceSquare(agentZ) < dist &&
+                        if (agentI.distanceSquare(agentZ) < dist &&
                             agentJ.distanceSquare(agentZ) < dist) {
                                 addEdge = false
                                 break;
