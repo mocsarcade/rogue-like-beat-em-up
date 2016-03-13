@@ -15,7 +15,7 @@ class Adventurer extends Creature {
         this.type = "adventurer"
         this.stage = 0
     }
-    onLoop(delta) {
+    onLoop() {
         if (Keyb.isJustDown("W") ||
             Keyb.isJustDown("<up>")) {
             this.move({y: -1})
