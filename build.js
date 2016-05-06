@@ -39,7 +39,7 @@ rimraf("./builds", function() {
             ],
             loaders: [
                 {test: /\.json$/i, loader: "json-loader"},
-                {test: /\.js$/i, exclude: /(node_modules)/i, loader: "babel-loader?presets[]=react,presets[]=es2015,presets[]=stage-0"},
+                {test: /\.js$/i, exclude: /(node_modules)/i, loader: "babel-loader"},
                 {test: /\.s?css$/i, loader: new WebpackExtract("css", "index.css").extract(["css-loader", "autoprefixer-loader", "sass-loader"])},
                 {test: /\.html$/i, loader: new WebpackExtract("html", "index.html").extract(["html-loader"])},
                 {test: /\.(png|jpe?g|gif|svg)$/i, loaders: ["url-loader", "image-webpack-loader"]},

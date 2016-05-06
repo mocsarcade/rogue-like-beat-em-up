@@ -18,9 +18,11 @@
     "afloop": "^1.0.1",
     "expect.js": "^0.3.1",
     "keyb": "^1.0.4",
+    "raf": "^3.2.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "shortid": "^2.2.4"
+    "shortid": "^2.2.4",
+    "vkey": "^1.0.0"
   },
   "devDependencies": {
     "ansi_up": "^1.3.0",

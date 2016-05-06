@@ -6,19 +6,6 @@
 //                                               //
 //////////////////////////////////////////////////
 
-//////////////////////
-///// Importing /////
-////////////////////
-
-var Keyb = require("keyb")
-var React = require("react")
-var ReactDOM = require("react-dom")
-var Afloop = require("afloop")
-
-/////////////////////
-///// Modeling /////
-///////////////////
-
 var Game = require("./scripts/model/Game.js")
 
 var state = new Object({
@@ -35,36 +22,27 @@ if(STAGE == "DEVELOPMENT") {
     window.state = state
 }
 
-//////////////////////
-///// Rendering /////
-////////////////////
+import Loop from "./scripts/utility/Loop.js"
+import {Input} from "./scripts/utility/Input.js"
+import Render from "./scripts/render/Mount.js"
 
-var Entity = require("./scripts/render/Entity")
-var AspectRatioFrame = require("./scripts/render/AspectRatioFrame")
-
-class Mount extends React.Component {
-    render() {
-        if(!!this.state) {
-            return (
-                <AspectRatioFrame width={320} height={180}>
-                    {this.state.game.entities.map((entity, index) => {
-                        return <Entity data={entity} key={index}/>
-                    })}
-                </AspectRatioFrame>
-            )
-        } else {
-            return <div/>
-        }
-    }
+var inputs = {
+    "move west": new Input(["D", "<right>"])
 }
 
-var mount = ReactDOM.render(<Mount/>, document.getElementById("mount"))
+var render = new Render()
+var loop = new Loop((delta) => {
 
-////////////////////
-///// Looping /////
-//////////////////
+    if(inputs["move west"].isStutteredDown()) {
+        console.log("!")
+    }
 
-var loop = new Afloop(function() {
     state.game.update()
-    mount.setState(state)
+    render(state)
 })
+
+if(STAGE == "PRODUCTION") {
+    document.addEventListener("keydown", function(event) {
+        event.preventDefault()
+    })
+}
