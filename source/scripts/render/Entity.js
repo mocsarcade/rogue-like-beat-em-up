@@ -1,7 +1,8 @@
 var React = require("react")
 var Media = require("../Media")
 
-var UNIT = 20
+const WIDTH = 16
+const HEIGHT = 24
 var NULL_TEXTURE = Media.images.textures.null
 
 class Entity extends React.Component {
@@ -12,17 +13,17 @@ class Entity extends React.Component {
             key: this.props.data.id,
             style: {
                 // Size
-                width: Math.ceil(this.props.data.width || 1) * UNIT + "px",
-                height: Math.ceil(this.props.data.height || 1) * UNIT + "px",
+                width: Math.ceil(this.props.data.width || 1) * WIDTH + "px",
+                height: Math.ceil(this.props.data.height || 1) * HEIGHT + "px",
                 // Position
                 position: "absolute",
-                left: Math.floor(this.props.data.position && this.props.data.position.x || 0) * UNIT + "px",
-                top: Math.floor(this.props.data.position && this.props.data.position.y || 0) * UNIT + "px",
-                marginLeft: this.props.data.anchor && this.props.data.anchor.x ? -1 * Math.floor((Math.ceil((this.props.data.width || 1) - 1) * Math.min(Math.max(this.props.data.anchor.x, 0), 1))) * UNIT + "px" : null,
-                marginTop: this.props.data.anchor && this.props.data.anchor.y ? -1 * Math.floor((Math.ceil((this.props.data.height || 1) - 1) * Math.min(Math.max(this.props.data.anchor.y, 0), 1))) * UNIT + "px" : null,
+                left: Math.floor(this.props.data.position && this.props.data.position.x || 0) * WIDTH + "px",
+                top: Math.floor(this.props.data.position && this.props.data.position.y || 0) * HEIGHT + "px",
+                marginLeft: this.props.data.anchor && this.props.data.anchor.x ? -1 * Math.floor((Math.ceil((this.props.data.width || 1) - 1) * Math.min(Math.max(this.props.data.anchor.x, 0), 1))) * WIDTH + "px" : null,
+                marginTop: this.props.data.anchor && this.props.data.anchor.y ? -1 * Math.floor((Math.ceil((this.props.data.height || 1) - 1) * Math.min(Math.max(this.props.data.anchor.y, 0), 1))) * HEIGHT + "px" : null,
                 // Background
                 backgroundRepeat: !!this.props.data.texture ? "repeat" : null,
-                backgroundSize: !!this.props.data.texture ? UNIT + "px" : null,
+                backgroundSize: !!this.props.data.texture ? WIDTH + "px" : null,
                 backgroundPosition: !!this.props.data.texture ? "bottom" : null,
                 backgroundColor: !!this.props.data.color ? this.props.data.color : null,
                 backgroundImage: !this.props.data.color ? "url(" + NULL_TEXTURE + ")" : null,

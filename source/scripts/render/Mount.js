@@ -3,16 +3,17 @@ import ReactDOM from "react-dom"
 
 var Entity = require("./Entity")
 var AspectRatioFrame = require("./AspectRatioFrame")
+import Frame from "./Frame.js"
 
 class Mount extends React.Component {
     render() {
         if(!!this.state) {
             return (
-                <AspectRatioFrame width={320} height={180}>
+                <Frame frame={{width: 320, height: 180}}>
                     {this.state.game.entities.map((entity, key) => {
                         return <Entity data={entity} key={key}/>
                     })}
-                </AspectRatioFrame>
+                </Frame>
             )
         } else {
             return <div/>
