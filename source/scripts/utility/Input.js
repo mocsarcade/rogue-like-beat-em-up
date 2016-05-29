@@ -59,6 +59,9 @@ export class Input {
     static isDown(input) {
         return Keyb.isDown(input)
     }
+    static isJustDown(input, time) {
+        return Keyb.isDown(input, time)
+    }
     isDown() {
         return this.inputs.some((input) => {
             return Keyb.isDown(input)

@@ -35,7 +35,7 @@ rimraf("./builds", function() {
         watch: MODE == "SERVER",
         module: {
             preLoaders: [
-                {test:/\.js$/, exclude: /node_modules/, loader: "eslint-loader"}
+                // {test:/\.js$/, exclude: /node_modules/, loader: "eslint-loader"}
             ],
             loaders: [
                 {test: /\.json$/i, loader: "json-loader"},

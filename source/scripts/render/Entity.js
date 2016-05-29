@@ -5,10 +5,10 @@ const WIDTH = 16
 const HEIGHT = 24
 var NULL_TEXTURE = Media.images.textures.null
 
-class Entity extends React.Component {
+export default class Entity extends React.Component {
     render() {
         return React.createElement("div", {
-            // Idthis.props.data
+            // Identity
             id: this.props.data.id,
             key: this.props.data.id,
             style: {
@@ -64,5 +64,3 @@ class Entity extends React.Component {
         }
     }
 }
-
-module.exports = Entity

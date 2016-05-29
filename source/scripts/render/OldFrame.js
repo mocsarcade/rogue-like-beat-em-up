@@ -1,6 +1,6 @@
 var React = require("react")
 
-class AspectRatioFrame extends React.Component {
+export default class Frame extends React.Component {
     render() {
         return (
             <div className="frame" style={this.renderStyle()}>
@@ -27,5 +27,3 @@ class AspectRatioFrame extends React.Component {
         }
     }
 }
-
-module.exports = AspectRatioFrame

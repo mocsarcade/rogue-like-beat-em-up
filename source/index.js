@@ -6,43 +6,26 @@
 //                                               //
 //////////////////////////////////////////////////
 
-var Game = require("./scripts/model/Game.js")
-
-var state = new Object({
-    game: new Game({
-        // ...
-    })
+import Game from "./scripts/model/Game.js"
+var game = new Game({
+    // ...
 })
 
-// While developing, we expose the game state
+// While  in development, we expose the game state
 // to the window, so we can examine it via the
-// browser javascript console. Please do not
-// try to use this global variable elsewhere.
+// javascript console. Please do not use this
+// global variable elsewhere.
+
 if(STAGE == "DEVELOPMENT") {
-    window.state = state
+    window.game = game
 }
 
 import Loop from "./scripts/utility/Loop.js"
 import {Input} from "./scripts/utility/Input.js"
-import Render from "./scripts/render/Mount.js"
-
-var inputs = {
-    "move west": new Input(["D", "<right>"])
-}
+import {Render} from "./scripts/render/Mount.js"
 
 var render = new Render()
 var loop = new Loop((delta) => {
-
-    if(inputs["move west"].isStutteredDown()) {
-        console.log("!")
-    }
-
-    state.game.update()
-    render(state)
+    game.update(delta)
+    render({"game": game})
 })
-
-if(STAGE == "PRODUCTION") {
-    document.addEventListener("keydown", function(event) {
-        event.preventDefault()
-    })
-}
