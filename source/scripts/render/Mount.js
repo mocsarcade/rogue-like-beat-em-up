@@ -9,13 +9,21 @@ const HEIGHT = 24 * 9
 export default class Mount extends React.Component {
     render() {
         if(!!this.state) {
-            return (
-                <Frame width={WIDTH} height={HEIGHT}>
-                    {this.state.game.entities.map((entity) => {
-                        return <Entity data={entity} key={entity.key}/>
-                    })}
-                </Frame>
-            )
+            if(this.state.game.isReady) {
+                return (
+                    <Frame frame={this.state.frame}>
+                        {this.state.game.entities.map((entity) => {
+                            return <Entity data={entity} key={entity.key}/>
+                        })}
+                    </Frame>
+                )
+            } else {
+                return (
+                    <Frame frame={this.state.frame}>
+                        <span>...</span>
+                    </Frame>
+                )
+            }
         } else {
             return <div/>
         }

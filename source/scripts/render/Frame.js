@@ -17,8 +17,8 @@ export default class Frame extends React.Component {
             margin: "auto",
             position: "fixed",
             overflow: "hidden",
-            width: this.props.width + "px",
-            height: this.props.height + "px",
+            width: this.props.frame.width + "px",
+            height: this.props.frame.height + "px",
             backgroundColor: this.props.color || "#222",
             transform: "scale(" + this.scale + ")",
             transformOrigin: "center",
@@ -26,8 +26,8 @@ export default class Frame extends React.Component {
     }
     get scale() {
         return Math.min(
-            window.innerWidth / this.props.width,
-            window.innerHeight / this.props.height
+            window.innerWidth / this.props.frame.width,
+            window.innerHeight / this.props.frame.height
         )
     }
 }

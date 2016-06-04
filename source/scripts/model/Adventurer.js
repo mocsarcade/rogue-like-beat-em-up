@@ -1,10 +1,6 @@
 var Keyb = require("keyb")
 var ShortID = require("shortid")
 
-var Media = require("../Media.js")
-var IMAGE = Media.images.shapes.entities[1]
-var COLOR = Media.colors.yellow
-
 export default class Adventurer {
     constructor(protoadventurer) {
         protoadventurer = protoadventurer || {}
@@ -14,15 +10,15 @@ export default class Adventurer {
         this.game = protoadventurer.game
         this.transition = true
 
-        this.shape = IMAGE
-        this.color = COLOR
+        this.shape = protoadventurer.sprite
+
+        this.color = "#DEB74A"
 
         this.key = ShortID.generate()
     }
     update(delta) {
-        if(!!window.animations
-        && !!window.animations["5x5"]) {
-            this.shape = window.animations["5x5"]
+        if(!!this.shape
+        && !!this.shape.update) {
             this.shape.update(delta)
         }
 
