@@ -10,26 +10,24 @@ export default class Frame extends React.Component {
     }
     get style() {
         return {
-            // top: "0px",
-            // left: "0px",
-            // right: "0px",
-            // bottom: "0px",
-            // margin: "auto",
-            // position: "fixed",
+            top: "0px",
+            left: "0px",
+            right: "0px",
+            bottom: "0px",
+            margin: "auto",
+            position: "fixed",
             overflow: "hidden",
-            width: this.props.frame.width + "px",
-            height: this.props.frame.height + "px",
+            width: this.props.width + "px",
+            height: this.props.height + "px",
             backgroundColor: this.props.color || "#222",
             transform: "scale(" + this.scale + ")",
-            transformOrigin: "top left",
+            transformOrigin: "center",
         }
     }
     get scale() {
         return Math.min(
-            window.innerWidth / this.props.frame.width,
-            window.innerHeight / this.props.frame.height
+            window.innerWidth / this.props.width,
+            window.innerHeight / this.props.height
         )
-        // var width = window.innerWidth / this.props.frame.width
-        // var height = window.innerHeight / this.props.frame.height
     }
 }

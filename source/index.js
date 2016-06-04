@@ -12,7 +12,7 @@ var game = new Game({
 })
 
 // While  in development, we expose the game state
-// to the window, so we can examine it via the
+// to the window, so we can examine it from the
 // javascript console. Please do not use this
 // global variable elsewhere.
 
@@ -22,10 +22,12 @@ if(STAGE == "DEVELOPMENT") {
 
 import Loop from "./scripts/utility/Loop.js"
 import {Input} from "./scripts/utility/Input.js"
-import {Render} from "./scripts/render/Mount.js"
+import Render from "./scripts/utility/Render.js"
 
 var render = new Render()
 var loop = new Loop((delta) => {
     game.update(delta)
-    render({"game": game})
+    render({
+        "game": game
+    })
 })

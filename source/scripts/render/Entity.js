@@ -1,9 +1,7 @@
-var React = require("react")
-var Media = require("../Media")
+import React from "react"
 
 const WIDTH = 16
 const HEIGHT = 24
-var NULL_TEXTURE = Media.images.textures.null
 
 export default class Entity extends React.Component {
     render() {

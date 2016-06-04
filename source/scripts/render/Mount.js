@@ -1,28 +1,23 @@
 import React from "react"
-import ReactDOM from "react-dom"
 
-import Frame from "./OldFrame.js"
+import Frame from "./Frame.js"
 import Entity from "./Entity.js"
 
-class Mount extends React.Component {
+const WIDTH = 192 // 16 * 12
+const HEIGHT = 288 // 24 * 12
+
+export default class Mount extends React.Component {
     render() {
         if(!!this.state) {
             return (
-                <Frame width={320} height={180}>
-                    {this.state.game.entities.map((entity, key) => {
-                        return <Entity data={entity} key={key}/>
+                <Frame width={WIDTH} height={HEIGHT}>
+                    {this.state.game.entities.map((entity) => {
+                        return <Entity data={entity} key={entity.key}/>
                     })}
                 </Frame>
             )
         } else {
             return <div/>
         }
-    }
-}
-
-export function Render() {
-    var mount = ReactDOM.render(<Mount/>, document.getElementById("mount"))
-    return function(state) {
-        mount.setState(state)
     }
 }

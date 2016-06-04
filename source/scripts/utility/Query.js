@@ -2,7 +2,7 @@
 // by that name from the URL. So querying for "name" from
 // "localhost:13821?name=Andrew" returns "Andrew".
 
-module.exports.queryURL = function(name) {
+export function QueryURL(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
     var results = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(location.search)
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "))
