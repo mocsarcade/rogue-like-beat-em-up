@@ -9,30 +9,32 @@ export default class Adventurer {
     constructor(protoadventurer) {
         protoadventurer = protoadventurer || {}
 
-        this.transition = true
-        this.position = protoadventurer.position || {x: 0, y: 0}
+        this.position = protoadventurer.position || {x: 4, y: 4}
+        this.inputs = protoadventurer.inputs
         this.game = protoadventurer.game
+        this.transition = true
 
         this.shape = IMAGE
         this.color = COLOR
 
         this.key = ShortID.generate()
     }
-    update() {
-        if(Keyb.isJustDown("W")
-        || Keyb.isJustDown("<up>")) {
+    update(delta) {
+        for(var key in this.inputs) {
+            if(!!this.inputs[key].update) {
+                this.inputs[key].update(delta)
+            }
+        }
+        if(this.inputs.north.isDown(delta)) {
             this.move({y: -1})
         }
-        if(Keyb.isJustDown("S")
-        || Keyb.isJustDown("<down>")) {
+        if(this.inputs.south.isDown(delta)) {
             this.move({y: +1})
         }
-        if(Keyb.isJustDown("A")
-        || Keyb.isJustDown("<left>")) {
+        if(this.inputs.west.isDown(delta)) {
             this.move({x: -1})
         }
-        if(Keyb.isJustDown("D")
-        || Keyb.isJustDown("<right>")) {
+        if(this.inputs.east.isDown(delta)) {
             this.move({x: +1})
         }
     }
