@@ -20,6 +20,12 @@ export default class Adventurer {
         this.key = ShortID.generate()
     }
     update(delta) {
+        if(!!window.animations
+        && !!window.animations["5x5"]) {
+            this.shape = window.animations["5x5"]
+            this.shape.update(delta)
+        }
+
         for(var key in this.inputs) {
             if(!!this.inputs[key].update) {
                 this.inputs[key].update(delta)
