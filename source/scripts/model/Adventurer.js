@@ -1,19 +1,22 @@
-// import Keyb from "../utility/Input.js"
 var Keyb = require("keyb")
-var Media = require("../Media.js")
+var ShortID = require("shortid")
 
-class Adventurer {
-    constructor(protoadventurer = new Object()) {
+var Media = require("../Media.js")
+var IMAGE = Media.images.shapes.entities[1]
+var COLOR = Media.colors.yellow
+
+export default class Adventurer {
+    constructor(protoadventurer) {
+        protoadventurer = protoadventurer || {}
+
+        this.transition = true
         this.position = protoadventurer.position || {x: 0, y: 0}
         this.game = protoadventurer.game
 
-        this.shape = Media.images.shapes.entities[1]
-        this.color = Media.colors.yellow
-        this.transition = true
-        this.stack = 1
+        this.shape = IMAGE
+        this.color = COLOR
 
-        this.height = 2
-        this.anchor = {x: 0, y: 1}
+        this.key = ShortID.generate()
     }
     update() {
         if(Keyb.isJustDown("W")
@@ -33,26 +36,25 @@ class Adventurer {
             this.move({x: +1})
         }
     }
-    move(movement = new Object()) {
+    move(movement) {
+        movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
 
-        var isInDungeon = this.game.dungeon.rooms.some((room) => {
-            return room.contains({
-                x: this.position.x + movement.x,
-                y: this.position.y + movement.y
-            })
-        })
-
-        if(!isInDungeon) {
-            movement.x = 0
-            movement.y = 0
-            return
-        }
+        // var isInDungeon = this.game.dungeon.rooms.some((room) => {
+        //     return room.contains({
+        //         x: this.position.x + movement.x,
+        //         y: this.position.y + movement.y
+        //     })
+        // })
+        //
+        // if(!isInDungeon) {
+        //     movement.x = 0
+        //     movement.y = 0
+        //     return
+        // }
 
         this.position.x += movement.x
         this.position.y += movement.y
     }
 }
-
-module.exports = Adventurer
