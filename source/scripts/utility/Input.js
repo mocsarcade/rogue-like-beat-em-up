@@ -1,6 +1,6 @@
 import vkey from "vkey"
 
-export var Keyb = {
+export var InputState = {
     isDown: function(key, time) {
         if(time == undefined) {
             return this.data[key] != undefined
@@ -24,13 +24,13 @@ export var Keyb = {
 }
 
 document.addEventListener("keydown", function(event) {
-    if(!Keyb.isDown(vkey[event.keyCode])) {
-        Keyb.setDown(vkey[event.keyCode])
+    if(!InputState.isDown(vkey[event.keyCode])) {
+        InputState.setDown(vkey[event.keyCode])
     }
 })
 
 document.addEventListener("keyup", function(event) {
-    Keyb.setUp(vkey[event.keyCode])
+    InputState.setUp(vkey[event.keyCode])
 })
 
 export class Input {
@@ -43,7 +43,7 @@ export class Input {
     }
     isDown(timeframe) {
         return this.inputs.some((input) => {
-            return Keyb.isDown(input, timeframe)
+            return InputState.isDown(input, timeframe)
         })
     }
 }
