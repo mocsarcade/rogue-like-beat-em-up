@@ -1,11 +1,8 @@
-var Keyb = require("keyb")
-var ShortID = require("shortid")
-
 export default class Adventurer {
     constructor(protoadventurer) {
         protoadventurer = protoadventurer || {}
 
-        this.position = protoadventurer.position || {x: 4, y: 4}
+        this.position = protoadventurer.position || {x: 4, y: 6}
         this.inputs = protoadventurer.inputs
         this.game = protoadventurer.game
         this.transition = true
@@ -13,8 +10,6 @@ export default class Adventurer {
         this.shape = protoadventurer.sprite
 
         this.color = "#DEB74A"
-
-        this.key = ShortID.generate()
     }
     update(delta) {
         if(!!this.shape

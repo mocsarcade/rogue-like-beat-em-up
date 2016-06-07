@@ -5,7 +5,7 @@ var Media; export default Media = {
     images: {
         sprites: {
             entities: {
-                "0x0": require("../images/shapes/entities/0.png"),
+                "0": require("../images/shapes/entities/0.png"),
             }
         },
     },
@@ -30,4 +30,8 @@ var spritesheet = new Spritesheet(require("../images/entities.png"), 16, 24, fun
             ]
         }
     }
+})
+
+new Spritesheet(require("../images/items.png"), 16, 24, function(spritesheet) {
+    Media.images.items = spritesheet.images
 })
