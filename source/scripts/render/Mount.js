@@ -13,7 +13,6 @@ export default class Mount extends React.Component {
             if(this.state.game.isReady) {
                 return (
                     <Frame frame={this.state.frame}>
-                        <Interface game={this.state.game}/>
                         {this.state.game.entities.map((entity) => {
                             return <Entity data={entity} key={entity.key}/>
                         })}

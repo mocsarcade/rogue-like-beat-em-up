@@ -16,9 +16,7 @@ export default class Game {
                 "east": new StutteredInput("<right>", 200),
             }
         }))
-        window.setTimeout(() => {
-            this.adventurer.weapon = Media.images.items["1x0"]
-        }, 100)
+        //this.adventurer.weapon = Media.images.items["1x0"]
 
         this.add("monster", new Monster({
             sprite: Media.images.sprites.entities["0"],

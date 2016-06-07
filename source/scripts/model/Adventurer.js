@@ -12,16 +12,12 @@ export default class Adventurer {
         this.color = "#DEB74A"
     }
     update(delta) {
-        if(!!this.shape
-        && !!this.shape.update) {
-            this.shape.update(delta)
-        }
-
         for(var key in this.inputs) {
             if(!!this.inputs[key].update) {
                 this.inputs[key].update(delta)
             }
         }
+
         if(this.inputs.north.isDown(delta)) {
             this.move({y: -1})
         }
@@ -39,6 +35,12 @@ export default class Adventurer {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
+
+        if(this.position.x + movement.x == this.game.monster.position.x
+        && this.position.y + movement.y == this.game.monster.position.y) {
+            movement.x = 0
+            movement.y = 0
+        }
 
         // var isInDungeon = this.game.dungeon.rooms.some((room) => {
         //     return room.contains({
