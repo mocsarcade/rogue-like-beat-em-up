@@ -1,7 +1,7 @@
 import React from "react"
 
-const WIDTH = 16
-const HEIGHT = 24
+const WIDTH = 18
+const HEIGHT = 18
 
 export default class Entity extends React.Component {
     render() {
@@ -25,10 +25,10 @@ export default class Entity extends React.Component {
                 backgroundPosition: !!this.props.data.texture ? "bottom" : null,
                 backgroundColor: !!this.props.data.color ? this.props.data.color : null,
                 backgroundImage: !this.props.data.color ? "url(" + NULL_TEXTURE + ")" : null,
-                WebkitMask: !!this.props.data.shape ? "url(" + this.props.data.shape + ")" : null,
-                WebkitMaskRepeat: !!this.props.data.shape ? "no-repeat" : null,
-                WebkitMaskPosition: !!this.props.data.shape ? "bottom" : null,
-                WebkitMaskSize: !!this.props.data.shape ? "contain" : null,
+                WebkitMask: !!this.props.data.sprite ? "url(" + this.props.data.sprite + ")" : null,
+                WebkitMaskRepeat: !!this.props.data.sprite ? "no-repeat" : null,
+                WebkitMaskPosition: !!this.props.data.sprite ? "bottom" : null,
+                WebkitMaskSize: !!this.props.data.sprite ? "contain" : null,
                 // Transition
                 transitionProperty: !!this.props.data.transition ? "top, left" : null,
                 transitionTimingFunction: !!this.props.data.transition ? this.props.data.transition.timing || "ease" : null,

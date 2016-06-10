@@ -1,7 +1,10 @@
+import DATA from "../DATA.js"
+
 export default class Monster {
     constructor(monster) {
-        this.position = {x: 4, y: 2}
-        this.shape = monster.sprite
         this.color = "#CB0000"
+        this.sprite = DATA.IMAGES.GEL_ALPHA
+
+        this.position = monster.position
     }
 }

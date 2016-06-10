@@ -1,15 +1,16 @@
+import DATA from "../DATA.js"
+
 export default class Adventurer {
     constructor(protoadventurer) {
         protoadventurer = protoadventurer || {}
 
-        this.position = protoadventurer.position || {x: 4, y: 6}
+        this.position = protoadventurer.position || {x: 2, y: 5}
         this.inputs = protoadventurer.inputs
         this.game = protoadventurer.game
         this.transition = true
 
-        this.shape = protoadventurer.sprite
-
-        this.color = "#DEB74A"
+        this.color = DATA.COLORS._YELLOW
+        this.sprite = DATA.IMAGES.ADVENTURER
     }
     update(delta) {
         for(var key in this.inputs) {
@@ -32,29 +33,30 @@ export default class Adventurer {
         }
     }
     move(movement) {
+        // initialization
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
 
-        if(this.position.x + movement.x == this.game.monster.position.x
-        && this.position.y + movement.y == this.game.monster.position.y) {
+        // collision with monsters
+        this.game.monsters.forEach((monster) => {
+            if(this.position.x + movement.x == monster.position.x
+            && this.position.y + movement.y == monster.position.y) {
+                movement.x = 0
+                movement.y = 0
+            }
+        })
+
+        // collision with the camera
+        if(movement.x < 0 && this.position.x + movement.x < 0
+        || movement.y < 0 && this.position.y + movement.y < 0
+        || movement.x > 0 && this.position.x + movement.x >= DATA.FRAME.WIDTH
+        || movement.y > 0 && this.position.y + movement.y >= DATA.FRAME.HEIGHT) {
             movement.x = 0
             movement.y = 0
         }
 
-        // var isInDungeon = this.game.dungeon.rooms.some((room) => {
-        //     return room.contains({
-        //         x: this.position.x + movement.x,
-        //         y: this.position.y + movement.y
-        //     })
-        // })
-        //
-        // if(!isInDungeon) {
-        //     movement.x = 0
-        //     movement.y = 0
-        //     return
-        // }
-
+        // translation
         this.position.x += movement.x
         this.position.y += movement.y
     }

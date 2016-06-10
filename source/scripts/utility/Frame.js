@@ -1,6 +1,6 @@
 export default class Frame {
     constructor() {
-        this.width = 16 * 9
-        this.height = 24 * 9
+        this.width = 18 * 5
+        this.height = 18 * 7
     }
 }

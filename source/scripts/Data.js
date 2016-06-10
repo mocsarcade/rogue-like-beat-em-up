@@ -1,11 +1,11 @@
-export var Data = {
+export default {
     TILE: {
-        WIDTH: 16,
-        HEIGHT: 24,
+        WIDTH: 18,
+        HEIGHT: 18,
     },
     FRAME: {
-        WIDTH: 192,
-        HEIGHT: 288,
+        WIDTH: 5,
+        HEIGHT: 7,
     },
     COLORS: {
         WHITE: "#EEEEEE",
@@ -16,5 +16,11 @@ export var Data = {
         BROWN: "#8D4633",
         GRAY: "#666666",
         BLACK: "#000000",
+        _YELLOW: "#DEB74A"
+    },
+    IMAGES: {
+        ADVENTURER: require("../images/adventurer.png"),
+        GEL_ALPHA: require("../images/gel_alpha.png"),
+        GEL_OMEGA: require("../images/gel_omega.png")
     }
 }

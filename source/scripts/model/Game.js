@@ -1,26 +1,23 @@
+import ShortID from "shortid"
+
 import Monster from "./Monster.js"
 import Adventurer from "./Adventurer.js"
 
-import {Input, StutteredInput} from "../utility/Input.js"
-import Media from "../Media.js"
-import ShortID from "shortid"
+import {StutteredInput} from "../utility/Input.js"
 
 export default class Game {
     constructor() {
         this.add("adventurer", new Adventurer({
-            sprite: Media.images.sprites.entities["0"],
             inputs: {
                 "north": new StutteredInput("<up>", 200),
                 "south": new StutteredInput("<down>", 200),
                 "west": new StutteredInput("<left>", 200),
                 "east": new StutteredInput("<right>", 200),
             }
-        }))
-        //this.adventurer.weapon = Media.images.items["1x0"]
+        }), false)
 
-        this.add("monster", new Monster({
-            sprite: Media.images.sprites.entities["0"],
-        }))
+        this.add("monsters", new Monster({position: {x: 1, y: 1}}))
+        this.add("monsters", new Monster({position: {x: 3, y: 1}}))
 
         // This variable can be
         // conditionally return
@@ -29,10 +26,16 @@ export default class Game {
         // initialized.
         this.isReady = true
     }
-    add(label, entity) {
-        this[label] = entity
-        entity.key = ShortID.generate()
+    add(name, entity, key) {
         entity.game = this
+        entity.key = key != undefined ? key : ShortID.generate()
+
+        if(key === false) {
+            this[name] = entity
+        } else {
+            this[name] = this[name] || []
+            this[name].push(entity)
+        }
     }
     get entities() {
         // Returns a big list of every
@@ -40,7 +43,7 @@ export default class Game {
         // is used for rendering.
         return (
             new Array()
-                .concat(this.monster)
+                .concat(this.monsters)
                 .concat(this.adventurer)
         )
     }

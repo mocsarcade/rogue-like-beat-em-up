@@ -1,7 +1,5 @@
 import React from "react"
 
-import grid from "../../images/grid.png"
-
 export default class Frame extends React.Component {
     render() {
         return (
@@ -22,7 +20,6 @@ export default class Frame extends React.Component {
             width: this.props.frame.width + "px",
             height: this.props.frame.height + "px",
             backgroundColor: this.props.color || "#222",
-            backgroundImage: "url(" + grid + ")",
             transform: "scale(" + this.scale + ")",
             transformOrigin: "center",
         }
