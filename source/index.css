@@ -15,3 +15,27 @@ html {
     background-color: #111;
     font-family: pixel, monospace;
 }
+
+@keyframes attack-northwards {
+    0% {transform: translateY(0px)}
+    50% {transform: translateY(-7px)}
+    100% {transform: translateY(0px)}
+}
+
+@keyframes attack-southwards {
+    0% {transform: translateY(0px)}
+    50% {transform: translateY(+7px)}
+    100% {transform: translateY(0px)}
+}
+
+@keyframes attack-westwards {
+    0% {transform: translateX(0px)}
+    50% {transform: translateX(-7px)}
+    100% {transform: translateX(0px)}
+}
+
+@keyframes attack-eastwards {
+    0% {transform: translateX(0px)}
+    50% {transform: translateX(+7px)}
+    100% {transform: translateX(0px)}
+}

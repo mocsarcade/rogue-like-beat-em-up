@@ -1,5 +1,7 @@
 import DATA from "../DATA.js"
 
+import ShortID from "shortid"
+
 export default class Adventurer {
     constructor(protoadventurer) {
         protoadventurer = protoadventurer || {}
@@ -11,6 +13,8 @@ export default class Adventurer {
 
         this.color = DATA.COLORS._YELLOW
         this.sprite = DATA.IMAGES.ADVENTURER
+
+        this.instance = ShortID.generate()
     }
     update(delta) {
         for(var key in this.inputs) {
@@ -38,11 +42,21 @@ export default class Adventurer {
         movement.x = movement.x || 0
         movement.y = movement.y || 0
 
+        this.animation = false
+
         // collision with monsters
         this.game.monsters.forEach((monster) => {
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
-                // console.log("ATTACK!")
+                if(movement.x < 0 && movement.y == 0) {
+                    this.animation = "attack-westwards"
+                } else if(movement.x > 0 && movement.y == 0) {
+                    this.animation = "attack-eastwards"
+                } else if(movement.x == 0 && movement.y < 0) {
+                    this.animation = "attack-northwards"
+                } else if(movement.x == 0 && movement.y > 0) {
+                    this.animation = "attack-southwards"
+                }
                 movement.x = 0
                 movement.y = 0
             }

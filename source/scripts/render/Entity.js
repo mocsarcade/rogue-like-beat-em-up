@@ -8,7 +8,8 @@ export default class Entity extends React.Component {
         return React.createElement("div", {
             // Identity
             id: this.props.data.id,
-            key: this.props.data.id,
+            key: this.props.data.instance,
+            ref: "entity",
             style: {
                 // Size
                 width: Math.ceil(this.props.data.width || 1) * WIDTH + "px",
@@ -44,7 +45,10 @@ export default class Entity extends React.Component {
                 // Miscellaneous
                 zIndex: this.props.data.stack,
                 opacity: this.props.data.opacity,
-                visibility: this.props.data.isHidden ? "hidden" : null
+                visibility: this.props.data.isHidden ? "hidden" : null,
+                animationName: this.props.data.animation || null,
+                animationDuration: 0.2 + "s",
+                animationFillMode: "forwards",
             },
             // Events
             onClick: this.onClick.bind(this),
@@ -60,5 +64,10 @@ export default class Entity extends React.Component {
         if(!!this.props.data.onDoubleClick) {
             this.props.data.onDoubleClick(event)
         }
+    }
+    componentDidMount(event) {
+        this.refs.entity.addEventListener("webkitAnimationEnd", (event) => {
+            this.props.data.animation = false
+        })
     }
 }
