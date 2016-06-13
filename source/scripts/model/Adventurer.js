@@ -2,6 +2,9 @@ import DATA from "../DATA.js"
 
 import ShortID from "shortid"
 
+import Effect from "./Effect.js"
+import AnimatedSprite from "../utility/AnimatedSprite.js"
+
 export default class Adventurer {
     constructor(protoadventurer) {
         protoadventurer = protoadventurer || {}
@@ -48,6 +51,7 @@ export default class Adventurer {
         this.game.monsters.forEach((monster) => {
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
+                this.instance = ShortID.generate()
                 if(movement.x < 0 && movement.y == 0) {
                     this.animation = "attack-westwards"
                 } else if(movement.x > 0 && movement.y == 0) {
@@ -57,6 +61,21 @@ export default class Adventurer {
                 } else if(movement.x == 0 && movement.y > 0) {
                     this.animation = "attack-southwards"
                 }
+                this.game.add("effects", new Effect({
+                    sprite: new AnimatedSprite({
+                        isLoop: false,
+                        timing: 50,
+                        images: [
+                            DATA.IMAGES.SLASH_1,
+                            DATA.IMAGES.SLASH_2,
+                            DATA.IMAGES.SLASH_3,
+                        ]
+                    }),
+                    position: {
+                        x: this.position.x + movement.x,
+                        y: this.position.y + movement.y,
+                    }
+                }))
                 movement.x = 0
                 movement.y = 0
             }

@@ -37,6 +37,9 @@ export default class Game {
             this[name].push(entity)
         }
     }
+    remove(name, entity) {
+        this[name].splice(this[name].indexOf(entity), 1)
+    }
     get entities() {
         // Returns a big list of every
         // entity in the game, which
@@ -45,9 +48,15 @@ export default class Game {
             new Array()
                 .concat(this.monsters)
                 .concat(this.adventurer)
+                .concat(this.effects || [])
         )
     }
     update(delta) {
         this.adventurer.update(delta)
+        if(!!this.effects) {
+            this.effects.forEach((effect) => {
+                effect.update(delta)
+            })
+        }
     }
 }
