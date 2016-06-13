@@ -16,7 +16,8 @@ export default {
         BROWN: "#8D4633",
         GRAY: "#666666",
         BLACK: "#000000",
-        _YELLOW: "#DEB74A"
+        _YELLOW: "#DEB74A",
+        _RED: "#A52F22",
     },
     IMAGES: {
         ADVENTURER: require("../images/adventurer.png"),

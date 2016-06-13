@@ -35,3 +35,10 @@ var loop = new Loop((delta) => {
 
     render(state)
 })
+
+// see attack/death particles, drop something
+// see attack animations, moving forward and backward
+// tiled grid
+// monster ai, monster "tell" animation
+// animate hero faster than animate monsters?
+// kill monsters, drop something, pickup something

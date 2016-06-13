@@ -42,6 +42,7 @@ export default class Adventurer {
         this.game.monsters.forEach((monster) => {
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
+                // console.log("ATTACK!")
                 movement.x = 0
                 movement.y = 0
             }
@@ -59,5 +60,11 @@ export default class Adventurer {
         // translation
         this.position.x += movement.x
         this.position.y += movement.y
+
+        this.game.monsters.forEach((monster) => {
+            if(monster.action instanceof Function) {
+                monster.action()
+            }
+        })
     }
 }
