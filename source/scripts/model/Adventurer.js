@@ -51,6 +51,8 @@ export default class Adventurer {
         this.game.monsters.forEach((monster) => {
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
+                monster.handleAttack(1)
+
                 this.instance = ShortID.generate()
                 if(movement.x < 0 && movement.y == 0) {
                     this.animation = "attack-westwards"
@@ -64,7 +66,7 @@ export default class Adventurer {
                 this.game.add("effects", new Effect({
                     sprite: new AnimatedSprite({
                         isLoop: false,
-                        timing: 50,
+                        timing: 20,
                         images: [
                             DATA.IMAGES.SLASH_1,
                             DATA.IMAGES.SLASH_2,
