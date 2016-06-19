@@ -4,7 +4,7 @@ export default {
         HEIGHT: 18,
     },
     FRAME: {
-        WIDTH: 5,
+        WIDTH: 7,
         HEIGHT: 7,
     },
     COLORS: {
@@ -15,9 +15,11 @@ export default {
         RED: "#CB0000",
         BROWN: "#8D4633",
         GRAY: "#666666",
-        BLACK: "#000000",
-        _YELLOW: "#DEB74A",
-        _RED: "#A52F22",
+        
+        BLACK: "#222222",
+        PINK: "#FF69B4",
+        YELLOW: "#DEB74A",
+        RED: "#A52F22",
     },
     IMAGES: {
         ADVENTURER: require("../images/adventurer.png"),

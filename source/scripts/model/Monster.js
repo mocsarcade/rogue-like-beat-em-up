@@ -2,11 +2,19 @@ import DATA from "../DATA.js"
 
 export default class Monster {
     constructor(monster) {
-        this.color = DATA.COLORS._RED
-        this.sprite = DATA.IMAGES.GEL_ALPHA
+        this.color = monster.color || DATA.COLORS.PINK
 
         this.position = monster.position
         this.transition = true
+
+        this.health = monster.health || 1
+    }
+    get sprite() {
+        if(this.phase == true) {
+            return DATA.IMAGES.GEL_ALPHA
+        } else {
+            return DATA.IMAGES.GEL_OMEGA
+        }
     }
     action() {
         this.phase = this.phase || false
@@ -64,9 +72,8 @@ export default class Monster {
         this.position.y += movement.y
     }
     handleAttack(damage) {
-        this.health = this.heath || 0
+        this.health = this.health || 0
         this.health -= damage
-
         if(this.health <= 0) {
             this.game.remove("monsters", this)
         }
