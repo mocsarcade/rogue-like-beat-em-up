@@ -1,13 +1,16 @@
 import DATA from "../DATA.js"
 
+import Effect from "./Effect.js"
+import AnimatedSprite from "../utility/AnimatedSprite.js"
+
 export default class Monster {
     constructor(monster) {
-        this.color = monster.color || DATA.COLORS.PINK
+        this.color = monster.protomonster.color || DATA.COLORS.PINK
 
         this.position = monster.position
         this.transition = true
 
-        this.health = monster.health || 1
+        this.health = monster.protomonster.health || 1
     }
     get sprite() {
         if(this.phase == true) {
@@ -19,6 +22,8 @@ export default class Monster {
     action() {
         this.phase = this.phase || false
         this.phase = !this.phase
+
+        this.animation = false
 
         if(this.phase == true) {
             var dx = this.game.adventurer.position.x - this.position.x
@@ -62,7 +67,30 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
-            console.log("ATTACK!")
+            if(movement.x < 0 && movement.y == 0) {
+                this.animation = "attack-westwards"
+            } else if(movement.x > 0 && movement.y == 0) {
+                this.animation = "attack-eastwards"
+            } else if(movement.x == 0 && movement.y < 0) {
+                this.animation = "attack-northwards"
+            } else if(movement.x == 0 && movement.y > 0) {
+                this.animation = "attack-southwards"
+            }
+            this.game.add("effects", undefined, new Effect({
+                sprite: new AnimatedSprite({
+                    isLoop: false,
+                    timing: 20,
+                    images: [
+                        DATA.IMAGES.SLASH_1,
+                        DATA.IMAGES.SLASH_2,
+                        DATA.IMAGES.SLASH_3,
+                    ]
+                }),
+                position: {
+                    x: this.position.x + movement.x,
+                    y: this.position.y + movement.y,
+                }
+            }))
             movement.x = 0
             movement.y = 0
         }

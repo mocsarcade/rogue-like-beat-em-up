@@ -20,7 +20,7 @@ export default class Adventurer {
 
         this.maxhealth = 3
         this.health = this.maxhealth
-        this.maxstamina = 2
+        this.maxstamina = 99
         this.stamina = this.maxstamina
         this.timeSinceLastExertion = 0
         this.timeSinceLastExertionBeforeStaminaRegeneration = 2
@@ -43,6 +43,9 @@ export default class Adventurer {
         }
         if(this.inputs.east.isDown(delta)) {
             this.move({x: +1})
+        }
+        if(this.inputs.wait.isDown(delta)) {
+            this.move()
         }
     }
     move(movement) {
