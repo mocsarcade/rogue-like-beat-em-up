@@ -20,14 +20,15 @@ export default class Game {
             }
         }))
 
-        this.add("monsters", undefined, new Monster({
-            protomonster: MONSTERS.RED_SLIME,
-            position: {x: 1, y: 1},
-        }))
-        this.add("monsters", undefined, new Monster({
-            protomonster: MONSTERS.BLUE_SLIME,
-            position: {x: 3, y: 1},
-        }))
+        this.monsters = []
+        // this.add("monsters", undefined, new Monster({
+        //     protomonster: MONSTERS.RED_SLIME,
+        //     position: {x: 1, y: 1},
+        // }))
+        // this.add("monsters", undefined, new Monster({
+        //     protomonster: MONSTERS.BLUE_SLIME,
+        //     position: {x: 3, y: 1},
+        // }))
     }
     add(name, key, entity) {
         entity.game = this
@@ -49,6 +50,7 @@ export default class Game {
     get entities() {
         return (
             new Array()
+                .concat(this.tiles || [])
                 .concat(this.monsters || [])
                 .concat(this.adventurer)
                 .concat(this.effects || [])
@@ -68,32 +70,6 @@ export default class Game {
             this.effects.forEach((effect) => {
                 effect.update(delta)
             })
-        }
-
-        if(this.monsters.length < 4) {
-            this.add("monsters", undefined, new Monster({
-                protomonster: getRandomMonster(),
-                position: getRandomPosition(),
-            }))
-        }
-    }
-}
-
-var index = 0
-function getRandomMonster() {
-    return MONSTERS[Object.keys(MONSTERS)[++index % Object.keys(MONSTERS).length]]
-}
-
-function getRandomPosition() {
-    if(Math.random() < 0.5) {
-        return {
-            x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
-            y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
-        }
-    } else {
-        return {
-            x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
-            y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
         }
     }
 }

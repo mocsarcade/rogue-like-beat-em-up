@@ -1,4 +1,4 @@
-    ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 //    _____         _   _     _   _ _                //
 //   |   __|___ ___| |_|_|___|_|_| |_|___ ___       //
 //   |   __|   |  _|   | |  _| | . | | . |   |     //
@@ -6,8 +6,8 @@
 //                                               //
 //////////////////////////////////////////////////
 
-import Game from "./scripts/model/Game.js"
-import Frame from "./scripts/utility/Frame.js"
+import Game from "scripts/model/Game.js"
+import Frame from "scripts/utility/Frame.js"
 
 var state = {
     frame: new Frame(),
