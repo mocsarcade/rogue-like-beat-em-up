@@ -99,6 +99,15 @@ export default class Adventurer {
             }
         })
 
+        // collision with dungeon
+        this.game.tiles.forEach((tile) => {
+            if(this.position.x + movement.x == tile.position.x
+            && this.position.y + movement.y == tile.position.y) {
+                movement.x = 0
+                movement.y = 0
+            }
+        })
+
         // collision with the camera
         if(movement.x < 0 && this.position.x + movement.x < 0
         || movement.y < 0 && this.position.y + movement.y < 0
@@ -111,6 +120,9 @@ export default class Adventurer {
         // translation
         this.position.x += movement.x
         this.position.y += movement.y
+
+        // translation of camera
+        this.game.camera.position = this.position
 
         this.game.monsters.forEach((monster) => {
             if(monster.action instanceof Function) {

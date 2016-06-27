@@ -8,6 +8,13 @@ import MONSTERS from "../MONSTERS.js"
 
 import {StutteredInput} from "../utility/Input.js"
 
+class Tile {
+    constructor(tile) {
+        this.position = tile.position
+        this.color = tile.color
+    }
+}
+
 export default class Game {
     constructor() {
         this.add("adventurer", false, new Adventurer({
@@ -29,6 +36,16 @@ export default class Game {
         //     protomonster: MONSTERS.BLUE_SLIME,
         //     position: {x: 3, y: 1},
         // }))
+
+        this.tiles = []
+        this.add("tiles", undefined, new Tile({
+            position: {x: 1, y: 1},
+            color: "#C00"
+        }))
+
+        this.camera = {
+            position: {x: 1, y: 1}
+        }
     }
     add(name, key, entity) {
         entity.game = this

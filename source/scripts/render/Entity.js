@@ -32,7 +32,7 @@ export default class Entity extends React.Component {
             backgroundPosition: !!this.props.data.texture ? "bottom" : null,
             backgroundColor: !!this.props.data.color ? this.props.data.color : null,
             backgroundImage: !this.props.data.color ? "url(" + NULL_TEXTURE + ")" : null,
-            WebkitMask: !!(this.props.data.sprite + "") ? "url(" + this.props.data.sprite + ")" : null,
+            WebkitMask: !!(this.props.data.sprite) ? "url(" + this.props.data.sprite + ")" : null,
             WebkitMaskRepeat: !!(this.props.data.sprite + "") ? "no-repeat" : null,
             WebkitMaskPosition: !!(this.props.data.sprite + "") ? "bottom" : null,
             WebkitMaskSize: !!(this.props.data.sprite + "") ? "contain" : null,
