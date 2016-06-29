@@ -13,10 +13,10 @@ export default class Camera extends React.Component {
     get style() {
         return {
             position: "absolute",
-            left: -1 * (this.props.camera.position.x - (DATA.FRAME.WIDTH / 2) + 0.5) * DATA.TILE.WIDTH + "px",
-            top: -1 * (this.props.camera.position.y - (DATA.FRAME.HEIGHT / 2) + 0.5) * DATA.TILE.HEIGHT + "px",
+            left: -1 * (this.props.camera.position.x - (DATA.FRAME.WIDTH / 2)) * DATA.TILE.WIDTH + "px",
+            top: -1 * (this.props.camera.position.y - (DATA.FRAME.HEIGHT / 2)) * DATA.TILE.HEIGHT + "px",
+            transitionDuration: (this.props.camera.speed || 0.5) + "s",
             transitionProperty: "top, left",
-            transitionDuration: "1s",
         }
     }
 }

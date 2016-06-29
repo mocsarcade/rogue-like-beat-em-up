@@ -15,6 +15,16 @@ class Tile {
     }
 }
 
+class Camera {
+    constructor() {
+        this.position = {x: 0, y: 0}
+    }
+    lookAt(entity) {
+        this.position.x = entity.position.x + ((entity.width || 1) / 2)
+        this.position.y = entity.position.y + ((entity.height || 1) / 2)
+    }
+}
+
 export default class Game {
     constructor() {
         this.add("adventurer", false, new Adventurer({
@@ -43,9 +53,8 @@ export default class Game {
             color: "#C00"
         }))
 
-        this.camera = {
-            position: {x: 1, y: 1}
-        }
+        this.camera = new Camera()
+        this.camera.lookAt(this.adventurer)
     }
     add(name, key, entity) {
         entity.game = this
@@ -88,5 +97,14 @@ export default class Game {
                 effect.update(delta)
             })
         }
+    }
+    onAction() {
+        this.camera.lookAt(this.adventurer)
+
+        this.monsters.forEach((monster) => {
+            if(monster.action instanceof Function) {
+                monster.action()
+            }
+        })
     }
 }
