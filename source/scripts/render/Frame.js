@@ -19,7 +19,7 @@ export default class Frame extends React.Component {
             overflow: "hidden",
             width: this.props.frame.width + "px",
             height: this.props.frame.height + "px",
-            backgroundColor: this.props.color || "#222",
+            backgroundColor: this.props.frame.color || "transparent",
             transform: "scale(" + this.scale + ")",
             transformOrigin: "center",
         }

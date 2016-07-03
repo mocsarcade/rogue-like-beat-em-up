@@ -12,7 +12,7 @@ export default class Adventurer {
         this.inputs = protoadventurer.inputs
         this.game = protoadventurer.game
 
-        this.position = {x: 2, y: 5}
+        this.position = protoadventurer.position || {x: 0, y: 0}
         this.transition = true
         this.color = DATA.COLORS.YELLOW
         this.sprite = DATA.IMAGES.ADVENTURER
@@ -96,15 +96,6 @@ export default class Adventurer {
                 movement.y = 0
             }
         })
-
-        // collision with the camera
-        if(movement.x < 0 && this.position.x + movement.x < 0
-        || movement.y < 0 && this.position.y + movement.y < 0
-        || movement.x > 0 && this.position.x + movement.x >= DATA.FRAME.WIDTH
-        || movement.y > 0 && this.position.y + movement.y >= DATA.FRAME.HEIGHT) {
-            movement.x = 0
-            movement.y = 0
-        }
 
         // translation
         this.position.x += movement.x

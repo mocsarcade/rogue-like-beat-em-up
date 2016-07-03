@@ -28,6 +28,7 @@ class Camera {
 export default class Game {
     constructor() {
         this.add("adventurer", false, new Adventurer({
+            position: {x: 0, y: 0},
             inputs: {
                 "north": new StutteredInput("<up>", 200),
                 "south": new StutteredInput("<down>", 200),
@@ -50,7 +51,7 @@ export default class Game {
         this.tiles = []
         this.add("tiles", undefined, new Tile({
             position: {x: 1, y: 1},
-            color: "#C00"
+            color: "#444"
         }))
 
         this.camera = new Camera()
