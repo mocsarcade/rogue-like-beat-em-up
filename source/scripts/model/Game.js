@@ -53,6 +53,14 @@ export default class Game {
             position: {x: 1, y: 1},
             color: "#444"
         }))
+        this.add("tiles", undefined, new Tile({
+            position: {x: 0, y: 1},
+            color: "#444"
+        }))
+        this.add("tiles", undefined, new Tile({
+            position: {x: 0, y: 0},
+            color: "#444"
+        }))
 
         this.camera = new Camera()
         this.camera.lookAt(this.adventurer)

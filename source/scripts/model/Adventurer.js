@@ -89,13 +89,13 @@ export default class Adventurer {
         })
 
         // collision with dungeon
-        this.game.tiles.forEach((tile) => {
-            if(this.position.x + movement.x == tile.position.x
-            && this.position.y + movement.y == tile.position.y) {
-                movement.x = 0
-                movement.y = 0
-            }
-        })
+        if(this.game.tiles.some((tile) => {
+            return this.position.x + movement.x == tile.position.x
+                && this.position.y + movement.y == tile.position.y
+        }) == false) {
+            movement.x = 0
+            movement.y = 0
+        }
 
         // translation
         this.position.x += movement.x
