@@ -4,8 +4,8 @@ export default {
         HEIGHT: 18,
     },
     FRAME: {
-        WIDTH: 7,
-        HEIGHT: 7,
+        WIDTH: 10,
+        HEIGHT: 10,
     },
     COLORS: {
         WHITE: "#EEEEEE",
@@ -15,7 +15,7 @@ export default {
         RED: "#CB0000",
         BROWN: "#8D4633",
         GRAY: "#666666",
-        
+
         BLACK: "#222222",
         PINK: "#FF69B4",
         YELLOW: "#DEB74A",
