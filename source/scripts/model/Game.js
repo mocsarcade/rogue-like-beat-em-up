@@ -11,7 +11,10 @@ import {StutteredInput} from "../utility/Input.js"
 class Tile {
     constructor(tile) {
         this.position = tile.position
+        this.sprite = tile.sprite
         this.color = tile.color
+
+        this.hasCollision = tile.hasCollision
     }
 }
 
@@ -49,18 +52,26 @@ export default class Game {
         // }))
 
         this.tiles = []
-        this.add("tiles", undefined, new Tile({
-            position: {x: 1, y: 1},
-            color: "#444"
-        }))
-        this.add("tiles", undefined, new Tile({
-            position: {x: 0, y: 1},
-            color: "#444"
-        }))
-        this.add("tiles", undefined, new Tile({
-            position: {x: 0, y: 0},
-            color: "#444"
-        }))
+
+        for(var x = -2; x <= +2; x++) {
+            for(var y = -2; y <= +2; y++) {
+                if(x == -2 || x == +2
+                || y == -2 || y == +2) {
+                    this.add("tiles", undefined, new Tile({
+                        sprite: DATA.IMAGES.OCTOTHORPE,
+                        position: {"x": x, "y": y},
+                        hasCollision: true,
+                        color: "#444"
+                    }))
+                } else {
+                    this.add("tiles", undefined, new Tile({
+                        sprite: DATA.IMAGES.DOT,
+                        position: {"x": x, "y": y},
+                        color: "#444"
+                    }))
+                }
+            }
+        }
 
         this.camera = new Camera()
         this.camera.lookAt(this.adventurer)

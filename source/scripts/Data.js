@@ -31,5 +31,7 @@ export default {
         SLASH_1: require("../images/slash-1.png"),
         SLASH_2: require("../images/slash-2.png"),
         SLASH_3: require("../images/slash-3.png"),
+        OCTOTHORPE: require("images/octothorpe.png"),
+        DOT: require("images/dot-2.png"),
     }
 }

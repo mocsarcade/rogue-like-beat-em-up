@@ -92,6 +92,7 @@ export default class Adventurer {
         if(this.game.tiles.some((tile) => {
             return this.position.x + movement.x == tile.position.x
                 && this.position.y + movement.y == tile.position.y
+                && !tile.hasCollision
         }) == false) {
             movement.x = 0
             movement.y = 0
