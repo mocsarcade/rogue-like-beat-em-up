@@ -5,6 +5,11 @@ import Adventurer from "./Adventurer.js"
 
 import DATA from "../DATA"
 import MONSTERS from "../MONSTERS.js"
+import LEVEL from "raw!scripts/LEVEL.txt"
+
+var level = LEVEL.split("\n").map((row) => {
+    return row.split("")
+})
 
 import {StutteredInput} from "../utility/Input.js"
 
@@ -30,17 +35,6 @@ class Camera {
 
 export default class Game {
     constructor() {
-        this.add("adventurer", false, new Adventurer({
-            position: {x: 0, y: 0},
-            inputs: {
-                "north": new StutteredInput("<up>", 200),
-                "south": new StutteredInput("<down>", 200),
-                "west": new StutteredInput("<left>", 200),
-                "east": new StutteredInput("<right>", 200),
-                "wait": new StutteredInput("<space>", 200),
-            }
-        }))
-
         this.monsters = []
         // this.add("monsters", undefined, new Monster({
         //     protomonster: MONSTERS.RED_SLIME,
@@ -53,21 +47,43 @@ export default class Game {
 
         this.tiles = []
 
-        for(var x = -2; x <= +2; x++) {
-            for(var y = -2; y <= +2; y++) {
-                if(x == -2 || x == +2
-                || y == -2 || y == +2) {
+        for(var y = 0; y < level.length; y += 1) {
+            for(var x = 0; x < level[y].length; x += 1) {
+                var tile = level[y][x]
+                if(tile == "#") {
                     this.add("tiles", undefined, new Tile({
                         sprite: DATA.IMAGES.OCTOTHORPE,
-                        position: {"x": x, "y": y},
+                        color: "#444",
                         hasCollision: true,
-                        color: "#444"
+                        position: {
+                            "x": x,
+                            "y": y,
+                        },
                     }))
-                } else {
+                } else if(tile == "." || tile == "@" || tile == "X") {
                     this.add("tiles", undefined, new Tile({
                         sprite: DATA.IMAGES.DOT,
-                        position: {"x": x, "y": y},
-                        color: "#444"
+                        color: "#888",
+                        position: {
+                            "x": x,
+                            "y": y,
+                        },
+                    }))
+                }
+
+                if(tile == "@") {
+                    this.add("adventurer", false, new Adventurer({
+                        inputs: {
+                            "north": new StutteredInput("<up>", 200),
+                            "south": new StutteredInput("<down>", 200),
+                            "west": new StutteredInput("<left>", 200),
+                            "east": new StutteredInput("<right>", 200),
+                            "wait": new StutteredInput("<space>", 200),
+                        },
+                        position: {
+                            "x": x,
+                            "y": y,
+                        },
                     }))
                 }
             }
