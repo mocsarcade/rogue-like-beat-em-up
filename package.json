@@ -2,10 +2,7 @@
   "name": "enchiridion",
   "version": "0.0.0",
   "description": "A game about knowledge.",
-  "license": {
-    "type": "mit",
-    "url": "https://opensource.org/licenses/MIT"
-  },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/mocsarcade/enchiridion"
@@ -15,14 +12,12 @@
     "Firstname Lastname <@username>"
   ],
   "dependencies": {
-    "afloop": "^1.0.1",
+    "afloop": "^1.0.2",
     "expect.js": "^0.3.1",
-    "keyb": "^1.0.4",
-    "raf": "^3.2.0",
+    "keyb": "^1.1.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "shortid": "^2.2.4",
-    "vkey": "^1.0.0"
+    "shortid": "^2.2.4"
   },
   "devDependencies": {
     "ansi_up": "^1.3.0",

@@ -7,7 +7,7 @@ export default class Effect {
     update(delta) {
         if(!!this.sprite.update) {
             this.sprite.update(delta)
-            if(!this.sprite.images.length) {
+            if(this.sprite.isFinished) {
                 this.game.remove("effects", this)
             }
         }

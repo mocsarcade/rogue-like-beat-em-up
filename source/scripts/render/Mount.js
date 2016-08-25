@@ -7,23 +7,13 @@ import Camera from "./Camera.js"
 export default class Mount extends React.Component {
     render() {
         if(!!this.state) {
-            if(this.state.game.isReady) {
-                return (
-                    <Frame frame={this.state.frame}>
-                        <Camera camera={this.state.game.camera}>
-                            {this.state.game.entities.map((entity) => {
-                                return <Entity data={entity} key={entity.key}/>
-                            })}
-                        </Camera>
-                    </Frame>
-                )
-            } else {
-                return (
-                    <Frame frame={this.state.frame}>
-                        <span>...</span>
-                    </Frame>
-                )
-            }
+            return (
+                <Frame frame={this.state.frame}>
+                    {this.state.game.entities.map((entity) => {
+                        return <Entity data={entity} key={entity.key}/>
+                    })}
+                </Frame>
+            )
         } else {
             return <div/>
         }

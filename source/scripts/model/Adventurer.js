@@ -12,6 +12,8 @@ export default class Adventurer {
         this.inputs = protoadventurer.inputs
         this.game = protoadventurer.game
 
+        this.key = "adventurer"
+
         this.position = protoadventurer.position || {x: 0, y: 0}
         this.transition = true
         this.color = DATA.COLORS.YELLOW
@@ -68,15 +70,11 @@ export default class Adventurer {
                 } else if(movement.x == 0 && movement.y > 0) {
                     this.animation = "attack-southwards"
                 }
-                this.game.add("effects", undefined, new Effect({
+                this.game.add("effects", new Effect({
                     sprite: new AnimatedSprite({
+                        images: DATA.IMAGES.SLASH,
                         isLoop: false,
                         timing: 20,
-                        images: [
-                            DATA.IMAGES.SLASH_1,
-                            DATA.IMAGES.SLASH_2,
-                            DATA.IMAGES.SLASH_3,
-                        ]
                     }),
                     position: {
                         x: this.position.x + movement.x,
@@ -89,13 +87,15 @@ export default class Adventurer {
         })
 
         // collision with dungeon
-        if(this.game.tiles.some((tile) => {
-            return this.position.x + movement.x == tile.position.x
-                && this.position.y + movement.y == tile.position.y
-                && !tile.hasCollision
-        }) == false) {
-            movement.x = 0
-            movement.y = 0
+        if(this.game.tiles instanceof Array) {
+            if(this.game.tiles.some((tile) => {
+                return this.position.x + movement.x == tile.position.x
+                    && this.position.y + movement.y == tile.position.y
+                    && !tile.hasCollision
+            }) == false) {
+                movement.x = 0
+                movement.y = 0
+            }
         }
 
         // translation

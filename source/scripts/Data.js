@@ -25,12 +25,16 @@ export default {
         ADVENTURER: require("../images/adventurer.png"),
         GEL_ALPHA: require("../images/gel_alpha.png"),
         GEL_OMEGA: require("../images/gel_omega.png"),
-        SLICE_1: require("../images/slice-1.png"),
-        SLICE_2: require("../images/slice-2.png"),
-        SLICE_3: require("../images/slice-3.png"),
-        SLASH_1: require("../images/slash-1.png"),
-        SLASH_2: require("../images/slash-2.png"),
-        SLASH_3: require("../images/slash-3.png"),
+        SLICE: [
+            require("../images/slice-1.png"),
+            require("../images/slice-2.png"),
+            require("../images/slice-3.png"),
+        ],
+        SLASH: [
+            require("../images/slash-1.png"),
+            require("../images/slash-2.png"),
+            require("../images/slash-3.png"),
+        ],
         OCTOTHORPE: require("images/octothorpe.png"),
         DOT: require("images/dot-2.png"),
     }

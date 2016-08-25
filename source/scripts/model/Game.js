@@ -2,106 +2,37 @@ import ShortID from "shortid"
 
 import Monster from "./Monster.js"
 import Adventurer from "./Adventurer.js"
+import Camera from "./Camera.js"
 
 import DATA from "../DATA"
 import MONSTERS from "../MONSTERS.js"
-import LEVEL from "raw!scripts/LEVEL.txt"
-
-var level = LEVEL.split("\n").map((row) => {
-    return row.split("")
-})
 
 import {StutteredInput} from "../utility/Input.js"
 
-class Tile {
-    constructor(tile) {
-        this.position = tile.position
-        this.sprite = tile.sprite
-        this.color = tile.color
-
-        this.hasCollision = tile.hasCollision
-    }
-}
-
-class Camera {
-    constructor() {
-        this.position = {x: 0, y: 0}
-    }
-    lookAt(entity) {
-        this.position.x = entity.position.x + ((entity.width || 1) / 2)
-        this.position.y = entity.position.y + ((entity.height || 1) / 2)
-    }
-}
+const MINIMUM_MONSTER_COUNT = 4
 
 export default class Game {
     constructor() {
+        this.adventurer = new Adventurer({
+            position: {x: 3, y: 3},
+            game: this,
+            inputs: {
+                north: new StutteredInput("<up>"),
+                south: new StutteredInput("<down>"),
+                west: new StutteredInput("<left>"),
+                east: new StutteredInput("<right>"),
+                wait: new StutteredInput("<space>")
+            },
+        })
+
         this.monsters = []
-        // this.add("monsters", undefined, new Monster({
-        //     protomonster: MONSTERS.RED_SLIME,
-        //     position: {x: 1, y: 1},
-        // }))
-        // this.add("monsters", undefined, new Monster({
-        //     protomonster: MONSTERS.BLUE_SLIME,
-        //     position: {x: 3, y: 1},
-        // }))
-
-        this.tiles = []
-
-        for(var y = 0; y < level.length; y += 1) {
-            for(var x = 0; x < level[y].length; x += 1) {
-                var tile = level[y][x]
-                if(tile == "#") {
-                    this.add("tiles", undefined, new Tile({
-                        sprite: DATA.IMAGES.OCTOTHORPE,
-                        color: "#444",
-                        hasCollision: true,
-                        position: {
-                            "x": x,
-                            "y": y,
-                        },
-                    }))
-                } else if(tile == "." || tile == "@" || tile == "X") {
-                    this.add("tiles", undefined, new Tile({
-                        sprite: DATA.IMAGES.DOT,
-                        color: "#888",
-                        position: {
-                            "x": x,
-                            "y": y,
-                        },
-                    }))
-                }
-
-                if(tile == "@") {
-                    this.add("adventurer", false, new Adventurer({
-                        inputs: {
-                            "north": new StutteredInput("<up>", 200),
-                            "south": new StutteredInput("<down>", 200),
-                            "west": new StutteredInput("<left>", 200),
-                            "east": new StutteredInput("<right>", 200),
-                            "wait": new StutteredInput("<space>", 200),
-                        },
-                        position: {
-                            "x": x,
-                            "y": y,
-                        },
-                    }))
-                }
-            }
-        }
-
-        this.camera = new Camera()
-        this.camera.lookAt(this.adventurer)
     }
-    add(name, key, entity) {
+    add(name, entity) {
         entity.game = this
-        entity.key = key != undefined ? key : ShortID.generate()
+        entity.key = entity.key || ShortID.generate()
 
-        if(key === false) {
-            this[name] = entity
-        } else {
-            this[name] = this[name] || []
-            this[name].push(entity)
-        }
+        this[name] = this[name] || []
+        this[name].push(entity)
     }
     remove(name, entity) {
         this[name].splice(this[name].indexOf(entity), 1)
@@ -118,14 +49,9 @@ export default class Game {
                 .concat(this.effects || [])
         )
     }
-    // This method can be
-    // conditionally return
-    // true when all assets
-    // have been loaded and
-    // initialized.
-    get isReady() {
-        return true
-    }
+    // This method is called
+    // once every frame, and
+    // is passed a delta in ms.
     update(delta) {
         this.adventurer.update(delta)
         if(!!this.effects) {
@@ -134,13 +60,37 @@ export default class Game {
             })
         }
     }
+    // This method is called
+    // after the adventurer
+    // has taken an action
+    // for the turn.
     onAction() {
-        this.camera.lookAt(this.adventurer)
-
-        this.monsters.forEach((monster) => {
-            if(monster.action instanceof Function) {
-                monster.action()
+        if(this.monsters instanceof Array) {
+            this.monsters.forEach((monster) => {
+                if(monster.action instanceof Function) {
+                    monster.action()
+                }
+            })
+            if(this.monsters.length < MINIMUM_MONSTER_COUNT) {
+                this.add("monsters", new Monster({
+                    protomonster: function getRandomMonster() {
+                        return MONSTERS[Object.keys(MONSTERS)[Math.floor(Math.random() * Object.keys(MONSTERS).length)]]
+                    }(),
+                    position: function getRandomPosition() {
+                        if(Math.random() < 0.5) {
+                            return {
+                                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
+                                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
+                            }
+                        } else {
+                            return {
+                                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
+                                y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
+                            }
+                        }
+                    }(),
+                }))
             }
-        })
+        }
     }
 }

@@ -3,9 +3,14 @@ import DATA from "../DATA.js"
 import Effect from "./Effect.js"
 import AnimatedSprite from "../utility/AnimatedSprite.js"
 
+import ShortID from "shortid"
+
 export default class Monster {
     constructor(monster) {
+        this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
+
+        this.game = monster.game
 
         this.position = monster.position
         this.transition = true
@@ -76,15 +81,11 @@ export default class Monster {
             } else if(movement.x == 0 && movement.y > 0) {
                 this.animation = "attack-southwards"
             }
-            this.game.add("effects", undefined, new Effect({
+            this.game.add("effects", new Effect({
                 sprite: new AnimatedSprite({
+                    images: DATA.IMAGES.SLASH,
                     isLoop: false,
                     timing: 20,
-                    images: [
-                        DATA.IMAGES.SLASH_1,
-                        DATA.IMAGES.SLASH_2,
-                        DATA.IMAGES.SLASH_3,
-                    ]
                 }),
                 position: {
                     x: this.position.x + movement.x,
