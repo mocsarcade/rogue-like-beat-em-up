@@ -29,13 +29,18 @@ export class RandomDungeon extends Dungeon {
     constructor(dungeon) {
         super(dungeon)
 
-        let gen = new Generator()
+        let gen = new Generator(this.size)
 
-        this.spaces = gen.generate(this.size)
+        this.spaces = gen.generate(Math.pow(Math.log(this.size), 3))
         this.size = this.spaces.length
 
+        // TODO:
         // needs to be sufficiently far away from the adventurer
-        let index = Math.ceil(gen.getRandom(1, this.size))
+        let index = 0
+        if (this.size > 1) {
+            // sometimes we get a dungeon with only one space!
+            index = Math.ceil(gen.getRandom(1, this.size - 1))
+        }
         let pos = this.spaces[index].position
 
         this.stairs = {

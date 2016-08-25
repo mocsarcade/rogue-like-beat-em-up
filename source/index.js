@@ -24,10 +24,10 @@ var Game = require("./scripts/model/Game.js")
 var state = new Object({
     game: new Game({
         dungeons: [
-            {colors: ["#666", "#555"], size: 50},
-            {colors: ["#400", "#500"], size: 70},
-            {colors: ["#040", "#050"], size: 100},
-            {colors: ["#004", "#005"], size: 200},
+            {colors: ["#666", "#555"], size: 10},
+            {colors: ["#400", "#500"], size: 25},
+            {colors: ["#040", "#050"], size: 50},
+            {colors: ["#004", "#005"], size: 100},
         ]
     })
 })

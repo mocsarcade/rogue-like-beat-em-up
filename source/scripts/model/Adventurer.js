@@ -16,23 +16,23 @@ class Adventurer extends Creature {
         this.stage = 0
     }
     onLoop() {
-        if(Keyb.isJustDown("W")
-        || Keyb.isJustDown("<up>")) {
+        if (Keyb.isJustDown("W") ||
+            Keyb.isJustDown("<up>")) {
             this.move({y: -1})
         }
-        if(Keyb.isJustDown("S")
-        || Keyb.isJustDown("<down>")) {
+        if (Keyb.isJustDown("S") ||
+            Keyb.isJustDown("<down>")) {
             this.move({y: +1})
         }
-        if(Keyb.isJustDown("A")
-        || Keyb.isJustDown("<left>")) {
+        if (Keyb.isJustDown("A") ||
+            Keyb.isJustDown("<left>")) {
             this.move({x: -1})
         }
-        if(Keyb.isJustDown("D")
-        || Keyb.isJustDown("<right>")) {
+        if (Keyb.isJustDown("D") ||
+            Keyb.isJustDown("<right>")) {
             this.move({x: +1})
         }
-        if(Keyb.isJustDown("<space>")) {
+        if (Keyb.isJustDown("<space>")) {
             this.move()
         }
     }
