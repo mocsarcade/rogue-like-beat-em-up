@@ -29,9 +29,6 @@ import Render from "./scripts/utility/Render.js"
 
 var render = new Render()
 var loop = new Afloop((delta) => {
-    if(state.game.isReady) {
-        state.game.update(delta)
-    }
-
+    state.game.update(delta)
     render(state)
 })
