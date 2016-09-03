@@ -4,8 +4,8 @@ import Monster from "./Monster.js"
 import Adventurer from "./Adventurer.js"
 import Camera from "./Camera.js"
 
-import DATA from "../DATA"
-import MONSTERS from "../MONSTERS.js"
+import DATA from "scripts/data"
+import MONSTERS from "scripts/data/monsters.js"
 
 import {StutteredInput} from "../utility/Input.js"
 

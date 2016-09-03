@@ -1,4 +1,4 @@
-import DATA from "../DATA.js"
+import DATA from "scripts/data"
 
 import Effect from "./Effect.js"
 import AnimatedSprite from "../utility/AnimatedSprite.js"

@@ -1,6 +1,6 @@
 import React from "react"
 
-import DATA from "../DATA"
+import DATA from "scripts/data"
 
 export default class Entity extends React.Component {
     render() {

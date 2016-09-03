@@ -1,4 +1,4 @@
-import DATA from "scripts/Data.js"
+import DATA from "scripts/data"
 
 export default class Frame {
     constructor() {

@@ -1,5 +1,4 @@
 @import "./styles/Font.scss";
-@include font(pixel);
 
 * {
     margin: 0;
