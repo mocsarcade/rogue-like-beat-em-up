@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-import Mount from "../render/Mount.js"
+import Mount from "scripts/render/Mount.js"
 
 export default function Render() {
     var mount = ReactDOM.render(<Mount/>, document.getElementById("mount"))

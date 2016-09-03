@@ -16,14 +16,13 @@ var state = {
 
 import Afloop from "afloop"
 
-import Render from "./scripts/utility/Render.js"
+import Render from "scripts/utility/Render.js"
 
 var render = new Render()
 var loop = new Afloop((delta) => {
     state.game.update(delta)
     render(state)
 })
-
 
 // While  in development, we expose the game state
 // to the window, so we can examine it from the

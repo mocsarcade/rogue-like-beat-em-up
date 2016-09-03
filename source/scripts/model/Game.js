@@ -1,13 +1,13 @@
 import ShortID from "shortid"
 
-import Monster from "./Monster.js"
-import Adventurer from "./Adventurer.js"
-import Camera from "./Camera.js"
+import Monster from "scripts/model/Monster.js"
+import Adventurer from "scripts/model/Adventurer.js"
+import Camera from "scripts/model/Camera.js"
 
 import DATA from "scripts/data"
 import MONSTERS from "scripts/data/monsters.js"
 
-import {StutteredInput} from "../utility/Input.js"
+import {StutteredInput} from "scripts/utility/Input.js"
 
 const MINIMUM_MONSTER_COUNT = 4
 
