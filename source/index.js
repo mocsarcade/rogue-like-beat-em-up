@@ -19,7 +19,7 @@ import Render from "scripts/utility/Render.js"
 
 var render = new Render()
 var loop = new Afloop((delta) => {
-    state.game.update(delta)
+    state.game.onFrameLoop(delta)
     render(state)
 })
 
