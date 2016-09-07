@@ -1,9 +1,9 @@
-import DATA from "../DATA.js"
+import DATA from "scripts/data"
 
 import ShortID from "shortid"
 
-import Effect from "./Effect.js"
-import AnimatedSprite from "../utility/AnimatedSprite.js"
+import Effect from "scripts/model/Effect.js"
+import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
 
 export default class Adventurer {
     constructor(protoadventurer) {

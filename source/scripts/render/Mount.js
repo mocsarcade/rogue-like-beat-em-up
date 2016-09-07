@@ -1,8 +1,8 @@
 import React from "react"
 
-import Frame from "./Frame.js"
-import Entity from "./Entity.js"
-import Camera from "./Camera.js"
+import Frame from "scripts/render/Frame.js"
+import Entity from "scripts/render/Entity.js"
+import Camera from "scripts/render/Camera.js"
 
 export default class Mount extends React.Component {
     render() {

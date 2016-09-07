@@ -1,6 +1,4 @@
-@mixin font($font) {
-    @font-face {
-        font-family: "#{$font}";
-        src: url("./fonts/#{$font}.ttf") format("truetype");
-    }
+@font-face {
+    font-family: pixel;
+    src: url("./fonts/pixel.ttf") format("truetype");
 }

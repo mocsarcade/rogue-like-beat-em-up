@@ -1,4 +1,4 @@
-import DATA from "./DATA.js"
+import DATA from "scripts/data"
 
 export default {
     RED_SLIME: {
