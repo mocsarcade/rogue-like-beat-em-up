@@ -8,8 +8,15 @@ var tests = context.keys().map((key) => {
     return context(key).default
 })
 
-// Run all the tests!!
 console.log("Running " + tests.length + " tests.")
+
+var time = window.performance.now()
+
 tests.forEach((test) => {
     Tester(test)
 })
+
+time = window.performance.now() - time
+time = time.toFixed(2) + "ms"
+
+console.log("All tests took " + time + ".")
