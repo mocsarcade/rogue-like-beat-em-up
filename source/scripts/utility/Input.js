@@ -1,39 +1,6 @@
-import vkey from "vkey"
+import Keyb from "keyb"
 
-export var InputState = {
-    isDown: function(key, time) {
-        if(time == undefined) {
-            return this.data[key] != undefined
-        } else {
-            return window.performance.now() - this.data[key] < (time || 1000 / 60)
-        }
-    },
-    setDown: function(key) {
-        this.data[key] = window.performance.now()
-    },
-    setUp: function(key) {
-        delete this.data[key]
-    },
-    isUp: function(key) {
-        if(this.data[key] == undefined) {
-            this.data[key] = -1
-        }
-        return this.data[key] <= 0
-    },
-    data: new Object()
-}
-
-document.addEventListener("keydown", function(event) {
-    if(!InputState.isDown(vkey[event.keyCode])) {
-        InputState.setDown(vkey[event.keyCode])
-    }
-})
-
-document.addEventListener("keyup", function(event) {
-    InputState.setUp(vkey[event.keyCode])
-})
-
-export class Input {
+export default class Input {
     constructor(inputs) {
         if(inputs.constructor != Array) {
             this.inputs = [inputs]
@@ -43,33 +10,21 @@ export class Input {
     }
     isDown(timeframe) {
         return this.inputs.some((input) => {
-            return InputState.isDown(input, timeframe)
+            return Keyb.isJustDown(input, timeframe)
         })
     }
 }
 
-export class StutteredInput extends Input {
-    constructor(inputs, stutter) {
-        super(inputs)
+// You should use this MockInput as a replacement
+// for an Input when testing your code. You can
+// convince your code that the input is down by
+// setting input.mock.isDown to true.
 
-        stutter = stutter || 250
-        this.stutter = stutter
-        this.maxstutter = stutter
+export class MockInput {
+    constructor() {
+        this.mock = {isDown: false}
     }
-    update(delta) {
-        if(super.isDown()) {
-            this.stutter -= delta
-        } else {
-            this.stutter = this.maxstutter
-        }
-    }
-    isDown(delta) {
-        if(super.isDown(delta)) {
-            this.stutter = this.maxstutter
-            return true
-        } else if(super.isDown() && this.stutter <= 0) {
-            this.stutter = this.maxstutter
-            return true
-        }
+    isDown() {
+        return this.mock.isDown === true
     }
 }

@@ -68,25 +68,4 @@ export default class Entity extends React.Component {
             this.props.data.onDoubleClick(event)
         }
     }
-    // get style() {
-    //     return {
-    //         // Size
-    //         width: Math.ceil(this.props.data.width || 1) * DATA.TILE.WIDTH + "px",
-    //         height: Math.ceil(this.props.data.height || 1) * DATA.TILE.HEIGHT + "px",
-    //         // Position
-    //         position: "absolute",
-    //         left: Math.floor(this.props.data.position && this.props.data.position.x || 0) * DATA.TILE.WIDTH + "px",
-    //         top: Math.floor(this.props.data.position && this.props.data.position.y || 0) * DATA.TILE.HEIGHT + "px",
-    //         // Background
-    //         backgroundPosition: "bottom",
-    //         backgroundRepeat: "no-repeat",
-    //         backgroundSize: DATA.TILE.WIDTH + "px",
-    //         backgroundImage: !!this.props.data.sprite ? "url(" + this.props.data.sprite + ")" : null,
-    //         // Transition
-    //         transitionProperty: !!this.props.data.transition ? "top, left" : null,
-    //         transitionTimingFunction: !!this.props.data.transition ? this.props.data.transition.timing || "ease" : null,
-    //         transitionDuration: !!this.props.data.transition ? (this.props.data.transition.duration || 0.2) + "s" : null,
-    //         transitionDelay: !!this.props.data.transition && !!this.props.data.transition.delay ? this.props.data.transition.delay + "s" : null,
-    //     }
-    // }
 }

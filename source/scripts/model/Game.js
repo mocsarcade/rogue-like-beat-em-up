@@ -7,7 +7,7 @@ import Camera from "scripts/model/Camera.js"
 import DATA from "scripts/data"
 import MONSTERS from "scripts/data/monsters.js"
 
-import {StutteredInput} from "scripts/utility/Input.js"
+import Input from "scripts/utility/Input.js"
 
 const MINIMUM_MONSTER_COUNT = 4
 
@@ -17,11 +17,11 @@ export default class Game {
             position: {x: 3, y: 3},
             game: this,
             inputs: {
-                north: new StutteredInput("<up>"),
-                south: new StutteredInput("<down>"),
-                west: new StutteredInput("<left>"),
-                east: new StutteredInput("<right>"),
-                wait: new StutteredInput("<space>")
+                north: new Input("<up>"),
+                south: new Input("<down>"),
+                west: new Input("<left>"),
+                east: new Input("<right>"),
+                wait: new Input("<space>")
             },
         })
 

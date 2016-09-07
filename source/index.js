@@ -15,7 +15,6 @@ var state = {
 }
 
 import Afloop from "afloop"
-
 import Render from "scripts/utility/Render.js"
 
 var render = new Render()
