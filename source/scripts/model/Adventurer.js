@@ -15,6 +15,7 @@ export default class Adventurer {
         this.key = "adventurer"
 
         this.position = protoadventurer.position || {x: 0, y: 0}
+
         this.transition = true
         this.color = DATA.COLORS.YELLOW
         this.sprite = DATA.IMAGES.ADVENTURER
@@ -88,13 +89,12 @@ export default class Adventurer {
 
         // collision with dungeon
         if(this.game.tiles instanceof Array) {
-            if(this.game.tiles.some((tile) => {
-                return this.position.x + movement.x == tile.position.x
-                    && this.position.y + movement.y == tile.position.y
-                    && !tile.hasCollision
-            }) == false) {
-                movement.x = 0
-                movement.y = 0
+            var key = (this.position.x + movement.x) + "x" + (this.position.y + movement.y)
+            if(this.game.tiles[key] != undefined) {
+                if(this.game.tiles[key].isCollideable) {
+                    movement.x = 0
+                    movement.y = 0
+                }
             }
         }
 

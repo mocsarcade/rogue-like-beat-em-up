@@ -4,8 +4,8 @@ export default {
         HEIGHT: 18,
     },
     FRAME: {
-        WIDTH: 10,
-        HEIGHT: 10,
+        WIDTH: 7,
+        HEIGHT: 7,
     },
     COLORS: {
         WHITE: "#EEEEEE",
