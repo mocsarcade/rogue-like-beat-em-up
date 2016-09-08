@@ -4,6 +4,7 @@ import Adventurer from "scripts/model/Adventurer.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
 import Dungeon from "scripts/model/Dungeon.js"
 
+import DATA from "scripts/data"
 import MONSTERS from "scripts/data/monsters.js"
 
 export default class Game {
@@ -30,7 +31,18 @@ export default class Game {
         this.monsters = new Array()
 
         this.tiles = [
-            // ...
+            {
+                key: "1x1",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[0],
+                position: {x: 1, y: 1}
+            },
+            {
+                key: "5x5",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+                position: {x: 5, y: 5}
+            },
         ]
     }
     add(name, entity) {

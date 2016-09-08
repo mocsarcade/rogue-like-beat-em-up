@@ -18,7 +18,7 @@ export default class Adventurer {
 
         this.transition = true
         this.color = DATA.COLORS.YELLOW
-        this.sprite = DATA.IMAGES.ADVENTURER
+        this.sprite = DATA.SPRITES.MONSTERS.ADVENTURER[0]
         this.instance = ShortID.generate()
 
         this.maxhealth = 3
@@ -73,7 +73,7 @@ export default class Adventurer {
                 }
                 this.game.add("effects", new Effect({
                     sprite: new AnimatedSprite({
-                        images: DATA.IMAGES.SLASH,
+                        images: DATA.SPRITES.EFFECTS.SLICE,
                         isLoop: false,
                         timing: 20,
                     }),
