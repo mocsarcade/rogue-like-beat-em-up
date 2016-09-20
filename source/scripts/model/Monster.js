@@ -19,9 +19,9 @@ export default class Monster {
     }
     get sprite() {
         if(this.phase == true) {
-            return DATA.IMAGES.GEL_ALPHA
+            return DATA.SPRITES.MONSTERS.SLIME.ALPHA
         } else {
-            return DATA.IMAGES.GEL_OMEGA
+            return DATA.SPRITES.MONSTERS.SLIME.OMEGA
         }
     }
     onAction() {
@@ -83,7 +83,7 @@ export default class Monster {
             }
             this.game.add("effects", new Effect({
                 sprite: new AnimatedSprite({
-                    images: DATA.IMAGES.SLASH,
+                    images: DATA.SPRITES.EFFECTS.SLASH,
                     isLoop: false,
                     timing: 20,
                 }),

@@ -16,7 +16,7 @@ tests.forEach((test) => {
     Tester(test)
 })
 
-time = window.performance.now() - time
-time = time.toFixed(2) + "ms"
+time = (window.performance.now() - time) / 1000
+time = time.toFixed(3) + " seconds"
 
-console.log("All tests took " + time + ".")
+console.log("Testing took " + time + ".")

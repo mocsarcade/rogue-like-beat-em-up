@@ -15,9 +15,10 @@ export default class Adventurer {
         this.key = "adventurer"
 
         this.position = protoadventurer.position || {x: 0, y: 0}
+
         this.transition = true
         this.color = DATA.COLORS.YELLOW
-        this.sprite = DATA.IMAGES.ADVENTURER
+        this.sprite = DATA.SPRITES.MONSTERS.ADVENTURER[0]
         this.instance = ShortID.generate()
 
         this.maxhealth = 3
@@ -72,7 +73,7 @@ export default class Adventurer {
                 }
                 this.game.add("effects", new Effect({
                     sprite: new AnimatedSprite({
-                        images: DATA.IMAGES.SLASH,
+                        images: DATA.SPRITES.EFFECTS.SLICE,
                         isLoop: false,
                         timing: 20,
                     }),
@@ -88,13 +89,12 @@ export default class Adventurer {
 
         // collision with dungeon
         if(this.game.tiles instanceof Array) {
-            if(this.game.tiles.some((tile) => {
-                return this.position.x + movement.x == tile.position.x
-                    && this.position.y + movement.y == tile.position.y
-                    && !tile.hasCollision
-            }) == false) {
-                movement.x = 0
-                movement.y = 0
+            var key = (this.position.x + movement.x) + "x" + (this.position.y + movement.y)
+            if(this.game.tiles[key] != undefined) {
+                if(this.game.tiles[key].isCollideable) {
+                    movement.x = 0
+                    movement.y = 0
+                }
             }
         }
 
