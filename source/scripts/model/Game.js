@@ -1,24 +1,18 @@
 import ShortID from "shortid"
 
-import Input from "scripts/utility/Input.js"
-
 import Adventurer from "scripts/model/Adventurer.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
 
 import MONSTERS from "scripts/data/monsters.js"
 
 export default class Game {
-    constructor() {
+    constructor(protogame) {
+        protogame = protogame || new Object()
+
         this.adventurer = new Adventurer({
             position: {x: 3, y: 3},
+            inputs: protogame.inputs,
             game: this,
-            inputs: {
-                north: new Input("<up>"),
-                south: new Input("<down>"),
-                west: new Input("<left>"),
-                east: new Input("<right>"),
-                wait: new Input("<space>")
-            },
         })
 
         this.wave = new MonsterWave({
