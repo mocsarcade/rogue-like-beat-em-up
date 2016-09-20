@@ -24,7 +24,7 @@ export default class Monster {
             return DATA.IMAGES.GEL_OMEGA
         }
     }
-    action() {
+    onAction() {
         this.phase = this.phase || false
         this.phase = !this.phase
 

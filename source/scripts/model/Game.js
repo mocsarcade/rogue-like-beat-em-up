@@ -1,15 +1,11 @@
 import ShortID from "shortid"
 
-import Monster from "scripts/model/Monster.js"
-import Adventurer from "scripts/model/Adventurer.js"
-import Camera from "scripts/model/Camera.js"
-
-import DATA from "scripts/data"
-import MONSTERS from "scripts/data/monsters.js"
-
 import Input from "scripts/utility/Input.js"
 
-const MINIMUM_MONSTER_COUNT = 4
+import Adventurer from "scripts/model/Adventurer.js"
+import MonsterWave from "scripts/model/MonsterWave.js"
+
+import MONSTERS from "scripts/data/monsters.js"
 
 export default class Game {
     constructor() {
@@ -25,7 +21,18 @@ export default class Game {
             },
         })
 
-        this.monsters = []
+        this.wave = new MonsterWave({
+            game: this,
+            data: {
+                capacity: 4,
+                monsters: [
+                    MONSTERS.RED_SLIME,
+                    MONSTERS.BLUE_SLIME,
+                ],
+            }
+        })
+
+        this.monsters = new Array()
     }
     add(name, entity) {
         entity.game = this
@@ -52,45 +59,36 @@ export default class Game {
     // This method is called
     // once every frame, and
     // is passed a delta in ms.
-    update(delta) {
+    onFrameLoop(delta) {
+
+        // Update the adventurer.
         this.adventurer.update(delta)
+
+        // Update any effects.
         if(!!this.effects) {
             this.effects.forEach((effect) => {
                 effect.update(delta)
             })
         }
+
     }
     // This method is called
     // after the adventurer
     // has taken an action
     // for the turn.
     onAction() {
+
+        // Update all the monsters
         if(this.monsters instanceof Array) {
             this.monsters.forEach((monster) => {
-                if(monster.action instanceof Function) {
-                    monster.action()
+                if(monster.onAction instanceof Function) {
+                    monster.onAction()
                 }
             })
-            if(this.monsters.length < MINIMUM_MONSTER_COUNT) {
-                this.add("monsters", new Monster({
-                    protomonster: function getRandomMonster() {
-                        return MONSTERS[Object.keys(MONSTERS)[Math.floor(Math.random() * Object.keys(MONSTERS).length)]]
-                    }(),
-                    position: function getRandomPosition() {
-                        if(Math.random() < 0.5) {
-                            return {
-                                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
-                                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
-                            }
-                        } else {
-                            return {
-                                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
-                                y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
-                            }
-                        }
-                    }(),
-                }))
-            }
         }
+
+        // Update the wave.
+        this.wave.onAction()
+
     }
 }
