@@ -23,8 +23,10 @@ export default {
     },
     IMAGES: {
         ADVENTURER: require("images/adventurer.png"),
-        GEL_ALPHA: require("images/gel_alpha.png"),
-        GEL_OMEGA: require("images/gel_omega.png"),
+        GEL: {
+            ALPHA: require("images/gel_alpha.png"),
+            OMEGA: require("images/gel_omega.png"),
+        },
         SLICE: [
             require("images/slice-1.png"),
             require("images/slice-2.png"),
