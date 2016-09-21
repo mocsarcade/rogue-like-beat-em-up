@@ -18,6 +18,7 @@ export default class Monster {
         this.transition = true
 
         this.health = monster.protomonster.health || 1
+
     }
     pickSprite() {
         if(this.phase == true) {
@@ -34,16 +35,7 @@ export default class Monster {
         this.animation = false
 
         if(this.phase == true) {
-            var dx = this.game.adventurer.position.x - this.position.x
-            var dy = this.game.adventurer.position.y - this.position.y
-
-            if(Math.abs(dx) > Math.abs(dy)) {
-                if(dx > 0) this.move({x: +1})
-                if(dx < 0) this.move({x: -1})
-            } else {
-                if(dy > 0) this.move({y: +1})
-                if(dy < 0) this.move({y: -1})
-            }
+            this.move(this.getSimpleChaseMovement())
         }
     }
     move(movement) {
@@ -108,6 +100,38 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.game.remove("monsters", this)
+        }
+    }
+
+    getSimpleChaseMovement() {
+        var dx = this.game.adventurer.position.x - this.position.x
+        var dy = this.game.adventurer.position.y - this.position.y
+
+        if(Math.abs(dx) > Math.abs(dy)) {
+            if(dx > 0) return {x: +1}
+            if(dx < 0) return {x: -1}
+        } else {
+            if(dy > 0) return {y: +1}
+            if(dy < 0) return {y: -1}
+        }
+    }
+
+    getWanderMovement(filters) {
+        origin = {'x': 0, 'y': 0}
+        filters.push(origin)
+        movement = origin
+        while (validWander(movement, filters)) {
+            movement.x = Math.floor((Math.random() * 3) + 1) - 2
+            movement.y = Math.floor((Math.random() * 3) + 1) - 2
+        }
+
+        return movement
+    }
+
+    validWander(movement, filters) {
+        for (filter in filters) {
+            if (filter.x !== undefined && filter.x == movement) return false
+            if (filter.y !== undefined && filter.y == movement) return false
         }
     }
 }
