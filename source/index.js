@@ -6,24 +6,36 @@
 //                                               //
 //////////////////////////////////////////////////
 
+import Afloop from "afloop"
+
+import Render from "scripts/utility/Render.js"
+import KeyboardInput from "scripts/utility/inputs/KeyboardInput"
+
 import Game from "scripts/model/Game.js"
 import Frame from "scripts/model/Frame.js"
 
 var state = {
     frame: new Frame(),
-    game: new Game(),
+    game: new Game({
+        inputs: {
+            // TODO: Save and load these inputs, so the
+            // players can configure their inputs.
+            north: new KeyboardInput(["<up>", "W"]),
+            south: new KeyboardInput(["<down>", "S"]),
+            west: new KeyboardInput(["<left>", "A"]),
+            east: new KeyboardInput(["<right>", "D"]),
+            wait: new KeyboardInput("<space>")
+        }
+    }),
 }
-
-import Afloop from "afloop"
-import Render from "scripts/utility/Render.js"
 
 var render = new Render()
 var loop = new Afloop((delta) => {
-    state.game.update(delta)
+    state.game.onFrameLoop(delta)
     render(state)
 })
 
-// While  in development, we expose the game state
+// While in development, we expose the game state
 // to the window, so we can examine it from the
 // javascript console. Please do not use this
 // global variable elsewhere.
@@ -50,4 +62,11 @@ if(STAGE == "DEVELOPMENT") {
             console.warn(warning)
         })
     })
+}
+
+// We run our tests in the same environment we
+// run our game, namely, the browser. :)
+
+if(STAGE == "DEVELOPMENT") {
+    require("scripts/tests")
 }

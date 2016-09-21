@@ -9,7 +9,7 @@ export default class Monster {
     constructor(monster) {
         this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
-        this.image = monster.protomonster.image || DATA.IMAGES.GEL
+        this.image = monster.protomonster.sprite || DATA.SPRITES.MONSTERTS.SLIME
 
         this.game = monster.game
 
@@ -20,12 +20,12 @@ export default class Monster {
     }
     get sprite() {
         if(this.phase == true) {
-            return this.image.ALPHA
+            return this.sprite.ALPHA
         } else {
-            return this.image.OMEGA
+            return this.sprite.OMEGA
         }
     }
-    action() {
+    onAction() {
         this.phase = this.phase || false
         this.phase = !this.phase
 
@@ -84,7 +84,7 @@ export default class Monster {
             }
             this.game.add("effects", new Effect({
                 sprite: new AnimatedSprite({
-                    images: DATA.IMAGES.SLASH,
+                    images: DATA.SPRITES.EFFECTS.SLASH,
                     isLoop: false,
                     timing: 20,
                 }),

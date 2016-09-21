@@ -1,31 +1,49 @@
 import ShortID from "shortid"
 
-import Monster from "scripts/model/Monster.js"
 import Adventurer from "scripts/model/Adventurer.js"
-import Camera from "scripts/model/Camera.js"
+import MonsterWave from "scripts/model/MonsterWave.js"
+import Dungeon from "scripts/model/Dungeon.js"
 
 import DATA from "scripts/data"
 import MONSTERS from "scripts/data/monsters.js"
 
-import Input from "scripts/utility/Input.js"
-
-const MINIMUM_MONSTER_COUNT = 4
-
 export default class Game {
-    constructor() {
+    constructor(protogame) {
+        protogame = protogame || new Object()
+
         this.adventurer = new Adventurer({
             position: {x: 3, y: 3},
+            inputs: protogame.inputs,
             game: this,
-            inputs: {
-                north: new Input("<up>"),
-                south: new Input("<down>"),
-                west: new Input("<left>"),
-                east: new Input("<right>"),
-                wait: new Input("<space>")
-            },
         })
 
-        this.monsters = []
+        this.wave = new MonsterWave({
+            game: this,
+            data: {
+                capacity: 4,
+                monsters: [
+                    MONSTERS.RED_SLIME,
+                    MONSTERS.BLUE_SLIME,
+                ],
+            }
+        })
+
+        this.monsters = new Array()
+
+        this.tiles = [
+            {
+                key: "1x1",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[0],
+                position: {x: 1, y: 1}
+            },
+            {
+                key: "5x5",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+                position: {x: 5, y: 5}
+            },
+        ]
     }
     add(name, entity) {
         entity.game = this
@@ -52,45 +70,36 @@ export default class Game {
     // This method is called
     // once every frame, and
     // is passed a delta in ms.
-    update(delta) {
+    onFrameLoop(delta) {
+
+        // Update the adventurer.
         this.adventurer.update(delta)
+
+        // Update any effects.
         if(!!this.effects) {
             this.effects.forEach((effect) => {
                 effect.update(delta)
             })
         }
+
     }
     // This method is called
     // after the adventurer
     // has taken an action
     // for the turn.
     onAction() {
+
+        // Update all the monsters
         if(this.monsters instanceof Array) {
             this.monsters.forEach((monster) => {
-                if(monster.action instanceof Function) {
-                    monster.action()
+                if(monster.onAction instanceof Function) {
+                    monster.onAction()
                 }
             })
-            if(this.monsters.length < MINIMUM_MONSTER_COUNT) {
-                this.add("monsters", new Monster({
-                    protomonster: function getRandomMonster() {
-                        return MONSTERS[Object.keys(MONSTERS)[Math.floor(Math.random() * Object.keys(MONSTERS).length)]]
-                    }(),
-                    position: function getRandomPosition() {
-                        if(Math.random() < 0.5) {
-                            return {
-                                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
-                                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
-                            }
-                        } else {
-                            return {
-                                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
-                                y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
-                            }
-                        }
-                    }(),
-                }))
-            }
         }
+
+        // Update the wave.
+        this.wave.onAction()
+
     }
 }
