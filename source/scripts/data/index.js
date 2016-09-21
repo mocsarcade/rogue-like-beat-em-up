@@ -33,6 +33,10 @@ export default {
             ORC: {
                 ALPHA: require("images/sprites/monsters/orc_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/orc_omega.png"),
+            },
+            BAT: {
+                ALPHA: require("images/bat_alpha.png"),
+                OMEGA: require("images/bat_omega.png"),
             }
         },
         EFFECTS: {
