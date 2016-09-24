@@ -40,17 +40,17 @@ export default {
         strength: 5,
     },
     GREEN_BAT: {
-        image: DATA.IMAGES.BAT,
+        sprite: DATA.SPRITES.MONSTERS.BAT,
         color: DATA.COLORS.GREEN,
         health: 2,
         strength: 1,
-        movement: "wander"
+        movement: "wander-orthogonal"
     },
     PINK_BAT: {
-        image: DATA.IMAGES.BAT,
+        sprite: DATA.SPRITES.MONSTERS.BAT,
         color: DATA.COLORS.PINK,
         health: 1,
         strength: 2,
-        movement: "wander"
+        movement: "wander-diagonal"
     }
 }
