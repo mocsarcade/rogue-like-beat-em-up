@@ -2,7 +2,7 @@ import ShortID from "shortid"
 
 import Adventurer from "scripts/model/Adventurer.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
-import Dungeon from "scripts/model/Dungeon.js"
+// import Dungeon from "scripts/model/Dungeon.js"
 
 import DATA from "scripts/data"
 import MONSTERS from "scripts/data/monsters.js"

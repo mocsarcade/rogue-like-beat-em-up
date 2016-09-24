@@ -10,7 +10,7 @@ export default class Monster {
         this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
-        this.sprite = pickSprite()
+        this.sprite = this.pickSprite()
 
         this.game = monster.game
 
@@ -29,7 +29,7 @@ export default class Monster {
     onAction() {
         this.phase = this.phase || false
         this.phase = !this.phase
-        this.sprite = pickSprite()
+        this.sprite = this.pickSprite()
 
         this.animation = false
 
