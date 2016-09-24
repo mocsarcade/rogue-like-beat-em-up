@@ -2,6 +2,7 @@ import DATA from "scripts/data"
 
 import Effect from "scripts/model/Effect.js"
 import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
+import Movement from "scripts/utility/Movement.js"
 
 import ShortID from "shortid"
 
@@ -16,8 +17,10 @@ export default class Monster {
 
         this.position = monster.position
         this.transition = true
+        this.movement = monster.protomonster.movement
 
         this.health = monster.protomonster.health || 1
+
 
     }
     pickSprite() {
@@ -35,7 +38,15 @@ export default class Monster {
         this.animation = false
 
         if(this.phase == true) {
-            this.move(this.getSimpleChaseMovement())
+            switch(this.movement) {
+            case "simplechase":
+                this.move(Movement.getSimpleChaseMovement(this.game.adventurer.position, this.position))
+                break
+            case "wander":
+            case "wander-orthogonal":
+            case "wander-diagonal":
+                this.move(Movement.getWanderMovement(Movement[this.movement.slice(7)].apply()))
+            }
         }
     }
     move(movement) {
@@ -100,38 +111,6 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.game.remove("monsters", this)
-        }
-    }
-
-    getSimpleChaseMovement() {
-        var dx = this.game.adventurer.position.x - this.position.x
-        var dy = this.game.adventurer.position.y - this.position.y
-
-        if(Math.abs(dx) > Math.abs(dy)) {
-            if(dx > 0) return {x: +1}
-            if(dx < 0) return {x: -1}
-        } else {
-            if(dy > 0) return {y: +1}
-            if(dy < 0) return {y: -1}
-        }
-    }
-
-    getWanderMovement(filters) {
-        origin = {'x': 0, 'y': 0}
-        filters.push(origin)
-        movement = origin
-        while (validWander(movement, filters)) {
-            movement.x = Math.floor((Math.random() * 3) + 1) - 2
-            movement.y = Math.floor((Math.random() * 3) + 1) - 2
-        }
-
-        return movement
-    }
-
-    validWander(movement, filters) {
-        for (filter in filters) {
-            if (filter.x !== undefined && filter.x == movement) return false
-            if (filter.y !== undefined && filter.y == movement) return false
         }
     }
 }
