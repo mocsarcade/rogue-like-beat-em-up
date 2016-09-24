@@ -9,7 +9,8 @@ export default class Monster {
     constructor(monster) {
         this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
-        this.spritename = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
+        this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
+        this.sprite = pickSprite()
 
         this.game = monster.game
 
@@ -18,16 +19,17 @@ export default class Monster {
 
         this.health = monster.protomonster.health || 1
     }
-    get sprite() {
+    pickSprite() {
         if(this.phase == true) {
-            return this.spritename.ALPHA
+            return this.basesprite.ALPHA
         } else {
-            return this.spritename.OMEGA
+            return this.basesprite.OMEGA
         }
     }
     onAction() {
         this.phase = this.phase || false
         this.phase = !this.phase
+        this.sprite = pickSprite()
 
         this.animation = false
 
