@@ -33,8 +33,13 @@ export default {
             ORC: {
                 ALPHA: require("images/sprites/monsters/orc_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/orc_omega.png"),
+            },
+            TROLL: {
+                ALPHA: require("images/sprites/monsters/troll_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/troll_omega.png"),
             }
         },
+
         EFFECTS: {
             SLICE: [
                 require("images/sprites/effects/slice-1.png"),

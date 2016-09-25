@@ -31,4 +31,10 @@ export default {
         health: 3,
         strength: 1,
     },
+    WHITE_TROLL: {
+        sprite: DATA.SPRITES.MONSTERS.TROLL,
+        color: DATA.COLORS.WHITE,
+        health: 5,
+        strength: 5,
+    },
 }
