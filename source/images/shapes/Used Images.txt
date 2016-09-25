@@ -1,2 +1,4 @@
 281 - Orc_Alpha
 300 - Orc_Omega
+52-troll_alpha
+72-troll_omega
