@@ -29,6 +29,10 @@ export default {
             SLIME: {
                 ALPHA: require("images/sprites/monsters/slime_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/slime_omega.png"),
+            },
+            ORC: {
+                ALPHA: require("images/sprites/monsters/orc_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/orc_omega.png"),
             }
         },
         EFFECTS: {
