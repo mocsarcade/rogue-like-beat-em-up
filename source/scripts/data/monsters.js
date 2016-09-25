@@ -18,7 +18,7 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
-        movement: function (target, current) {
+        movement: function (target) {
             return [
                 {x: -1},
                 {x: +1},
@@ -32,7 +32,7 @@ export default {
         color: DATA.COLORS.BLUE,
         health: 1,
         strength: 1,
-        movement: function (target, current) {
+        movement: function () {
             return [
                 {x: -1},
                 {x: +1},
@@ -70,7 +70,7 @@ export default {
         color: DATA.COLORS.GREEN,
         health: 1,
         strength: 1,
-        movement: function (target, current) {
+        movement: function () {
             return [
                 {x: -1, y: -1},
                 {x: -1, y: +1},
@@ -84,7 +84,7 @@ export default {
         color: DATA.COLORS.PINK,
         health: 1,
         strength: 1,
-        movement: function (target, current) {
+        movement: function () {
             return [
                 {x: -2},
                 {x: +2},
