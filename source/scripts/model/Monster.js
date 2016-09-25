@@ -2,7 +2,6 @@ import DATA from "scripts/data"
 
 import Effect from "scripts/model/Effect.js"
 import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
-import Movement from "scripts/utility/Movement.js"
 
 import ShortID from "shortid"
 
@@ -17,7 +16,18 @@ export default class Monster {
 
         this.position = monster.position
         this.transition = true
-        this.movement = monster.protomonster.movement
+        this.movement = monster.protomonster.movement || function (target, current) {
+            var dx = target.x - current.x
+            var dy = target.y - current.y
+
+            if(Math.abs(dx) > Math.abs(dy)) {
+                if(dx > 0) return {x: +1}
+                if(dx < 0) return {x: -1}
+            } else {
+                if(dy > 0) return {y: +1}
+                if(dy < 0) return {y: -1}
+            }
+        }
 
         this.health = monster.protomonster.health || 1
 
