@@ -16,9 +16,9 @@ export default class Monster {
 
         this.position = monster.position
         this.transition = true
-        this.movement = monster.protomonster.movement || function (target, current) {
-            var dx = target.x - current.x
-            var dy = target.y - current.y
+        this.movement = monster.protomonster.movement || function () {
+            var dx = this.game.adventurer.position.x - this.position.x
+            var dy = this.game.adventurer.position.y - this.position.y
 
             if(Math.abs(dx) > Math.abs(dy)) {
                 if(dx > 0) return {x: +1}
@@ -48,7 +48,7 @@ export default class Monster {
         this.animation = false
 
         if(this.phase == true) {
-            this.move(this.movement(this.game.adventurer.position, this.position))
+            this.move(this.movement())
         }
     }
     move(movement) {
