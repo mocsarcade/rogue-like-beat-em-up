@@ -28,7 +28,9 @@ export default class Game {
                     MONSTERS.BLUE_ORC,
                     MONSTERS.GREEN_ORC,
                     MONSTERS.GREEN_BAT,
-                    MONSTERS.PINK_BAT,
+                    MONSTERS.RED_BAT,
+                    MONSTERS.BLUE_BAT,
+                    MONSTERS.FAST_BAT,
                 ],
             }
         })

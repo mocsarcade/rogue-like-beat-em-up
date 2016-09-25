@@ -38,15 +38,7 @@ export default class Monster {
         this.animation = false
 
         if(this.phase == true) {
-            switch(this.movement) {
-            case "simplechase":
-                this.move(Movement.getSimpleChaseMovement(this.game.adventurer.position, this.position))
-                break
-            case "wander":
-            case "wander-orthogonal":
-            case "wander-diagonal":
-                this.move(Movement.getWanderMovement(Movement[this.movement.slice(7)].apply()))
-            }
+            this.move(this.movement(this.game.adventurer.position, this.position))
         }
     }
     move(movement) {
