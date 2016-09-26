@@ -37,6 +37,10 @@ export default {
             TROLL: {
                 ALPHA: require("images/sprites/monsters/troll_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/troll_omega.png"),
+            },
+            BAT: {
+                ALPHA: require("images/bat_alpha.png"),
+                OMEGA: require("images/bat_omega.png"),
             }
         },
 

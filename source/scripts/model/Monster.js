@@ -16,8 +16,25 @@ export default class Monster {
 
         this.position = monster.position
         this.transition = true
+        this.movement = monster.protomonster.movement || function () {
+            var dx = this.game.adventurer.position.x - this.position.x
+            var dy = this.game.adventurer.position.y - this.position.y
+
+            if(Math.abs(dx) > Math.abs(dy)) {
+                if(dx > 0) return {x: +1}
+                if(dx < 0) return {x: -1}
+            } else {
+                if(dy > 0) return {y: +1}
+                if(dy < 0) return {y: -1}
+            }
+        }
+        this.turnCounter = monster.protomonster.turnCounter || function () {
+            this.phase = !this.phase
+        }
 
         this.health = monster.protomonster.health || 1
+
+
     }
     pickSprite() {
         if(this.phase == true) {
@@ -28,22 +45,13 @@ export default class Monster {
     }
     onAction() {
         this.phase = this.phase || false
-        this.phase = !this.phase
+        this.turnCounter()
         this.sprite = this.pickSprite()
 
         this.animation = false
 
         if(this.phase == true) {
-            var dx = this.game.adventurer.position.x - this.position.x
-            var dy = this.game.adventurer.position.y - this.position.y
-
-            if(Math.abs(dx) > Math.abs(dy)) {
-                if(dx > 0) this.move({x: +1})
-                if(dx < 0) this.move({x: -1})
-            } else {
-                if(dy > 0) this.move({y: +1})
-                if(dy < 0) this.move({y: -1})
-            }
+            this.move(this.movement())
         }
     }
     move(movement) {
@@ -109,5 +117,52 @@ export default class Monster {
         if(this.health <= 0) {
             this.game.remove("monsters", this)
         }
+    }
+    getOffscreenMovement() {
+        if (this.position.x < 0) return {x: +1}
+        if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+        if (this.position.y < 0) return {y: +1}
+        if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+        return false
+    }
+    pruneMovement(choices) {
+        for(var choice of choices) {
+            var movementVector = {
+                "x": choice.x || 0,
+                "y": choice.y || 0
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + movementVector.x && monster.position.y == this.position.y + movementVector.y) {
+                    choices = this.removeFromArray(choices, choice)
+                }
+            }
+            if (this.outOfBounds(movementVector)) {
+                choices = this.removeFromArray(choices, choice)
+            }
+        }
+        return choices
+    }
+    outOfBounds(positionVector) {
+
+        if (positionVector.x + this.position.x < 0) {
+            return true
+        }
+        if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
+            return true
+        }
+        if (positionVector.y + this.position.y < 0) {
+            return true
+        }
+        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT) {
+            return true
+        }
+        return false
+    }
+    removeFromArray(myarray, value) {
+        var temp = myarray
+        var index = temp.indexOf(value)
+        delete temp[index]
+        if (index > -1) temp.splice(index, 1)
+        return temp
     }
 }

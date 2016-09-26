@@ -37,4 +37,105 @@ export default {
         health: 5,
         strength: 5,
     },
+    RED_BAT: {
+        sprite: DATA.SPRITES.MONSTERS.BAT,
+        color: DATA.COLORS.RED,
+        health: 1,
+        strength: 1,
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+    BLUE_BAT: {
+        sprite: DATA.SPRITES.MONSTERS.BAT,
+        color: DATA.COLORS.BLUE,
+        health: 1,
+        strength: 1,
+        turnCounter: function() {
+            this.phase = true
+        },
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+    GREEN_BAT: {
+        sprite: DATA.SPRITES.MONSTERS.BAT,
+        color: DATA.COLORS.GREEN,
+        health: 1,
+        strength: 1,
+        turnCounter: function() {
+            this.phase = true
+        },
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            var choices = [
+                {x: -1, y: -1},
+                {x: -1, y: +1},
+                {x: +1, y: -1},
+                {x: +1, y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+    FAST_BAT: {
+        sprite: DATA.SPRITES.MONSTERS.BAT,
+        color: DATA.COLORS.PINK,
+        health: 1,
+        strength: 1,
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            var choices = [
+                {x: -2},
+                {x: +2},
+                {y: -2},
+                {y: +2}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+    STONE_BAT: {
+        sprite: DATA.SPRITES.MONSTERS.BAT,
+        color: DATA.COLORS.GRAY,
+        health: 3,
+        strength: 1,
+        turnCounter: function() {
+            this.turn = this.turn + (Math.floor((Math.random() * 3))) + 1 || 0
+            if (this.turn >= 3) {
+                this.phase = true
+                this.turn = 0
+            } else {
+                this.phase = false
+            }
+        },
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+
 }
