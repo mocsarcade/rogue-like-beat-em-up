@@ -42,15 +42,6 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
-        turnCounter: function() {
-            this.turn = this.turn + 1 || 0
-            if (this.turn >= 2) {
-                this.phase = true
-                this.turn = 0
-            } else {
-                this.phase = false
-            }
-        },
         movement: function () {
             if (this.position.x < 0) return {x: +1}
             if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
@@ -98,6 +89,9 @@ export default {
         color: DATA.COLORS.BLUE,
         health: 1,
         strength: 1,
+        turnCounter: function() {
+            this.phase = true
+        },
         movement: function () {
             if (this.position.x < 0) return {x: +1}
             if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
@@ -145,6 +139,9 @@ export default {
         color: DATA.COLORS.GREEN,
         health: 1,
         strength: 1,
+        turnCounter: function() {
+            this.phase = true
+        },
         movement: function () {
             if (this.position.x < 0) return {x: +1}
             if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
@@ -242,4 +239,61 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         }
     },
+    STONE_BAT: {
+        sprite: DATA.SPRITES.MONSTERS.BAT,
+        color: DATA.COLORS.GRAY,
+        health: 3,
+        strength: 1,
+        turnCounter: function() {
+            this.turn = this.turn + (Math.floor((Math.random() * 3))) + 1 || 0
+            if (this.turn >= 3) {
+                this.phase = true
+                this.turn = 0
+            } else {
+                this.phase = false
+            }
+        },
+        movement: function () {
+            if (this.position.x < 0) return {x: +1}
+            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+            if (this.position.y < 0) return {y: +1}
+            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x - 1 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + 1 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: +1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y - 1 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y + 1 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: +1})]
+            }
+
+            if (this.position.x == 0)
+                delete choices[choices.indexOf({x: -1})]
+            if (this.position.x == DATA.FRAME.WIDTH)
+                delete choices[choices.indexOf({x: +1})]
+            if (this.position.y == 0)
+                delete choices[choices.indexOf({y: -1})]
+            if (this.position.y == DATA.FRAME.HEIGHT)
+                delete choices[choices.indexOf({y: +1})]
+
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+
 }

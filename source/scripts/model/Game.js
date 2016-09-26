@@ -32,6 +32,7 @@ export default class Game {
                     MONSTERS.BLUE_BAT,
                     MONSTERS.GREEN_BAT,
                     MONSTERS.FAST_BAT,
+                    MONSTERS.STONE_BAT,
                 ],
             }
         })
