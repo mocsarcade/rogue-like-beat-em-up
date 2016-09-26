@@ -43,12 +43,45 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            return [
+            if (this.position.x < 0) return {x: +1}
+            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+            if (this.position.y < 0) return {y: +1}
+            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+
+            var choices = [
                 {x: -1},
                 {x: +1},
                 {y: -1},
                 {y: +1}
-            ][Math.floor((Math.random() * 4))]
+            ]
+
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x - 1 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + 1 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: +1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y - 1 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y + 1 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: +1})]
+            }
+
+            if (this.position.x == 0)
+                delete choices[choices.indexOf({x: -1})]
+            if (this.position.x == DATA.FRAME.WIDTH)
+                delete choices[choices.indexOf({x: +1})]
+            if (this.position.y == 0)
+                delete choices[choices.indexOf({y: -1})]
+            if (this.position.y == DATA.FRAME.HEIGHT)
+                delete choices[choices.indexOf({y: +1})]
+
+            return choices[Math.floor((Math.random() * choices.length))]
         }
     },
     BLUE_BAT: {
@@ -57,12 +90,45 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            return [
+            if (this.position.x < 0) return {x: +1}
+            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+            if (this.position.y < 0) return {y: +1}
+            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+
+            var choices = [
                 {x: -1},
                 {x: +1},
                 {y: -1},
                 {y: +1}
-            ][Math.floor((Math.random() * 4))]
+            ]
+
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x - 1 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + 1 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: +1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y - 1 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y + 1 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: +1})]
+            }
+
+            if (this.position.x == 0)
+                delete choices[choices.indexOf({x: -1})]
+            if (this.position.x == DATA.FRAME.WIDTH)
+                delete choices[choices.indexOf({x: +1})]
+            if (this.position.y == 0)
+                delete choices[choices.indexOf({y: -1})]
+            if (this.position.y == DATA.FRAME.HEIGHT)
+                delete choices[choices.indexOf({y: +1})]
+
+            return choices[Math.floor((Math.random() * choices.length))]
         }
     },
     GREEN_BAT: {
@@ -71,12 +137,53 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            return [
+            if (this.position.x < 0) return {x: +1}
+            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+            if (this.position.y < 0) return {y: +1}
+            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+
+            var choices = [
                 {x: -1, y: -1},
                 {x: -1, y: +1},
                 {x: +1, y: -1},
                 {x: +1, y: +1},
-            ][Math.floor((Math.random() * 4))]
+            ]
+
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x - 1 && monster.position.y == this.position.y - 1)
+                    delete choices[choices.indexOf({x: -1, y: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x - 1 && monster.position.y == this.position.y + 1)
+                    delete choices[choices.indexOf({x: -1, y: +1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + 1 && monster.position.y == this.position.y - 1)
+                    delete choices[choices.indexOf({x: +1, y: -1})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + 1 && monster.position.y == this.position.y + 1)
+                    delete choices[choices.indexOf({x: +1, y: +1})]
+            }
+
+            if (this.position.x == 0) {
+                delete choices[choices.indexOf({x: -1, y: -1})]
+                delete choices[choices.indexOf({x: -1, y: +1})]
+            }
+            if (this.position.x == DATA.FRAME.WIDTH) {
+                delete choices[choices.indexOf({x: +1, y: -1})]
+                delete choices[choices.indexOf({x: +1, y: +1})]
+            }
+            if (this.position.y == 0) {
+                delete choices[choices.indexOf({x: -1, y: -1})]
+                delete choices[choices.indexOf({x: +1, y: -1})]
+            }
+            if (this.position.y == DATA.FRAME.HEIGHT) {
+                delete choices[choices.indexOf({x: -1, y: +1})]
+                delete choices[choices.indexOf({x: +1, y: +1})]
+            }
+
+            return choices[Math.floor((Math.random() * choices.length))]
         }
     },
     FAST_BAT: {
@@ -85,12 +192,45 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            return [
+            if (this.position.x < 0) return {x: +2}
+            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -2}
+            if (this.position.y < 0) return {y: +2}
+            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -2}
+
+            var choices = [
                 {x: -2},
                 {x: +2},
                 {y: -2},
-                {y: +2},
-            ][Math.floor((Math.random() * 4))]
+                {y: +2}
+            ]
+
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x - 2 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: -2})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + 2 && monster.position.y == this.position.y)
+                    delete choices[choices.indexOf({x: +2})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y - 2 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: -2})]
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.y == this.position.y + 2 && monster.position.x == this.position.x)
+                    delete choices[choices.indexOf({y: +2})]
+            }
+
+            if (this.position.x == 0)
+                delete choices[choices.indexOf({x: -2})]
+            if (this.position.x == DATA.FRAME.WIDTH)
+                delete choices[choices.indexOf({x: +2})]
+            if (this.position.y == 0)
+                delete choices[choices.indexOf({y: -2})]
+            if (this.position.y == DATA.FRAME.HEIGHT)
+                delete choices[choices.indexOf({y: +2})]
+
+            return choices[Math.floor((Math.random() * choices.length))]
         }
     },
 }
