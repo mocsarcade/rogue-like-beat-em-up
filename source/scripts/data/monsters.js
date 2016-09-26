@@ -42,7 +42,7 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
-        movement: function (target) {
+        movement: function () {
             return [
                 {x: -1},
                 {x: +1},
