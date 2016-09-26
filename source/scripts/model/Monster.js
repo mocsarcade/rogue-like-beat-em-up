@@ -100,6 +100,49 @@ export default class Monster {
         this.position.x += movement.x
         this.position.y += movement.y
     }
+    pursuit(magnitude) {
+
+          //Variables for the monster and hero positions
+       var monX = this.position.x
+       var monY = this.position.y
+
+       var adX = this.game.adventurer.position.x 
+       var adY = this.game.adventurer.position.y
+
+       var dx = this.game.adventurer.position.x - this.position.x
+       var dy = this.game.adventurer.position.y - this.position.y
+
+       var movementDirection 
+       var magnitude
+
+       //Translate coordinates to movement directions
+
+       if (monX <= adX && (Math.abs(dx) > Math.abs(dy)))  {
+
+           movementDirection = "East"
+           this.move({x: +magnitude})
+       }
+
+       if (monX >= adX && (Math.abs(dx) > Math.abs(dy))) {
+
+           movementDirection = "West"
+           this.move({x: -magnitude})
+       }
+
+       if (monY <= adY && (Math.abs(dy) > Math.abs(dx))) {
+
+           movementDirection = "North"
+           this.move({y: +magnitude})
+       }
+
+       if (monY >= adY && (Math.abs(dy) > Math.abs(dx))) {
+           movementDirection = "South" 
+           this.move({y: -magnitude})
+       }
+
+
+
+   }
     handleAttack(damage) {
         this.health = this.health || 0
         this.health -= damage
