@@ -2,3 +2,5 @@
 300 - Orc_Omega
 52-troll_alpha
 72-troll_omega
+82: bat_alpha
+101: bat_omega
