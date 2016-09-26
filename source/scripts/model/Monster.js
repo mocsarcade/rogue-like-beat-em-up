@@ -118,4 +118,11 @@ export default class Monster {
             this.game.remove("monsters", this)
         }
     }
+    moveOnScreen() {
+        if (this.position.x < 0) return {x: +1}
+        if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+        if (this.position.y < 0) return {y: +1}
+        if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+        return false
+    }
 }

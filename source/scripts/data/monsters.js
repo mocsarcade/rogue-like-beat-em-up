@@ -43,10 +43,7 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.position.x < 0) return {x: +1}
-            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
-            if (this.position.y < 0) return {y: +1}
-            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+            if (this.moveOnScreen()) return this.moveOnScreen()
 
             var choices = [
                 {x: -1},
@@ -93,10 +90,7 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.position.x < 0) return {x: +1}
-            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
-            if (this.position.y < 0) return {y: +1}
-            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+            if (this.moveOnScreen()) return this.moveOnScreen()
 
             var choices = [
                 {x: -1},
@@ -143,10 +137,7 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.position.x < 0) return {x: +1}
-            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
-            if (this.position.y < 0) return {y: +1}
-            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+            if (this.moveOnScreen()) return this.moveOnScreen()
 
             var choices = [
                 {x: -1, y: -1},
@@ -198,10 +189,7 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.position.x < 0) return {x: +2}
-            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -2}
-            if (this.position.y < 0) return {y: +2}
-            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -2}
+            if (this.moveOnScreen()) return this.moveOnScreen()
 
             var choices = [
                 {x: -2},
@@ -254,10 +242,7 @@ export default {
             }
         },
         movement: function () {
-            if (this.position.x < 0) return {x: +1}
-            if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
-            if (this.position.y < 0) return {y: +1}
-            if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+            if (this.moveOnScreen()) return this.moveOnScreen()
 
             var choices = [
                 {x: -1},
