@@ -28,6 +28,9 @@ export default class Monster {
                 if(dy < 0) return {y: -1}
             }
         }
+        this.turnCounter = monster.protomonster.turnCounter || function () {
+            this.phase = !this.phase
+        }
 
         this.health = monster.protomonster.health || 1
 
@@ -42,7 +45,7 @@ export default class Monster {
     }
     onAction() {
         this.phase = this.phase || false
-        this.phase = !this.phase
+        this.turnCounter()
         this.sprite = this.pickSprite()
 
         this.animation = false

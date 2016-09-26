@@ -42,6 +42,15 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
+        turnCounter: function() {
+            this.turn = this.turn + 1 || 0
+            if (this.turn >= 2) {
+                this.phase = true
+                this.turn = 0
+            } else {
+                this.phase = false
+            }
+        },
         movement: function () {
             if (this.position.x < 0) return {x: +1}
             if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
