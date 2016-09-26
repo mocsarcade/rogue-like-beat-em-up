@@ -112,31 +112,31 @@ export default class Monster {
        var dx = this.game.adventurer.position.x - this.position.x
        var dy = this.game.adventurer.position.y - this.position.y
 
-       var movementDirection 
+       
        var magnitude
 
        //Translate coordinates to movement directions
 
        if (monX <= adX && (Math.abs(dx) > Math.abs(dy)))  {
 
-           movementDirection = "East"
+        
            this.move({x: +magnitude})
        }
 
        if (monX >= adX && (Math.abs(dx) > Math.abs(dy))) {
 
-           movementDirection = "West"
+          
            this.move({x: -magnitude})
        }
 
        if (monY <= adY && (Math.abs(dy) > Math.abs(dx))) {
 
-           movementDirection = "North"
+         
            this.move({y: +magnitude})
        }
 
        if (monY >= adY && (Math.abs(dy) > Math.abs(dx))) {
-           movementDirection = "South" 
+          
            this.move({y: -magnitude})
        }
 
