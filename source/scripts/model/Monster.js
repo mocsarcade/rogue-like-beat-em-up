@@ -125,4 +125,44 @@ export default class Monster {
         if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
         return false
     }
+    pruneMovement(choices) {
+        for(var choice of choices) {
+            var movementVector = {
+                "x": choice.x || 0,
+                "y": choice.y || 0
+            }
+            for(var monster of this.game.monsters) {
+                if (monster.position.x == this.position.x + movementVector.x && monster.position.y == this.position.y + movementVector.y) {
+                    choices = this.removeFromArray(choices, choice)
+                }
+            }
+            if (this.outOfBounds(movementVector)) {
+                choices = this.removeFromArray(choices, choice)
+            }
+        }
+        return choices
+    }
+    outOfBounds(positionVector) {
+
+        if (positionVector.x + this.position.x < 0) {
+            return true
+        }
+        if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
+            return true
+        }
+        if (positionVector.y + this.position.y < 0) {
+            return true
+        }
+        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT) {
+            return true
+        }
+        return false
+    }
+    removeFromArray(myarray, value) {
+        var temp = myarray
+        var index = temp.indexOf(value)
+        delete temp[index]
+        if (index > -1) temp.splice(index, 1)
+        return temp
+    }
 }
