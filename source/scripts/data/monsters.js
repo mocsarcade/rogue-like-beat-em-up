@@ -43,7 +43,7 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.moveOnScreen()) return this.moveOnScreen()
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
 
             var choices = [
                 {x: -1},
@@ -90,7 +90,7 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.moveOnScreen()) return this.moveOnScreen()
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
 
             var choices = [
                 {x: -1},
@@ -137,7 +137,7 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.moveOnScreen()) return this.moveOnScreen()
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
 
             var choices = [
                 {x: -1, y: -1},
@@ -189,7 +189,7 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.moveOnScreen()) return this.moveOnScreen()
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
 
             var choices = [
                 {x: -2},
@@ -242,7 +242,7 @@ export default {
             }
         },
         movement: function () {
-            if (this.moveOnScreen()) return this.moveOnScreen()
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
 
             var choices = [
                 {x: -1},
