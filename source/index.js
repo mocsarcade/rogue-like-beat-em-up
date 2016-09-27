@@ -88,7 +88,7 @@ if(STAGE == "DEVELOPMENT") {
         })
         stats.warnings.forEach((warning) => {
             warning = require("strip-ansi")(warning)
-            console.warn(warning)``
+            console.warn(warning)
         })
     })
 }

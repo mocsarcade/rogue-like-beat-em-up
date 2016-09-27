@@ -30,5 +30,5 @@ export default function BatTest() {
         // being spawned in.
     })
 
-    // But assertions here that test your code!
+    // Put assertions here that test your code!
 }
