@@ -6,11 +6,11 @@ import Effect from "scripts/model/Effect.js"
 import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
 
 export default class Adventurer {
-    constructor(protoadventurer) {
+    constructor(game, protoadventurer) {
         protoadventurer = protoadventurer || {}
 
-        this.inputs = protoadventurer.inputs
-        this.game = protoadventurer.game
+        this.inputs = protoadventurer.inputs || {}
+        this.game = game
 
         this.key = "adventurer"
 

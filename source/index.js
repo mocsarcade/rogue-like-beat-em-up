@@ -14,18 +14,47 @@ import KeyboardInput from "scripts/utility/inputs/KeyboardInput"
 import Game from "scripts/model/Game.js"
 import Frame from "scripts/model/Frame.js"
 
+import MONSTERS from "scripts/data/monsters.js"
+
 var state = {
     frame: new Frame(),
     game: new Game({
-        inputs: {
-            // TODO: Save and load these inputs, so the
-            // players can configure their inputs.
-            north: new KeyboardInput(["<up>", "W"]),
-            south: new KeyboardInput(["<down>", "S"]),
-            west: new KeyboardInput(["<left>", "A"]),
-            east: new KeyboardInput(["<right>", "D"]),
-            wait: new KeyboardInput("<space>")
-        }
+        adventurer: {
+            inputs: {
+                // TODO: Save and load these inputs, so the
+                // players can configure their inputs.
+                north: new KeyboardInput(["<up>", "W"]),
+                south: new KeyboardInput(["<down>", "S"]),
+                west: new KeyboardInput(["<left>", "A"]),
+                east: new KeyboardInput(["<right>", "D"]),
+                wait: new KeyboardInput("<space>")
+            },
+            position: {
+                x: 3, y: 3
+            }
+        },
+        wave: {
+            capacity: 4,
+            monsters: [
+                MONSTERS.RED_SLIME,
+                MONSTERS.BLUE_SLIME,
+                MONSTERS.RED_ORC,
+                MONSTERS.BLUE_ORC,
+                MONSTERS.GREEN_ORC,
+                MONSTERS.WHITE_TROLL,
+                MONSTERS.RED_BAT,
+                MONSTERS.BLUE_BAT,
+                MONSTERS.GREEN_BAT,
+                MONSTERS.FAST_BAT,
+                MONSTERS.STONE_BAT,
+            ]
+        },
+        monsters: [
+            {
+                position: {x: 0, y: 0},
+                protomonster: MONSTERS.RED_SLIME
+            }
+        ]
     }),
 }
 
@@ -59,7 +88,7 @@ if(STAGE == "DEVELOPMENT") {
         })
         stats.warnings.forEach((warning) => {
             warning = require("strip-ansi")(warning)
-            console.warn(warning)
+            console.warn(warning)``
         })
     })
 }
