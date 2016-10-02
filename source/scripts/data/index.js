@@ -4,8 +4,8 @@ export default {
         HEIGHT: 18,
     },
     FRAME: {
-        WIDTH: 10,
-        HEIGHT: 10,
+        WIDTH: 7,
+        HEIGHT: 7,
     },
     COLORS: {
         WHITE: "#EEEEEE",
@@ -21,21 +21,49 @@ export default {
         YELLOW: "#DEB74A",
         RED: "#A52F22",
     },
-    IMAGES: {
-        ADVENTURER: require("images/adventurer.png"),
-        GEL_ALPHA: require("images/gel_alpha.png"),
-        GEL_OMEGA: require("images/gel_omega.png"),
-        SLICE: [
-            require("images/slice-1.png"),
-            require("images/slice-2.png"),
-            require("images/slice-3.png"),
-        ],
-        SLASH: [
-            require("images/slash-1.png"),
-            require("images/slash-2.png"),
-            require("images/slash-3.png"),
-        ],
-        OCTOTHORPE: require("images/octothorpe.png"),
-        DOT: require("images/dot-2.png"),
+    SPRITES: {
+        MONSTERS: {
+            ADVENTURER: [
+                require("images/sprites/monsters/adventurer.png"),
+            ],
+            SLIME: {
+                ALPHA: require("images/sprites/monsters/slime_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/slime_omega.png"),
+            },
+            ORC: {
+                ALPHA: require("images/sprites/monsters/orc_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/orc_omega.png"),
+            },
+            TROLL: {
+                ALPHA: require("images/sprites/monsters/troll_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/troll_omega.png"),
+            },
+            BAT: {
+                ALPHA: require("images/bat_alpha.png"),
+                OMEGA: require("images/bat_omega.png"),
+            }
+        },
+
+        EFFECTS: {
+            SLICE: [
+                require("images/sprites/effects/slice-1.png"),
+                require("images/sprites/effects/slice-2.png"),
+                require("images/sprites/effects/slice-3.png"),
+            ],
+            SLASH: [
+                require("images/sprites/effects/slash-1.png"),
+                require("images/sprites/effects/slash-2.png"),
+                require("images/sprites/effects/slash-3.png"),
+            ],
+        },
+        TERRAIN: {
+            OCTOTHORPE: [
+                require("images/sprites/terrain/octothorpe.png"),
+            ],
+            DOT: [
+                require("images/sprites/terrain/dot-1.png"),
+                require("images/sprites/terrain/dot-2.png"),
+            ],
+        }
     }
 }

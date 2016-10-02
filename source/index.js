@@ -6,24 +6,65 @@
 //                                               //
 //////////////////////////////////////////////////
 
+import Afloop from "afloop"
+
+import Render from "scripts/utility/Render.js"
+import KeyboardInput from "scripts/utility/inputs/KeyboardInput"
+
 import Game from "scripts/model/Game.js"
 import Frame from "scripts/model/Frame.js"
 
+import MONSTERS from "scripts/data/monsters.js"
+
 var state = {
     frame: new Frame(),
-    game: new Game(),
+    game: new Game({
+        adventurer: {
+            inputs: {
+                // TODO: Save and load these inputs, so the
+                // players can configure their inputs.
+                north: new KeyboardInput(["<up>", "W"]),
+                south: new KeyboardInput(["<down>", "S"]),
+                west: new KeyboardInput(["<left>", "A"]),
+                east: new KeyboardInput(["<right>", "D"]),
+                wait: new KeyboardInput("<space>")
+            },
+            position: {
+                x: 3, y: 3
+            }
+        },
+        wave: {
+            capacity: 4,
+            monsters: [
+                MONSTERS.RED_SLIME,
+                MONSTERS.BLUE_SLIME,
+                MONSTERS.RED_ORC,
+                MONSTERS.BLUE_ORC,
+                MONSTERS.GREEN_ORC,
+                MONSTERS.WHITE_TROLL,
+                MONSTERS.RED_BAT,
+                MONSTERS.BLUE_BAT,
+                MONSTERS.GREEN_BAT,
+                MONSTERS.FAST_BAT,
+                MONSTERS.STONE_BAT,
+            ]
+        },
+        monsters: [
+            {
+                position: {x: 0, y: 0},
+                protomonster: MONSTERS.RED_SLIME
+            }
+        ]
+    }),
 }
-
-import Afloop from "afloop"
-import Render from "scripts/utility/Render.js"
 
 var render = new Render()
 var loop = new Afloop((delta) => {
-    state.game.update(delta)
+    state.game.onFrameLoop(delta)
     render(state)
 })
 
-// While  in development, we expose the game state
+// While in development, we expose the game state
 // to the window, so we can examine it from the
 // javascript console. Please do not use this
 // global variable elsewhere.
@@ -50,4 +91,11 @@ if(STAGE == "DEVELOPMENT") {
             console.warn(warning)
         })
     })
+}
+
+// We run our tests in the same environment we
+// run our game, namely, the browser. :)
+
+if(STAGE == "DEVELOPMENT") {
+    require("scripts/tests")
 }
