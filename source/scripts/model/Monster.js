@@ -6,13 +6,13 @@ import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
 import ShortID from "shortid"
 
 export default class Monster {
-    constructor(monster) {
+    constructor(game, monster) {
         this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
         this.sprite = this.pickSprite()
 
-        this.game = monster.game
+        this.game = game
 
         this.position = monster.position
         this.transition = true

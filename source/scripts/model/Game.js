@@ -1,43 +1,29 @@
 import ShortID from "shortid"
 
 import Adventurer from "scripts/model/Adventurer.js"
+import Monster from "scripts/model/Monster.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
 // import Dungeon from "scripts/model/Dungeon.js"
 
 import DATA from "scripts/data"
-import MONSTERS from "scripts/data/monsters.js"
 
 export default class Game {
-    constructor(protogame) {
-        protogame = protogame || new Object()
+    constructor(game = {}) {
 
-        this.adventurer = new Adventurer({
+        this.adventurer = new Adventurer(this, game.adventurer || {
             position: {x: 3, y: 3},
-            inputs: protogame.inputs,
-            game: this,
         })
 
-        this.wave = new MonsterWave({
-            game: this,
-            data: {
-                capacity: 4,
-                monsters: [
-                    MONSTERS.RED_SLIME,
-                    MONSTERS.BLUE_SLIME,
-                    MONSTERS.RED_ORC,
-                    MONSTERS.BLUE_ORC,
-                    MONSTERS.GREEN_ORC,
-                    MONSTERS.WHITE_TROLL,
-                    MONSTERS.RED_BAT,
-                    MONSTERS.BLUE_BAT,
-                    MONSTERS.GREEN_BAT,
-                    MONSTERS.FAST_BAT,
-                    MONSTERS.STONE_BAT,
-                ],
-            }
-        })
-
+        if(game.wave != undefined) {
+            this.wave = new MonsterWave(this, game.wave)
+        }
+        
         this.monsters = new Array()
+        if(game.monsters instanceof Array) {
+            this.monsters = game.monsters.map((monster) => {
+                return new Monster(this, monster)
+            })
+        }
 
         this.tiles = [
             {
@@ -108,7 +94,9 @@ export default class Game {
         }
 
         // Update the wave.
-        this.wave.onAction()
+        if(!!this.wave) {
+            this.wave.onAction()
+        }
 
     }
 }

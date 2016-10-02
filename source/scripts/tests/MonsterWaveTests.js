@@ -4,7 +4,12 @@ import Game from "scripts/model/Game.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
 
 export default function MonsterWaveTests() {
-    var game = new Game()
+    var game = new Game({
+        wave: {
+            capacity: 4,
+            monsters: [{}],
+        }
+    })
 
     Expect(game.wave).not.to.be(undefined)
     Expect(game.wave).to.be.an(MonsterWave)
