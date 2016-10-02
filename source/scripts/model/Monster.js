@@ -110,16 +110,16 @@ export default class Monster {
        var dy = this.game.adventurer.position.y - this.position.y
        //Translate coordinates to movement directions
        if (monX <= adX && (Math.abs(dx) > Math.abs(dy)))  {      
-           this.move({x: +1})
+           return {x: +1}
        }
        if (monX >= adX && (Math.abs(dx) > Math.abs(dy))) {         
-           this.move({x: -1})
+           return {x: -1}
        }
        if (monY <= adY && (Math.abs(dy) > Math.abs(dx))) {         
-           this.move({y: +1})
+           return {y: +1}
        }
        if (monY >= adY && (Math.abs(dy) > Math.abs(dx))) {      
-           this.move({y: -1})
+           return {y: -1}
        }
    }
     handleAttack(damage) {
