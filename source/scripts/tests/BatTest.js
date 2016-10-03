@@ -3,6 +3,7 @@ import Expect from "expect.js"
 import Game from "scripts/model/Game.js"
 
 import MONSTERS from "scripts/data/monsters.js"
+import DATA from "scripts/data/index.js"
 
 export default function BatTest() {
 
@@ -30,5 +31,13 @@ export default function BatTest() {
         // being spawned in.
     })
 
-    // Put assertions here that test your code!
+    // Had to use JSON.stringify to compare objects
+    Expect(JSON.stringify(game.monsters[0].position)).to.be(JSON.stringify({x: 1,y: 1}))
+    game.monsters[0].onAction()
+    Expect(JSON.stringify(game.monsters[0].position)).not.to.be(JSON.stringify({x: 1,y: 1}))
+    Expect(game.monsters[0].position.x).not.to.be.below(0)
+    Expect(game.monsters[0].position.y).not.to.be.below(0)
+    Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
+    Expect(game.monsters[0].position.y).not.to.be.above(DATA.FRAME.HEIGHT)
+
 }
