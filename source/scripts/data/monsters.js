@@ -137,5 +137,28 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         }
     },
+    SKELETON: {
+        sprite: DATA.SPRITES.MONSTERS.ORC, //Temp until we get an image
+        color: DATA.COLORS.WHITE,
+        health: 1,
+        strength: 1,
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
+    BONE_PILE: {
+        sprite: DATA.SPRITES.MONSTERS.BONES, //Temp until we get an image
+        color: DATA.COLORS.WHITE,
+        health: 1,
+        strength: 0,
+
 
 }
