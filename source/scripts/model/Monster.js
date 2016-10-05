@@ -116,6 +116,14 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.game.remove("monsters", this)
+
+            if(!!this.game) {
+                if(!!this.game.wave) {
+                    if(this.game.wave.countdown > 0) {
+                        this.game.wave.countdown -= 1
+                    }
+                }
+            }
         }
     }
     getOffscreenMovement() {

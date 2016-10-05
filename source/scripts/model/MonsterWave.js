@@ -25,6 +25,8 @@ export default class MonsterWave {
         // become more difficult during the wave.
         this.capacity = wave.capacity || 4
         this.monsters = wave.monsters || []
+
+        this.countdown = 10
     }
     onAction() {
         // If attached to a game...
