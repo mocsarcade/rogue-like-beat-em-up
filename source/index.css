@@ -39,6 +39,32 @@ html {
     100% {transform: translateX(0px)}
 }
 
+@function strip-unit($number) {
+    @if type-of($number) == 'number' and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+
+    @return $number;
+}
+
+#frame {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
+    position: fixed;
+
+    overflow: hidden;
+    background-color: #222;
+
+    width: 126px;
+    height: 126px;
+
+    transform-origin: center;
+    // transform: scale(100vh);
+}
+
 #hud {
     top: 0px;
     left: 0px;

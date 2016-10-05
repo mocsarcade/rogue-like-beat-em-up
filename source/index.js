@@ -48,13 +48,7 @@ var state = {
                 // MONSTERS.FAST_BAT,
                 // MONSTERS.STONE_BAT,
             ]
-        },
-        monsters: [
-            {
-                position: {x: 0, y: 0},
-                protomonster: MONSTERS.RED_SLIME
-            }
-        ]
+        }
     }),
 }
 

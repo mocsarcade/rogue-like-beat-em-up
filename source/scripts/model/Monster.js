@@ -119,9 +119,7 @@ export default class Monster {
 
             if(!!this.game) {
                 if(!!this.game.wave) {
-                    if(this.game.wave.countdown > 0) {
-                        this.game.wave.countdown -= 1
-                    }
+                    this.game.wave.bumpKillcount()
                 }
             }
         }
