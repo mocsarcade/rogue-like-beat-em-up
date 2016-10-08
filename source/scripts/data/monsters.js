@@ -36,6 +36,13 @@ export default {
         color: DATA.COLORS.WHITE,
         health: 5,
         strength: 5,
+        turnCounter: function() {
+            this.somecount = this.somecount + 1 || 0
+            if(this.somecount % 4 == 0) {
+                return this.phase = true
+            }
+            return this.phase = false
+        }
     },
     RED_BAT: {
         sprite: DATA.SPRITES.MONSTERS.BAT,
