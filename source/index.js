@@ -36,8 +36,8 @@ var state = {
         wave: {
             capacity: 4,
             monsters: [
-                MONSTERS.RED_SLIME,
-                MONSTERS.BLUE_SLIME,
+                // MONSTERS.RED_SLIME,
+                // MONSTERS.BLUE_SLIME,
                 // MONSTERS.RED_ORC,
                 // MONSTERS.BLUE_ORC,
                 // MONSTERS.GREEN_ORC,
@@ -47,6 +47,7 @@ var state = {
                 // MONSTERS.GREEN_BAT,
                 // MONSTERS.FAST_BAT,
                 // MONSTERS.STONE_BAT,
+                MONSTERS.RED_THIEF,
             ]
         }
     }),

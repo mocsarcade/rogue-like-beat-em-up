@@ -137,5 +137,10 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         }
     },
-
+    RED_THIEF: {
+        sprite: DATA.SPRITES.MONSTERS.THIEF,
+        color: DATA.COLORS.RED,
+        health: 5,
+        strength: 5,
+    },
 }
