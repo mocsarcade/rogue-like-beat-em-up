@@ -17,7 +17,7 @@ export default function OrcTest() {
             position: {x: 3, y: 3},
         },
 
-        // A game with an adventurer and a bat.
+        // A game with an adventurer and an orc.
 
         monsters: [
             {
@@ -26,10 +26,6 @@ export default function OrcTest() {
             }
         ]
 
-        // Also, by purposefully forgetting to
-        // pass a "wave" to the game, our test
-        // won't be interrupted by other monsters
-        // being spawned in.
     })
     Expect(game.monsters[0].position).to.eql({x: 1, y: 1})
     game.monsters[0].onAction()
