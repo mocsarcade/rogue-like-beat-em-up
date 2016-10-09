@@ -31,10 +31,9 @@ export default function BatTest() {
         // being spawned in.
     })
 
-    // Had to use JSON.stringify to compare objects
-    Expect(JSON.stringify(game.monsters[0].position)).to.be(JSON.stringify({x: 1,y: 1}))
+    Expect(game.monsters[0].position).to.be.eql({x: 1,y: 1})
     game.monsters[0].onAction()
-    Expect(JSON.stringify(game.monsters[0].position)).not.to.be(JSON.stringify({x: 1,y: 1}))
+    Expect(game.monsters[0].position).not.to.be.eql({x: 1,y: 1})
     Expect(game.monsters[0].position.x).not.to.be.below(0)
     Expect(game.monsters[0].position.y).not.to.be.below(0)
     Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
