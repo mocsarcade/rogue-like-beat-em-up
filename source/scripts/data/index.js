@@ -46,6 +46,10 @@ export default {
                 ALPHA: require("images/sprites/monsters/thief_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
             },
+            SPIDER: {
+                ALPHA: require("images/sprites/monsters/spider_alpha.png"),
+                OMEGA: require("images/sprites/monsters/spider_omega.png"),
+            },
         },
         EFFECTS: {
             SLICE: [
