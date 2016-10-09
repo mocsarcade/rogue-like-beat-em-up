@@ -25,11 +25,7 @@ export default function TrollTest() {
                 protomonster: MONSTERS.WHITE_TROLL
             }
         ]
-
-        // Also, by purposefully forgetting to
-        // pass a "wave" to the game, our test
-        // won't be interrupted by other monsters
-        // being spawned in.
+        
     })
 
     game.monsters[0].onAction()
@@ -41,7 +37,7 @@ export default function TrollTest() {
     game.monsters[0].onAction()
     expect(game.monsters[0].position).to.eql({x: 1, y: 2})
     game.monsters[0].onAction()
-    
+
     Expect(game.monsters[0].position).not.to.eql({x: 1, y: 1})
     Expect(game.monsters[0].position.x).not.to.be.below(0)
     Expect(game.monsters[0].position.y).not.to.be.below(0)
