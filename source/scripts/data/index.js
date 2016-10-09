@@ -41,7 +41,19 @@ export default {
             BAT: {
                 ALPHA: require("images/bat_alpha.png"),
                 OMEGA: require("images/bat_omega.png"),
-            }
+            },
+            SMALL_NECROMANCER: {
+                ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
+                OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
+            },
+            BIG_NECROMANCER: {
+                ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
+                OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
+            },
+            SKELETON: { 
+                ALPHA: require("images/sprites/monsters/skeleton_alpha.png"),
+                OMEGA: require("images/sprites/monsters/skeleton_omega.png"),
+            },
         },
 
         EFFECTS: {
@@ -63,6 +75,10 @@ export default {
             DOT: [
                 require("images/sprites/terrain/dot-1.png"),
                 require("images/sprites/terrain/dot-2.png"),
+            ],
+            BLOOD: [
+                require("images/sprites/terrain/Blood.png"),
+               
             ],
         }
     }

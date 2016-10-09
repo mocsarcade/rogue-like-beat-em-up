@@ -47,6 +47,9 @@ var state = {
                 MONSTERS.GREEN_BAT,
                 MONSTERS.FAST_BAT,
                 MONSTERS.STONE_BAT,
+                MONSTERS.SMALL_NECROMANCER, 
+                MONSTERS.BIG_NECROMANCER, 
+                MONSTERS.SKELETON,
             ]
         },
         monsters: [
