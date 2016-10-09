@@ -140,7 +140,13 @@ export default {
     RED_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.RED,
-        health: 5,
-        strength: 5,
+        health: 1,
+        strength: 1,
+    },
+    BLUE_THIEF: {
+        sprite: DATA.SPRITES.MONSTERS.THIEF,
+        color: DATA.COLORS.BLUE,
+        health: 2,
+        strength: 2,
     },
 }

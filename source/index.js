@@ -48,6 +48,7 @@ var state = {
                 // MONSTERS.FAST_BAT,
                 // MONSTERS.STONE_BAT,
                 MONSTERS.RED_THIEF,
+                MONSTERS.BLUE_THIEF,
             ]
         }
     }),

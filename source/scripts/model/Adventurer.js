@@ -57,6 +57,7 @@ export default class Adventurer {
 
         // collision with monsters
         this.game.monsters.forEach((monster) => {
+            console.log(monster.basesprite)
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
                 monster.handleAttack(1)
