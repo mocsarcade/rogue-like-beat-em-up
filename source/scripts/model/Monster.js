@@ -63,7 +63,7 @@ export default class Monster {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
-        
+
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -164,6 +164,7 @@ export default class Monster {
         return temp
     }
     outOfBounds(positionVector) {
+        positionVector = positionVector || {x: 0, y: 0}
         if (positionVector.x + this.position.x < 0) {
             return true
         }
