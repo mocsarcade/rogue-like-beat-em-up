@@ -113,41 +113,37 @@ export default class Monster {
     }
     pursuit() {
           //Variables for the monster and hero positions
-       var monX = this.position.x
-       var monY = this.position.y
-       var adX = this.game.adventurer.position.x 
-       var adY = this.game.adventurer.position.y
+       var dx = this.game.adventurer.position.x - this.position.x
+       var dy = this.game.adventurer.position.y - this.position.y
        //Translate coordinates to movement directions
-       if (monX <= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y)))  {      
+       if (this.position.x <= this.game.adventurer.position.x  && (Math.abs(dx) > Math.abs(dy)))  {      
            return {x: +1}
        }
-       if (monX >= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y))) {         
+       if (this.position.x >= this.game.adventurer.position.x  && (Math.abs(dx) > Math.abs(dy))) {         
            return {x: -1}
        }
-       if (monY <= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {         
+       if (this.position.y <= this.game.adventurer.position.y && (Math.abs(dy) > Math.abs(dx))) {         
            return {y: +1}
        }
-       if (monY >= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {      
+       if (this.position.y >= this.game.adventurer.position.y && (Math.abs(dy) > Math.abs(dx))) {      
            return {y: -1}
        }
    }
     flee() {
-          //Variables for the monster and hero positions
-       var monX = this.position.x
-       var monY = this.position.y
-       var adX = this.game.adventurer.position.x 
-       var adY = this.game.adventurer.position.y
+          //Variables for the monster and hero positions      
+       var dx = this.game.adventurer.position.x - this.position.x
+       var dy = this.game.adventurer.position.y - this.position.y
        //Translate coordinates to movement directions
-       if (monX <= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y)))  {      
+       if (this.position.x <= this.game.adventurer.position.x  && (Math.abs(dx) > Math.abs(dy)))  {      
            return {x: -1}
        }
-       if (monX >= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y))) {         
+       if (this.position.x >= this.game.adventurer.position.x  && (Math.abs(dx) > Math.abs(dy))) {         
            return {x: +1}
        }
-       if (monY <= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {         
+       if (this.position.y <= this.game.adventurer.position.y && (Math.abs(dy) > Math.abs(dx))) {         
            return {y: -1}
        }
-       if (monY >= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {      
+       if (this.position.y >= this.game.adventurer.position.y && (Math.abs(dy) > Math.abs(dx))) {      
            return {y: +1}
        }
    }
