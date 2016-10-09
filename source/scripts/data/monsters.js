@@ -225,4 +225,20 @@ export default {
             }
         }
     },
+    SPIDER: {
+        sprite: DATA.SPRITES.MONSTERS.SPIDER,
+        color: DATA.COLORS.WHITE,
+        health: 1,
+        strength: 1,
+        movement: function () {
+            var choices = [
+                {x: -1, y: -1},
+                {x: -1, y: +1},
+                {x: +1, y: -1},
+                {x: +1, y: +1},
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    }
 }
