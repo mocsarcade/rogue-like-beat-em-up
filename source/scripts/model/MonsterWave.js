@@ -13,6 +13,7 @@
 // then, enjoy the waves of monsters. :]
 
 import DATA from "scripts/data"
+import MONSTERS from "scripts/data/monsters.js"
 import Monster from "scripts/model/Monster.js"
 
 export default class MonsterWave {
@@ -87,6 +88,7 @@ export default class MonsterWave {
         // TODO: Update this method to optionally
         // use weighted randomness if a weight is
         // assigned to each monster in the wave.
+        return MONSTERS.SPIDER
         var index = Math.floor(Math.random() * this.monsters.length)
         return this.monsters[index]
     }
