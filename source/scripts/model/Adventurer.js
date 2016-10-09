@@ -55,12 +55,16 @@ export default class Adventurer {
 
         this.animation = false
 
+
         // collision with monsters
         this.game.monsters.forEach((monster) => {
-            console.log(monster.basesprite)
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
                 monster.handleAttack(1)
+
+                this.grabCounter = monster.protomonster.grabCounter || function () {
+                    this.phase = !this.phase
+                }
 
                 //this.instance = ShortID.generate()
                 if(movement.x < 0 && movement.y == 0) {
@@ -72,6 +76,7 @@ export default class Adventurer {
                 } else if(movement.x == 0 && movement.y > 0) {
                     this.animation = "attack-southwards"
                 }
+
                 this.game.add("effects", new Effect({
                     sprite: new AnimatedSprite({
                         images: DATA.SPRITES.EFFECTS.SLICE,
@@ -104,5 +109,6 @@ export default class Adventurer {
         this.position.y += movement.y
 
         this.game.onAction()
+
     }
 }

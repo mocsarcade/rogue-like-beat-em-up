@@ -142,6 +142,16 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
+        grabCounter: function() {
+            this.grabCount = this.grabCount + 1 || 0
+            console.log("line reached")
+            if(this.grabCount % 2 == 0) {
+                this.phase = true
+            }else {
+                this.phase = false
+            }
+            return this.phase
+        }
     },
     BLUE_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
