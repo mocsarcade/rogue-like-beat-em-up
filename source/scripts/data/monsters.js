@@ -138,7 +138,7 @@ export default {
         }
     },
     SKELETON: {
-        sprite: DATA.SPRITES.MONSTERS.SKELETON, //Temp until we get an image
+        sprite: DATA.SPRITES.MONSTERS.ORC, //Temp until we get an image
         color: DATA.COLORS.WHITE,
         health: 1,
         strength: 1,
@@ -154,59 +154,11 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         }
     },
-    NECROMANCER: {
-        sprite: DATA.SPRITES.MONSTERS.NECROMANCER, //Temp until we get an image
+    BONE_PILE: {
+        sprite: DATA.SPRITES.MONSTERS.BONES, //Temp until we get an image
         color: DATA.COLORS.WHITE,
         health: 1,
-        strength: 1,
-        turnCounter: function() {
-            this.turn = this.turn +  1
-            if (this.turn = 7) {
-                this.phase = false
-                this.turn = 0
-                raiseSkeleton() //Need a raise skeleton function
-            } else {
-                this.phase = true
-            }
-        }
-        movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
-            var choices = [
-                {x: -1},
-                {x: +1},
-                {y: -1},
-                {y: +1}
-            ]
-            choices = this.pruneMovement(choices)
-            return choices[Math.floor((Math.random() * choices.length))]
-        }
-    },
-    NECROMANCER_BIG: {
-        sprite: DATA.SPRITES.MONSTERS.NECROMANCER, //Temp until we get an image
-        color: DATA.COLORS.BLACK,
-        health: 2,
-        strength: 1,
-        turnCounter: function() {
-            this.turn = this.turn +  1
-            if (this.turn = 7) {
-                this.phase = false
-                this.turn = 0
-                raiseSkeleton() //Need a raise skeleton function
-            } else {
-                this.phase = true
-            }
-        }
-        movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
-            var choices = [
-                {x: -1},
-                {x: +1},
-                {y: -1},
-                {y: +1}
-            ]
-            choices = this.pruneMovement(choices)
-            return choices[Math.floor((Math.random() * choices.length))]
-        }
-    },
+        strength: 0,
+
 
 }
