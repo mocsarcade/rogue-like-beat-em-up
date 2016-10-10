@@ -28,6 +28,9 @@ export default class Monster {
                 if(dy < 0) return {y: -1}
             }
         }
+        this.grabbed = monster.protomonster.grabCounter || function () {
+
+        }
         this.turnCounter = monster.protomonster.turnCounter || function () {
             this.phase = !this.phase
         }
@@ -116,9 +119,6 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.game.remove("monsters", this)
-            if(this.basesprite == DATA.SPRITES.MONSTERS.BLUE_SLIME) {
-                console.log("yay you killed a blue lime")
-            }
             if(!!this.game) {
                 if(!!this.game.wave) {
                     this.game.wave.bumpKillcount()

@@ -154,11 +154,13 @@ export default {
         strength: 1,
         grabCounter: function() {
             this.grabCount = this.grabCount + 1 || 0
+            console.log(this.grabCount)
             if(this.grabCount == 0) {
                 this.grabbed = true
             }else {
                 this.grabbed = false
             }
+            console.log(this.grabbed)
             return this.grabbed
         }
     },

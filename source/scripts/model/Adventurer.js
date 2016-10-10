@@ -4,6 +4,7 @@ import ShortID from "shortid"
 
 import Effect from "scripts/model/Effect.js"
 import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
+import MONSTERS from "scripts/data/monsters.js"
 
 export default class Adventurer {
     constructor(game, protoadventurer) {
@@ -59,10 +60,10 @@ export default class Adventurer {
 
         // collision with monsters
         this.game.monsters.forEach((monster) => {
+            this.grabbed = monster.grabbed
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
                 monster.handleAttack(1)
-
                 //this.instance = ShortID.generate()
                 if(movement.x < 0 && movement.y == 0) {
                     this.animation = "attack-westwards"
@@ -87,8 +88,6 @@ export default class Adventurer {
                 }))
                 movement.x = 0
                 movement.y = 0
-                
-                this.grabbed = monster.protomonster.grabCounter
             }
         })
 
@@ -103,12 +102,13 @@ export default class Adventurer {
             }
         }
 
-
-
         // translation
+
+
+        //once i get this.grabbed to update properly i will uncomment the next two comments
         //if(!this.grabbed) {
-            this.position.x += movement.x
-            this.position.y += movement.y
+        this.position.x += movement.x
+        this.position.y += movement.y
         //}
         this.game.onAction()
 
