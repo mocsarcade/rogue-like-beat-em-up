@@ -4,6 +4,7 @@ import Adventurer from "scripts/model/Adventurer.js"
 import Monster from "scripts/model/Monster.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
 // import Dungeon from "scripts/model/Dungeon.js"
+import Camera from "scripts/model/Camera.js"
 
 import DATA from "scripts/data"
 
@@ -25,20 +26,26 @@ export default class Game {
             })
         }
 
-        // this.tiles = [
-        //     {
-        //         key: "1x1",
-        //         color: DATA.COLORS.WHITE,
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[0],
-        //         position: {x: 1, y: 1}
-        //     },
-        //     {
-        //         key: "5x5",
-        //         color: DATA.COLORS.WHITE,
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
-        //         position: {x: 5, y: 5}
-        //     },
-        // ]
+        // TODO: Initialize these
+        // tiles from the parameters.
+        this.tiles = [
+            {
+                key: "1x1",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[0],
+                position: {x: 1, y: 1}
+            },
+            {
+                key: "5x5",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+                position: {x: 5, y: 5}
+            },
+        ]
+        
+        this.camera = new Camera({
+            position: {x: 3.5, y: 3.5}
+        })
     }
     add(name, entity) {
         entity.game = this

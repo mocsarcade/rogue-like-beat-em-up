@@ -101,7 +101,17 @@ export default class Adventurer {
         // translation
         this.position.x += movement.x
         this.position.y += movement.y
-
+        
+        // camera
+        if(!!this.game) {
+            if(!!this.game.camera) {
+                // TODO: Use camera zones to
+                // define what to look at.
+                this.game.camera.lookAt(this)
+            }
+        }
+        
+        // signaling
         this.game.onAction()
     }
 }
