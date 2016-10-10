@@ -2,7 +2,7 @@ import DATA from "scripts/data"
 
 import Effect from "scripts/model/Effect.js"
 import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
-
+import MONSTERS from "scripts/data/monsters.js"
 import ShortID from "shortid"
 
 export default class Monster {
@@ -116,7 +116,9 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.game.remove("monsters", this)
-
+            if(this.basesprite == DATA.SPRITES.MONSTERS.BLUE_SLIME) {
+                console.log("yay you killed a blue lime")
+            }
             if(!!this.game) {
                 if(!!this.game.wave) {
                     this.game.wave.bumpKillcount()

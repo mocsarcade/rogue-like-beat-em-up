@@ -39,6 +39,7 @@ var state = {
 
                 MONSTERS.RED_SLIME,
                 MONSTERS.BLUE_SLIME,
+<<<<<<< HEAD
                 // MONSTERS.RED_ORC,
                 // MONSTERS.BLUE_ORC,
                 // MONSTERS.GREEN_ORC,
@@ -50,6 +51,17 @@ var state = {
                 // MONSTERS.STONE_BAT,
                 MONSTERS.RED_THIEF,
                 MONSTERS.BLUE_THIEF,
+=======
+                MONSTERS.RED_ORC,
+                MONSTERS.BLUE_ORC,
+                MONSTERS.GREEN_ORC,
+                MONSTERS.WHITE_TROLL,
+                MONSTERS.RED_BAT,
+                MONSTERS.BLUE_BAT,
+                MONSTERS.GREEN_BAT,
+                MONSTERS.FAST_BAT,
+                MONSTERS.STONE_BAT,
+>>>>>>> 915677d88c2aa07293a9286f4f6f3829daf4bd80
             ]
         }
     }),
