@@ -23,6 +23,7 @@ export default class Adventurer {
 
         this.maxhealth = 3
         this.health = this.maxhealth
+        this.grabbed = false
     }
     update(delta) {
         for(var key in this.inputs) {
@@ -62,10 +63,6 @@ export default class Adventurer {
             && this.position.y + movement.y == monster.position.y) {
                 monster.handleAttack(1)
 
-                this.grabCounter = monster.protomonster.grabCounter || function () {
-                    this.phase = !this.phase
-                }
-
                 //this.instance = ShortID.generate()
                 if(movement.x < 0 && movement.y == 0) {
                     this.animation = "attack-westwards"
@@ -90,6 +87,8 @@ export default class Adventurer {
                 }))
                 movement.x = 0
                 movement.y = 0
+                
+                this.grabbed = monster.protomonster.grabCounter
             }
         })
 
@@ -104,10 +103,13 @@ export default class Adventurer {
             }
         }
 
-        // translation
-        this.position.x += movement.x
-        this.position.y += movement.y
 
+
+        // translation
+        //if(!this.grabbed) {
+            this.position.x += movement.x
+            this.position.y += movement.y
+        //}
         this.game.onAction()
 
     }

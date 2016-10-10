@@ -144,13 +144,12 @@ export default {
         strength: 1,
         grabCounter: function() {
             this.grabCount = this.grabCount + 1 || 0
-            console.log("line reached")
-            if(this.grabCount % 2 == 0) {
-                this.phase = true
+            if(this.grabCount == 0) {
+                this.grabbed = true
             }else {
-                this.phase = false
+                this.grabbed = false
             }
-            return this.phase
+            return this.grabbed
         }
     },
     BLUE_THIEF: {
