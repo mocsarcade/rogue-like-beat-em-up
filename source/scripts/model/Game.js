@@ -26,8 +26,8 @@ export default class Game {
             })
         }
 
-        // TODO: Initialize these
-        // tiles from the parameters.
+        // TODO: Initialize this
+        // from the parameters.
         this.tiles = [
             {
                 key: "1x1",
@@ -40,6 +40,27 @@ export default class Game {
                 color: DATA.COLORS.WHITE,
                 sprite: DATA.SPRITES.TERRAIN.DOT[1],
                 position: {x: 5, y: 5}
+            },
+            {
+                key: "3x-3",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+                position: {x: 3, y: -4}
+            },
+        ]
+        
+        // TODO: Initialize this
+        // from the parameters.
+        this.rooms = [
+            {
+                position: {x: 3.5, y: 3.5},
+                width: DATA.FRAME.WIDTH,
+                height: DATA.FRAME.HEIGHT
+            },
+            {
+                position: {x: 3.5, y: -3.5},
+                width: DATA.FRAME.WIDTH,
+                height: DATA.FRAME.HEIGHT
             },
         ]
         

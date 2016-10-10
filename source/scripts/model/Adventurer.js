@@ -105,9 +105,15 @@ export default class Adventurer {
         // camera
         if(!!this.game) {
             if(!!this.game.camera) {
-                // TODO: Use camera zones to
-                // define what to look at.
-                this.game.camera.lookAt(this)
+                this.game.rooms.forEach((room) => {
+                    if(this.position.x >= Math.floor(room.position.x - (room.width / 2))
+                    && this.position.x < Math.floor(room.position.x + (room.width / 2))
+                    && this.position.y >= Math.floor(room.position.y - (room.height / 2))
+                    && this.position.y < Math.floor(room.position.y + (room.height / 2))) {
+                        this.game.camera.position.x = room.position.x
+                        this.game.camera.position.y = room.position.y
+                    }
+                })
             }
         }
         
