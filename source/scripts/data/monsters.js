@@ -41,10 +41,10 @@ export default {
             this.turncount = this.turncount + 1 || 0
             if(this.turncount % 4 == 0) {
                 this.phase = true
-            }else{
+            } else {
                 this.phase = false
-          }
-          return this.phase
+            }
+            return this.phase
         }
     },
     RED_BAT: {
