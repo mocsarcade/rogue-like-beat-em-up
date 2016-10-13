@@ -1,4 +1,6 @@
 import DATA from "scripts/data"
+import Monster from "scripts/model/Monster.js"
+import MONSTERS from "scripts/data/monsters.js"
 
 export default {
     RED_SLIME: {
@@ -6,6 +8,20 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
+        isSpawned: true,
+        onDeath: function() {
+          if(this.isSpawned == true) {
+              this.isSpawned = false
+              this.game.monsters.push(new Monster(this.game, {
+                protomonster: MONSTERS.RED_SLIME,
+                position: {x: this.position.x, y: this.position.y + 1},
+              }))
+              this.game.add("monsters", this)
+              this.game.wave.killcount += 2
+          } else if (this.isSpawned = false) {
+            this.game.remove("monsters", this)
+          }
+        }
 
     },
     BLUE_SLIME: {
@@ -13,6 +29,20 @@ export default {
         color: DATA.COLORS.BLUE,
         health: 2,
         strength: 1,
+        isSpawned: true,
+        onDeath: function() {
+          if(this.isSpawned == true) {
+              this.isSpawned = false
+              this.game.monsters.push(new Monster(this.game, {
+                protomonster: MONSTERS.BLUE_SLIME,
+                position: {x: this.position.x, y: this.position.y + 1},
+              }))
+              this.game.add("monsters", this)
+              this.game.wave.killcount += 2
+          } else if (this.isSpawned = false) {
+            this.game.remove("monsters", this)
+          }
+        }
     },
     RED_ORC: {
         sprite: DATA.SPRITES.MONSTERS.ORC,
