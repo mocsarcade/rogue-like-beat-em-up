@@ -37,10 +37,10 @@ var state = {
             capacity: 4,
             monsters: [
 
-                //MONSTERS.RED_SLIME,
-                //MONSTERS.BLUE_SLIME,
+                MONSTERS.RED_SLIME,
+                MONSTERS.BLUE_SLIME,
                 MONSTERS.RED_THIEF,
-                //MONSTERS.BLUE_THIEF,
+                MONSTERS.BLUE_THIEF,
 
             ]
         }

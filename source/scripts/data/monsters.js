@@ -150,23 +150,31 @@ export default {
     RED_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.RED,
-        health: 1,
+        health: 2,
         strength: 1,
         grabCounter: function() {
-            console.log("red thief")
-            this.grabcount = this.grabcount + 1 || 0
-            if(this.grabcount % 4 == 0) {
-                console.log("grabbed")
-                console.log(this.game.adventurer.grabcount)
-                this.game.adventurer.grabcount += 3
-                console.log(this.game.adventurer.grabcount)
+            this.turnCount = this.turnCount || 0
+            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
+            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
+                this.turnCount = this.turnCount + 1
+                this.game.adventurer.grabCount += 2
+                this.game.adventurer.grabMonster = this
             }
         }
     },
     BLUE_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.BLUE,
-        health: 2,
+        health: 3,
         strength: 2,
+        grabCounter: function() {
+            this.turnCount = this.turnCount || 0
+            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
+            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
+                this.turnCount = this.turnCount + 1
+                this.game.adventurer.grabCount += 3
+                this.game.adventurer.grabMonster = this
+            }
+        }
     },
 }
