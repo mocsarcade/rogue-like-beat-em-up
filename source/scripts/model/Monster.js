@@ -28,8 +28,7 @@ export default class Monster {
                 if(dy < 0) return {y: -1}
             }
         }
-        this.grabbed = monster.protomonster.grabCounter || function () {
-
+        this.grabCounter = monster.protomonster.grabCounter || function () {
         }
         this.turnCounter = monster.protomonster.turnCounter || function () {
             this.phase = !this.phase
@@ -86,6 +85,7 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
+            this.grabCounter()
             if(movement.x < 0 && movement.y == 0) {
                 this.animation = "attack-westwards"
             } else if(movement.x > 0 && movement.y == 0) {

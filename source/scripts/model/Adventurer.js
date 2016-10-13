@@ -24,7 +24,7 @@ export default class Adventurer {
 
         this.maxhealth = 3
         this.health = this.maxhealth
-        this.grabbed = false
+        this.grabCount = 0
     }
     update(delta) {
         for(var key in this.inputs) {
@@ -60,7 +60,6 @@ export default class Adventurer {
 
         // collision with monsters
         this.game.monsters.forEach((monster) => {
-            this.grabbed = monster.grabbed
             if(this.position.x + movement.x == monster.position.x
             && this.position.y + movement.y == monster.position.y) {
                 monster.handleAttack(1)
@@ -103,13 +102,14 @@ export default class Adventurer {
         }
 
         // translation
-
-
-        //once i get this.grabbed to update properly i will uncomment the next two comments
-        //if(!this.grabbed) {
-        this.position.x += movement.x
-        this.position.y += movement.y
-        //}
+        //console.log("adventurer")
+        //console.log(this.grabCount)
+        if(this.grabCount == 0) {
+            this.position.x += movement.x
+            this.position.y += movement.y
+        }else {
+            this.grabCount = this.grabCount - 1
+        }
         this.game.onAction()
 
     }
