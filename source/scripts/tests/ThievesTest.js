@@ -17,7 +17,7 @@ export default function ThiefTest() {
             position: {x: 3, y: 3},
         },
 
-        // A game with an adventurer and an orc.
+        // A game with an adventurer and a thief.
 
         monsters: [
             {
