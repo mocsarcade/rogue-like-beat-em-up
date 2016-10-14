@@ -1,7 +1,7 @@
 # To run:
 # ./share.sh v.0.0.1
 
-git clone https://github.com/mocsarcade/enchridion.git --branch gh-pages shares
+git clone $(git remote -v | grep push | cut -f2 | cut -d ' ' -f1) --branch gh-pages shares
 
 node build --production
 
