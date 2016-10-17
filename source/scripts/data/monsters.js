@@ -10,19 +10,21 @@ export default {
         strength: 1,
         isSpawned: true,
         onDeath: function() {
-          if(this.isSpawned == true) {
-              this.isSpawned = false
-              this.game.monsters.push(new Monster(this.game, {
-                protomonster: MONSTERS.RED_SLIME,
-                position: {x: this.position.x, y: this.position.y + 1},
-              }))
-              this.game.add("monsters", this)
-              this.game.wave.killcount += 2
-          } else if (this.isSpawned = false) {
-            this.game.remove("monsters", this)
-          }
+            if(this.isSpawned == true) {
+                this.isSpawned = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.wave.killcount += 2
+            } else if (this.isSpawned = false) {
+                this.game.remove("monsters", this)
+            }
         }
-
     },
     BLUE_SLIME: {
         sprite: DATA.SPRITES.MONSTERS.SLIME,
@@ -31,18 +33,27 @@ export default {
         strength: 1,
         isSpawned: true,
         onDeath: function() {
-          if(this.isSpawned == true) {
-              this.isSpawned = false
-              this.game.monsters.push(new Monster(this.game, {
-                protomonster: MONSTERS.BLUE_SLIME,
-                position: {x: this.position.x, y: this.position.y + 1},
-              }))
-              this.game.add("monsters", this)
-              this.game.wave.killcount += 2
-          } else if (this.isSpawned = false) {
-            this.game.remove("monsters", this)
-          }
+            if(this.isSpawned == true) {
+                this.isSpawned = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.wave.killcount += 2
+            } else if (this.isSpawned = false) {
+                this.game.remove("monsters", this)
+            }
         }
+    },
+    SPAWNED_SLIME: {
+        sprite: DATA.SPRITES.MONSTERS.SLIME,
+        color: DATA.COLORS.PINK,
+        health: 1,
+        strength: 1,
     },
     RED_ORC: {
         sprite: DATA.SPRITES.MONSTERS.ORC,
@@ -73,8 +84,8 @@ export default {
                 this.phase = true
             }else{
                 this.phase = false
-          }
-          return this.phase
+            }
+            return this.phase
         }
     },
     RED_BAT: {
