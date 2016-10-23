@@ -1,25 +1,26 @@
-# To run:
-# ./share.sh v.0.0.1
+# This script will build the code and push it to Github Pages.
 
-git clone $(git remote -v | grep push | cut -f2 | cut -d ' ' -f1) --branch gh-pages shares
+# To use, run with the "name of your build," like "pr13" or "v0.1.1".
+# The name of your build can be whatever you want. Your build will
+# be hosted at https://mocsarcade.github.io/gbjam5/NAME_OF_YOUR_BUILD.
+#
+#    $ ./share.sh NAME_OF_YOUR_BUILD
+#
 
-node build --production
+git clone https://github.com/mocsarcade/enchiridion --branch gh-pages shares
+
+node build
 
 mkdir -p ./shares/$1
 cp -r ./builds/web/* ./shares/$1
 
-git --git-dir=./shares/.git --work-tree=./shares config user.email "$(git config user.email)"
-git --git-dir=./shares/.git --work-tree=./shares config user.name "$(git config user.name)"
-
-git --git-dir=./shares/.git --work-tree=./shares add $1
+git --git-dir=./shares/.git --work-tree=./shares add .
 git --git-dir=./shares/.git --work-tree=./shares commit -m "Pushed $1"
 git --git-dir=./shares/.git --work-tree=./shares push origin gh-pages
 
 rm -rf shares
 
-REPO="$(git remote -v | grep push | cut -f2 | cut -d ' ' -f1 | cut -d ':' -f2)"
-
 echo
 echo Share your build by going to:
-echo https://$(echo $REPO | cut -d '/' -f1).github.io/$(echo $REPO | cut -d '/' -f2 | cut -d '.' -f1)/$1
+echo https://mocsarcade.github.io/enchiridion/$1
 echo
