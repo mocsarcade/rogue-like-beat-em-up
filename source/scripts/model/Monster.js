@@ -72,10 +72,12 @@ export default class Monster {
         // collision with other monsters
         this.game.monsters.forEach((monster) => {
             if(monster != this) {
-                if(monster.position.x == this.position.x + movement.x
-                && monster.position.y == this.position.y + movement.y) {
-                    movement.x = 0
-                    movement.y = 0
+                if(!monster.isDead) {
+                    if(monster.position.x == this.position.x + movement.x
+                    && monster.position.y == this.position.y + movement.y) {
+                        movement.x = 0
+                        movement.y = 0
+                    }
                 }
             }
         })
@@ -115,15 +117,16 @@ export default class Monster {
         this.health = this.health || 0
         this.health -= damage
         if(this.health <= 0) {
-            this.game.remove("monsters", this)
-            if(this.basesprite == DATA.SPRITES.MONSTERS.BLUE_SLIME) {
-                console.log("yay you killed a blue lime")
-            }
+            this.isDead = true
             if(!!this.game) {
                 if(!!this.game.wave) {
                     this.game.wave.bumpKillcount()
                 }
             }
+            this.stack = -100
+            this.opacity = 0.5
+            this.color = DATA.COLORS.RED
+            this.sprite = DATA.SPRITES.BLOOD[Math.floor(Math.random() * DATA.SPRITES.BLOOD.length)]
         }
     }
     getOffscreenMovement() {
