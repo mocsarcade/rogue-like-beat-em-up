@@ -87,8 +87,10 @@ export default class Game {
         // Update all the monsters
         if(this.monsters instanceof Array) {
             this.monsters.forEach((monster) => {
-                if(monster.onAction instanceof Function) {
-                    monster.onAction()
+                if(!monster.isDead) {
+                    if(monster.onAction instanceof Function) {
+                        monster.onAction()
+                    }
                 }
             })
         }
