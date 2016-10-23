@@ -7,6 +7,7 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
+
     },
     BLUE_SLIME: {
         sprite: DATA.SPRITES.MONSTERS.SLIME,
@@ -37,6 +38,15 @@ export default {
         color: DATA.COLORS.WHITE,
         health: 5,
         strength: 5,
+        turnCounter: function() {
+            this.turncount = this.turncount + 1 || 0
+            if(this.turncount % 4 == 0) {
+                this.phase = true
+            } else {
+                this.phase = false
+            }
+            return this.phase
+        }
     },
     RED_BAT: {
         sprite: DATA.SPRITES.MONSTERS.BAT,

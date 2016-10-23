@@ -17,7 +17,7 @@ export default class Game {
         if(game.wave != undefined) {
             this.wave = new MonsterWave(this, game.wave)
         }
-        
+
         this.monsters = new Array()
         if(game.monsters instanceof Array) {
             this.monsters = game.monsters.map((monster) => {
@@ -25,20 +25,20 @@ export default class Game {
             })
         }
 
-        this.tiles = [
-            {
-                key: "1x1",
-                color: DATA.COLORS.WHITE,
-                sprite: DATA.SPRITES.TERRAIN.DOT[0],
-                position: {x: 1, y: 1}
-            },
-            {
-                key: "5x5",
-                color: DATA.COLORS.WHITE,
-                sprite: DATA.SPRITES.TERRAIN.DOT[1],
-                position: {x: 5, y: 5}
-            },
-        ]
+        // this.tiles = [
+        //     {
+        //         key: "1x1",
+        //         color: DATA.COLORS.WHITE,
+        //         sprite: DATA.SPRITES.TERRAIN.DOT[0],
+        //         position: {x: 1, y: 1}
+        //     },
+        //     {
+        //         key: "5x5",
+        //         color: DATA.COLORS.WHITE,
+        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
+        //         position: {x: 5, y: 5}
+        //     },
+        // ]
     }
     add(name, entity) {
         entity.game = this

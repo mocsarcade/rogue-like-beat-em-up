@@ -51,13 +51,7 @@ var state = {
                 MONSTERS.BIG_NECROMANCER, 
                 MONSTERS.SKELETON,
             ]
-        },
-        monsters: [
-            {
-                position: {x: 0, y: 0},
-                protomonster: MONSTERS.RED_SLIME
-            }
-        ]
+        }
     }),
 }
 

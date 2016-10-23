@@ -25,21 +25,24 @@ export default class MonsterWave {
         // become more difficult during the wave.
         this.capacity = wave.capacity || 4
         this.monsters = wave.monsters || []
+
+        this.killcount = 10
     }
     onAction() {
         // If attached to a game...
         if(this.game != undefined) {
-            // If, at the moment, the number of monsters is
-            // less than the intended capacity of monsters...
-            if(this.game.monsters.length < this.capacity) {
-                // Then spawn a new monster in the game!
-                this.game.add("monsters", new Monster(this.game, {
-                    position: this.getRandomPosition(),
-                    protomonster: this.getRandomMonster()
-                }))
+            // If there are still monsters left to kill...
+            if(this.game.monsters.length < this.killcount) {
+                // If, at the moment, the number of monsters is
+                // less than the intended capacity of monsters...
+                while(this.game.monsters.length < this.capacity) {
+                    // Then spawn a new monster in the game!
+                    this.game.monsters.push(new Monster(this.game, {
+                        protomonster: this.getRandomMonster(),
+                        position: this.getRandomPosition(),
+                    }))
+                }
             }
-            // TODO: Use a for-loop so the wave can
-            // spawn more than one monster per action.
         }
     }
     // Returns a random position to
@@ -49,6 +52,8 @@ export default class MonsterWave {
     getRandomPosition() {
         // TODO: Update this method to consult the
         // bounds of either a DungeonRoom or Camera.
+        // TODO: Update this method to ensure it won't
+        // collide with an already existing monster.
         if(Math.random() < 0.5) {
             return {
                 x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
@@ -71,5 +76,11 @@ export default class MonsterWave {
         // assigned to each monster in the wave.
         var index = Math.floor(Math.random() * this.monsters.length)
         return this.monsters[index]
+    }
+    bumpKillcount() {
+        this.killcount -= 1
+        if(this.killcount <= 0) {
+            console.log("you win!")
+        }
     }
 }
