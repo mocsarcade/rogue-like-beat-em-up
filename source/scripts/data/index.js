@@ -42,6 +42,7 @@ export default {
                 ALPHA: require("images/bat_alpha.png"),
                 OMEGA: require("images/bat_omega.png"),
             },
+<<<<<<< HEAD
             SMALL_NECROMANCER: {
                 ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
                 OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
@@ -53,6 +54,11 @@ export default {
             SKELETON: { 
                 ALPHA: require("images/sprites/monsters/skeleton_alpha.png"),
                 OMEGA: require("images/sprites/monsters/skeleton_omega.png"),
+=======
+            THIEF: {
+                ALPHA: require("images/sprites/monsters/thief_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/thief_omega.png"),
+>>>>>>> de0aa7e2ccc78fc7d206bd6f0879eda3843085fc
             },
         },
 
@@ -76,10 +82,30 @@ export default {
                 require("images/sprites/terrain/dot-1.png"),
                 require("images/sprites/terrain/dot-2.png"),
             ],
+<<<<<<< HEAD
             BLOOD: [
                 require("images/sprites/terrain/Blood.png"),
                
             ],
         }
+=======
+        },
+        BLOOD: [
+            require("images/sprites/blood/0.png"),
+            require("images/sprites/blood/1.png"),
+            require("images/sprites/blood/2.png"),
+            require("images/sprites/blood/3.png"),
+            require("images/sprites/blood/4.png"),
+            require("images/sprites/blood/5.png"),
+            require("images/sprites/blood/6.png"),
+            require("images/sprites/blood/7.png"),
+            require("images/sprites/blood/8.png"),
+            require("images/sprites/blood/9.png"),
+            require("images/sprites/blood/10.png"),
+            require("images/sprites/blood/11.png"),
+            require("images/sprites/blood/12.png"),
+            require("images/sprites/blood/13.png"),
+        ],
+>>>>>>> de0aa7e2ccc78fc7d206bd6f0879eda3843085fc
     }
 }
