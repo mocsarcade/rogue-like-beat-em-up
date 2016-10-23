@@ -58,15 +58,6 @@ export default class Adventurer {
 
         this.animation = false
 
-<<<<<<< HEAD
-        // collision with monsters
-        this.game.monsters.forEach((monster) => {
-            if(!monster.isDead) {
-                if(this.position.x + movement.x == monster.position.x
-                && this.position.y + movement.y == monster.position.y) {
-                    monster.handleAttack(1)
-
-=======
         if(this.grabCount == 0) {
 
             // collision with monsters
@@ -74,7 +65,6 @@ export default class Adventurer {
                 if(this.position.x + movement.x == monster.position.x
                 && this.position.y + movement.y == monster.position.y) {
                     monster.handleAttack(1)
->>>>>>> 6cfeb839f723458dc0961e1b3290c69f00676167
                     //this.instance = ShortID.generate()
                     if(movement.x < 0 && movement.y == 0) {
                         this.animation = "attack-westwards"
@@ -85,23 +75,6 @@ export default class Adventurer {
                     } else if(movement.x == 0 && movement.y > 0) {
                         this.animation = "attack-southwards"
                     }
-
-                    this.game.add("effects", new Effect({
-                        sprite: new AnimatedSprite({
-                            images: DATA.SPRITES.EFFECTS.SLICE,
-                            isLoop: false,
-                            timing: 20,
-                        }),
-                        position: {
-                            x: this.position.x + movement.x,
-                            y: this.position.y + movement.y,
-                        }
-                    }))
-                    movement.x = 0
-                    movement.y = 0
-                }
-            }
-        })
 
                     this.game.add("effects", new Effect({
                         sprite: new AnimatedSprite({
