@@ -41,7 +41,11 @@ export default {
             BAT: {
                 ALPHA: require("images/bat_alpha.png"),
                 OMEGA: require("images/bat_omega.png"),
-            }
+            },
+            THIEF: {
+                ALPHA: require("images/sprites/monsters/thief_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/thief_omega.png"),
+            },
         },
 
         EFFECTS: {
