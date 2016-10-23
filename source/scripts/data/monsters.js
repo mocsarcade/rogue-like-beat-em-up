@@ -150,7 +150,6 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         }
     },
-<<<<<<< HEAD
     SKELETON: {
         sprite: DATA.SPRITES.MONSTERS.SKELETON, 
         color: DATA.COLORS.WHITE,
@@ -211,7 +210,7 @@ export default {
                 return this.flee()     
          }      
     },                  
-=======
+
     RED_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.RED,
@@ -242,7 +241,7 @@ export default {
             }
         }
     },
->>>>>>> de0aa7e2ccc78fc7d206bd6f0879eda3843085fc
+
 }
 
 
