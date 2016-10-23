@@ -1,4 +1,6 @@
 import DATA from "scripts/data"
+import Monster from "scripts/model/Monster.js"
+import MONSTERS from "scripts/data/monsters.js"
 
 
 export default {
@@ -153,6 +155,7 @@ export default {
         color: DATA.COLORS.WHITE,
         health: 1,
         strength: 1,
+        isSpawned: true, 
         movement: function () {
             if (this.getOffscreenMovement()) return this.getOffscreenMovement()
             return this.pursuit()
@@ -163,22 +166,50 @@ export default {
         color: DATA.COLORS.BROWN,              
         health: 1,              
         strength: 1,      
-         movement: function () {       
+        turnCounter: function() {
+            this.turn = this.turn + 1 || 0
+            if (this.turn >= 7) {
+                this.phase = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SKELETON,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                    this.game.wave.killcount += 1
+                    this.turn = 0
+            } else {
+                this.phase = true
+            }
+        },
+        movement: function () {              
              if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
-             return this.flee()     
-         }     
-     },        
+                return this.flee()     
+        }    
+    },        
     BIG_NECROMANCER: {        
          sprite: DATA.SPRITES.MONSTERS.BIG_NECROMANCER,      
          color: DATA.COLORS.GRAY,     
          health: 2,        
          strength: 1,           
-         movement: function () {       
-             if (this.getOffscreenMovement()) return this.getOffscreenMovement()                           
-             return this.flee()    
-         }     
-     },        
-        
-  }
+        turnCounter: function() {
+            this.turn = this.turn + 1 || 0
+            if (this.turn >=7) {
+                this.phase = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SKELETON,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                    this.game.wave.killcount += 1
+                this.turn = 0
+            } else {
+                this.phase = true
+            }
+        },
+        movement: function () {       
+             
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
+                return this.flee()     
+         }      
+    },                  
+}
 
 
