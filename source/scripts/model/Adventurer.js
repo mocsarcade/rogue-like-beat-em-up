@@ -57,6 +57,7 @@ export default class Adventurer {
         movement.y = movement.y || 0
 
         this.animation = false
+        this.bloodscreen = false
 
         if(this.grabCount == 0) {
 
@@ -109,11 +110,17 @@ export default class Adventurer {
 
             this.position.x += movement.x
             this.position.y += movement.y
-        }else {
+        } else {
             this.grabCount = this.grabCount - 1
             this.grabMonster.handleAttack(1)
         }
         this.game.onAction()
-
+    }
+    beAttacked(damage) {
+        this.bloodscreen = true
+        this.health -= damage || 0.5
+        if(this.health <= 0) {
+            console.log("you died")
+        }
     }
 }

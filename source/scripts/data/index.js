@@ -47,7 +47,6 @@ export default {
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
             },
         },
-
         EFFECTS: {
             SLICE: [
                 require("images/sprites/effects/slice-1.png"),
@@ -85,5 +84,12 @@ export default {
             require("images/sprites/blood/12.png"),
             require("images/sprites/blood/13.png"),
         ],
+        HUD: {
+            HEART: {
+                0: require("images/sprites/hud/heart-0.png"),
+                50: require("images/sprites/hud/heart-50.png"),
+                100: require("images/sprites/hud/heart-100.png"),
+            },
+        },
     }
 }
