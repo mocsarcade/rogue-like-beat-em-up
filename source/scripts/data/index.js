@@ -53,7 +53,7 @@ export default {
             SKELETON: { 
                 ALPHA: require("images/sprites/monsters/skeleton_alpha.png"),
                 OMEGA: require("images/sprites/monsters/skeleton_omega.png"),
-
+            },
             THIEF: {
                 ALPHA: require("images/sprites/monsters/thief_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
@@ -86,9 +86,9 @@ export default {
                 require("images/sprites/terrain/Blood.png"),
                
             ],
-        }
-
         },
+
+        
         BLOOD: [
             require("images/sprites/blood/0.png"),
             require("images/sprites/blood/1.png"),
@@ -105,6 +105,6 @@ export default {
             require("images/sprites/blood/12.png"),
             require("images/sprites/blood/13.png"),
         ],
-
-    }
+    },
 }
+
