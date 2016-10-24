@@ -36,18 +36,10 @@ export default function NecromancerTest() {
     game.monsters[0].onAction()
     game.adventurer.move({y: +1})
 
-    Expect(game.monsters[0].position).to.eql({x: 3, y: 1})
+    Expect(game.monsters[0].position).to.eql({x: 3, y: 0})
     Expect(game.adventurer.position).to.eql({x: 3, y: 4})
-
-    //Wait 6 more turns 
-    game.monsters[0].onAction()
-    game.monsters[0].onAction()
-    game.monsters[0].onAction()
-    game.monsters[0].onAction()
-    game.monsters[0].onAction()
-    game.monsters[0].onAction()
-
-    //Summon Skeleton
-    Expect(game.monster[1])
-    
+    Expect(game.monsters[0].position.x).not.to.be.below(0)
+    Expect(game.monsters[0].position.y).not.to.be.below(0)
+    Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
+    Expect(game.monsters[0].position.y).not.to.be.above(DATA.FRAME.HEIGHT)
 }
