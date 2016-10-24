@@ -89,6 +89,7 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
+            this.game.adventurer.beAttacked()
             this.grabCounter()
             if(movement.x < 0 && movement.y == 0) {
                 this.animation = "attack-westwards"
