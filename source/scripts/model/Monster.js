@@ -121,7 +121,6 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.isDead = true
-            this.game.remove("monsters", this)
             if(!!this.game) {
                 if(!!this.game.wave) {
                     this.game.wave.bumpKillcount()

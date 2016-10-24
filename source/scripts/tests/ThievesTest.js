@@ -46,11 +46,11 @@ export default function ThiefTest() {
     game.monsters[0].onAction()
     game.adventurer.move({y: +1})
 
-    Expect(game.monsters[0]).to.eql(undefined)
+    Expect(game.monsters[0].isDead).to.be(true)
     Expect(game.adventurer.position).to.eql({x: 3, y: 3})
 
     game.adventurer.move({y: +1})
 
-    Expect(game.monsters[0]).to.eql(undefined)
+    Expect(game.monsters[0].isDead).to.be(true)
     Expect(game.adventurer.position).to.eql({x: 3, y: 4})
 }
