@@ -67,8 +67,8 @@ var loop = new Afloop((delta) => {
 
 if(STAGE == "PRODUCTION") {
     var redTrack = new Audio(DATA.AUDIO.RED)
-    var yellowTrack = new Audio(DATA.AUDIO.YELLOW)
-    var purpleTrack = new Audio(DATA.AUDIO.PURPLE)
+    //var yellowTrack = new Audio(DATA.AUDIO.YELLOW)
+    //var purpleTrack = new Audio(DATA.AUDIO.PURPLE)
 
 
     //1.0 is normal speed
@@ -78,22 +78,27 @@ if(STAGE == "PRODUCTION") {
     //-0.5 is backwards, half speed
     //when you switch rooms you should speed up or slow down the music to match the pace of the room
     redTrack.playbackRate = 1
-    yellowTrack.playbackRate = 1
-    purpleTrack.playbackRate = 1
+    //yellowTrack.playbackRate = 1
+    //purpleTrack.playbackRate = 1
 
+    redTrack.volume = 0.5
+    //yellowTrack.volume = 0.5
+    //purpleTrack.volume = 0.5
+
+    redTrack.loop = true
     redTrack.play()
 
-    redTrack.onended = function() {
-        yellowTrack.play()
-    }
+    //redTrack.onended = function() {
+    //    yellowTrack.play()
+    //}
 
-    yellowTrack.onended = function() {
-        purpleTrack.play()
-    }
+    //yellowTrack.onended = function() {
+    //    purpleTrack.play()
+    //}
 
-    purpleTrack.onended = function() {
-        redTrack.play()
-    }
+    //purpleTrack.onended = function() {
+    //    redTrack.play()
+    //}
 
 }
 

@@ -23,8 +23,8 @@ export default {
     },
     AUDIO: {
         RED: require("audio/red.mp3"),
-        YELLOW: require("audio/yellow.mp3"),
-        PURPLE: require("audio/purple.mp3"),
+        //YELLOW: require("audio/yellow.mp3"),
+        //PURPLE: require("audio/purple.mp3"),
     },
     SPRITES: {
         MONSTERS: {
