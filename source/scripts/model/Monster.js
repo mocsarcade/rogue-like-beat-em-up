@@ -87,6 +87,7 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
+            this.game.adventurer.beAttacked()
             this.grabCounter()
             if(movement.x < 0 && movement.y == 0) {
                 this.animation = "attack-westwards"
@@ -161,7 +162,6 @@ export default class Monster {
         this.health -= damage
         if(this.health <= 0) {
             this.isDead = true
-            this.game.remove("monsters", this)
             if(!!this.game) {
                 if(!!this.game.wave) {
                     this.game.wave.bumpKillcount()

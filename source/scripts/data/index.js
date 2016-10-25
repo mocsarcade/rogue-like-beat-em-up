@@ -42,25 +42,11 @@ export default {
                 ALPHA: require("images/bat_alpha.png"),
                 OMEGA: require("images/bat_omega.png"),
             },
-            SMALL_NECROMANCER: {
-                ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
-                OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
-            },
-            BIG_NECROMANCER: {
-                ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
-                OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
-            },
-            SKELETON: { 
-                ALPHA: require("images/sprites/monsters/skeleton_alpha.png"),
-                OMEGA: require("images/sprites/monsters/skeleton_omega.png"),
-            },
             THIEF: {
                 ALPHA: require("images/sprites/monsters/thief_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
-
             },
         },
-
         EFFECTS: {
             SLICE: [
                 require("images/sprites/effects/slice-1.png"),
@@ -81,14 +67,7 @@ export default {
                 require("images/sprites/terrain/dot-1.png"),
                 require("images/sprites/terrain/dot-2.png"),
             ],
-
-            BLOOD: [
-                require("images/sprites/terrain/Blood.png"),
-               
-            ],
         },
-
-        
         BLOOD: [
             require("images/sprites/blood/0.png"),
             require("images/sprites/blood/1.png"),
@@ -105,6 +84,12 @@ export default {
             require("images/sprites/blood/12.png"),
             require("images/sprites/blood/13.png"),
         ],
-    },
+        HUD: {
+            HEART: {
+                0: require("images/sprites/hud/heart-0.png"),
+                50: require("images/sprites/hud/heart-50.png"),
+                100: require("images/sprites/hud/heart-100.png"),
+            },
+        },
+    }
 }
-

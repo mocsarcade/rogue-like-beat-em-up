@@ -9,7 +9,7 @@
 
 git clone https://github.com/mocsarcade/enchiridion --branch gh-pages shares
 
-node build
+node build --production
 
 mkdir -p ./shares/$1
 cp -r ./builds/web/* ./shares/$1

@@ -57,39 +57,44 @@ export default class Adventurer {
         movement.y = movement.y || 0
 
         this.animation = false
+        this.bloodscreen = false
+
         if(this.grabCount == 0) {
 
             // collision with monsters
             this.game.monsters.forEach((monster) => {
-                if(this.position.x + movement.x == monster.position.x
-                && this.position.y + movement.y == monster.position.y) {
-                    monster.handleAttack(1)
-                    
-                    this.instance = ShortID.generate()
-                    if(movement.x < 0 && movement.y == 0) {
-                        this.animation = "attack-westwards"
-                    } else if(movement.x > 0 && movement.y == 0) {
-                        this.animation = "attack-eastwards"
-                    } else if(movement.x == 0 && movement.y < 0) {
-                        this.animation = "attack-northwards"
-                    } else if(movement.x == 0 && movement.y > 0) {
-                        this.animation = "attack-southwards"
-                    }
-
-                    this.game.add("effects", new Effect({
-                        sprite: new AnimatedSprite({
-                            images: DATA.SPRITES.EFFECTS.SLICE,
-                            isLoop: false,
-                            timing: 20,
-                        }),
-                        position: {
-                            x: this.position.x + movement.x,
-                            y: this.position.y + movement.y,
+                if(!monster.isDead) {
+                    if(this.position.x + movement.x == monster.position.x
+                    && this.position.y + movement.y == monster.position.y) {
+                        monster.handleAttack(1)
+                        //this.instance = ShortID.generate()
+                        if(movement.x < 0 && movement.y == 0) {
+                            this.animation = "attack-westwards"
+                        } else if(movement.x > 0 && movement.y == 0) {
+                            this.animation = "attack-eastwards"
+                        } else if(movement.x == 0 && movement.y < 0) {
+                            this.animation = "attack-northwards"
+                        } else if(movement.x == 0 && movement.y > 0) {
+                            this.animation = "attack-southwards"
                         }
-                    }))
-                    movement.x = 0
-                    movement.y = 0
+
+                        this.game.add("effects", new Effect({
+                            sprite: new AnimatedSprite({
+                                images: DATA.SPRITES.EFFECTS.SLICE,
+                                isLoop: false,
+                                timing: 20,
+                            }),
+                            position: {
+                                x: this.position.x + movement.x,
+                                y: this.position.y + movement.y,
+                            }
+                        }))
+                        movement.x = 0
+                        movement.y = 0
+                    }
                 }
+            })
+
             // collision with dungeon
             if(this.game.tiles instanceof Array) {
                 var key = (this.position.x + movement.x) + "x" + (this.position.y + movement.y)
@@ -102,15 +107,20 @@ export default class Adventurer {
             }
 
             // translation
-})
+
             this.position.x += movement.x
             this.position.y += movement.y
-        
-        }else {
+        } else {
             this.grabCount = this.grabCount - 1
             this.grabMonster.handleAttack(1)
         }
         this.game.onAction()
-
+    }
+    beAttacked(damage) {
+        this.bloodscreen = true
+        this.health -= damage || 0.5
+        if(this.health <= 0) {
+            console.log("you died")
+        }
     }
 }
