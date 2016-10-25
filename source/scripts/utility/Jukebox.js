@@ -4,8 +4,6 @@ var AUDIO = {
     PURPLE: require("audio/purple.mp3"),
 }
 
-console.log("Playing the music.")
-
 var redTrack = new Audio(AUDIO.RED)
 var yellowTrack = new Audio(AUDIO.YELLOW)
 var purpleTrack = new Audio(AUDIO.PURPLE)
@@ -19,6 +17,10 @@ var purpleTrack = new Audio(AUDIO.PURPLE)
 redTrack.playbackRate = 1
 yellowTrack.playbackRate = 1
 purpleTrack.playbackRate = 1
+
+redTrack.volume = 0.5
+yellowTrack.volume = 0.5
+purpleTrack.volume = 0.5
 
 redTrack.play()
 
