@@ -65,10 +65,10 @@ export default class Game {
     // This method is called
     // once every frame, and
     // is passed a delta in ms.
-    onFrameLoop(delta) {
+    onFrameLoop(delta, inputs) {
 
         // Update the adventurer.
-        this.adventurer.update(delta)
+        this.adventurer.update(delta, inputs)
 
         // Update any effects.
         if(!!this.effects) {

@@ -8,27 +8,20 @@
 
 import Afloop from "afloop"
 
+import Input from "scripts/utility/Input.js"
 import Render from "scripts/utility/Render.js"
-import KeyboardInput from "scripts/utility/inputs/KeyboardInput"
 
 import Game from "scripts/model/Game.js"
 import Frame from "scripts/model/Frame.js"
 
 import MONSTERS from "scripts/data/monsters.js"
 
+window.Input = Input
+
 var state = {
     frame: new Frame(),
     game: new Game({
         adventurer: {
-            inputs: {
-                // TODO: Save and load these inputs, so the
-                // players can configure their inputs.
-                north: new KeyboardInput(["<up>", "W"]),
-                south: new KeyboardInput(["<down>", "S"]),
-                west: new KeyboardInput(["<left>", "A"]),
-                east: new KeyboardInput(["<right>", "D"]),
-                wait: new KeyboardInput("<space>")
-            },
             position: {
                 x: 3, y: 3
             }
@@ -56,7 +49,8 @@ var state = {
 
 var render = new Render()
 var loop = new Afloop((delta) => {
-    state.game.onFrameLoop(delta)
+    var inputs = Input.getInputs(delta)
+    state.game.onFrameLoop(delta, inputs)
     render(state)
 })
 

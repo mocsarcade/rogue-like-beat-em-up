@@ -10,7 +10,6 @@ export default class Adventurer {
     constructor(game, protoadventurer) {
         protoadventurer = protoadventurer || {}
 
-        this.inputs = protoadventurer.inputs || {}
         this.game = game
 
         this.key = "adventurer"
@@ -27,27 +26,25 @@ export default class Adventurer {
         this.grabCount = 0
         this.grabMonster = null
     }
-    update(delta) {
-        for(var key in this.inputs) {
-            if(!!this.inputs[key].update) {
-                this.inputs[key].update(delta)
-            }
-        }
+    update(delta, inputs) {
 
-        if(this.inputs.north.isDown(delta)) {
+        if(inputs.north == true) {
             this.move({y: -1})
         }
-        if(this.inputs.south.isDown(delta)) {
+        if(inputs.south == true) {
             this.move({y: +1})
         }
-        if(this.inputs.west.isDown(delta)) {
+        if(inputs.west == true) {
             this.move({x: -1})
         }
-        if(this.inputs.east.isDown(delta)) {
+        if(inputs.east == true) {
             this.move({x: +1})
         }
-        if(this.inputs.wait.isDown(delta)) {
-            this.move()
+
+        if(STAGE == "DEVELOPMENT") {
+            if(inputs.assert == true) {
+                this.move()
+            }
         }
     }
     move(movement) {
