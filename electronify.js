@@ -13,5 +13,6 @@ ncp("./package.json", "./builds/web/package.json")
 var packager = require('electron-packager')
 packager({
     "dir":"builds/web",
-    "all":true
+    "all":true,
+    "out":"builds/electron"
 })
