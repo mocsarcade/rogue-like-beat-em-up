@@ -16,8 +16,6 @@ import Frame from "scripts/model/Frame.js"
 
 import MONSTERS from "scripts/data/monsters.js"
 
-import DATA from "scripts/data"
-
 var state = {
     frame: new Frame(),
     game: new Game({
@@ -66,35 +64,9 @@ var loop = new Afloop((delta) => {
 
 
 if(STAGE == "PRODUCTION") {
-    var redTrack = new Audio(DATA.AUDIO.RED)
-    var yellowTrack = new Audio(DATA.AUDIO.YELLOW)
-    var purpleTrack = new Audio(DATA.AUDIO.PURPLE)
-
-
-    //1.0 is normal speed
-    //0.5 is half speed (slower)
-    //2.0 is double speed (faster)
-    //-1.0 is backwards, normal speed
-    //-0.5 is backwards, half speed
-    //when you switch rooms you should speed up or slow down the music to match the pace of the room
-    redTrack.playbackRate = 1
-    yellowTrack.playbackRate = 1
-    purpleTrack.playbackRate = 1
-
-    redTrack.play()
-
-    redTrack.onended = function() {
-        yellowTrack.play()
-    }
-
-    yellowTrack.onended = function() {
-        purpleTrack.play()
-    }
-
-    purpleTrack.onended = function() {
-        redTrack.play()
-    }
-
+    require(["scripts/utility/Jukebox.js"], function(require) {
+        // ..
+    })
 }
 
 // While in development, we expose the game state
