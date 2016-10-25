@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "A roguelike beat-em-up.",
   "license": "MIT",
+  "main": "electron-bootstrap.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mocsarcade/enchiridion"
@@ -16,6 +17,7 @@
   ],
   "dependencies": {
     "afloop": "^1.0.2",
+    "electron": "^1.4.4",
     "expect.js": "^0.3.1",
     "keyb": "^1.1.0",
     "microajax": "^1.0.3",
