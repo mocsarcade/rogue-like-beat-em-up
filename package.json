@@ -60,6 +60,7 @@
     "yargs": "^4.7.1"
   },
   "scripts": {
-    "build": "node build"
+    "build": "node build",
+    "electronify": "node electronify"
   }
 }
