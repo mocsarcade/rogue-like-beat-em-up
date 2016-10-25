@@ -46,6 +46,18 @@ export default {
                 ALPHA: require("images/sprites/monsters/thief_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
             },
+            SMALL_NECROMANCER: { 
+                ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
+                OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
+            },
+            BIG_NECROMANCER: { 
+                ALPHA: require("images/sprites/monsters/necromancer_alpha.png"),
+                OMEGA: require("images/sprites/monsters/necromancer_omega.png"),
+            },
+            SKELETON: { 
+                ALPHA: require("images/sprites/monsters/skeleton_alpha.png"),
+                OMEGA: require("images/sprites/monsters/skeleton_omega.png"),
+            },
         },
         EFFECTS: {
             SLICE: [
