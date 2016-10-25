@@ -33,22 +33,30 @@ var state = {
                 x: 3, y: 3
             }
         },
-        wave: {
-            capacity: 4,
-            monsters: [
-                MONSTERS.RED_SLIME,
-                MONSTERS.BLUE_SLIME,
-                // MONSTERS.RED_ORC,
-                // MONSTERS.BLUE_ORC,
-                // MONSTERS.GREEN_ORC,
-                // MONSTERS.WHITE_TROLL,
-                // MONSTERS.RED_BAT,
-                // MONSTERS.BLUE_BAT,
-                // MONSTERS.GREEN_BAT,
-                // MONSTERS.FAST_BAT,
-                // MONSTERS.STONE_BAT,
-            ]
-        }
+        waves: [
+            {
+                capacity: 1,
+                killcount: 5,
+                monsters: [
+                    MONSTERS.RED_SLIME,
+                ]
+            },
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_SLIME,
+                ]
+            },
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_SLIME,
+                    MONSTERS.BLUE_SLIME,
+                ]
+            }
+        ]
     }),
 }
 

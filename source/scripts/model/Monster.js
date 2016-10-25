@@ -60,15 +60,6 @@ export default class Monster {
         movement.x = movement.x || 0
         movement.y = movement.y || 0
 
-        // collision with the camera
-        if(movement.x < 0 && this.position.x + movement.x < 0
-        || movement.y < 0 && this.position.y + movement.y < 0
-        || movement.x > 0 && this.position.x + movement.x >= DATA.FRAME.WIDTH
-        || movement.y > 0 && this.position.y + movement.y >= DATA.FRAME.HEIGHT) {
-            movement.x = 0
-            movement.y = 0
-        }
-
         // collision with other monsters
         this.game.monsters.forEach((monster) => {
             if(monster != this) {
@@ -120,18 +111,13 @@ export default class Monster {
                 console.log("yay you killed a blue lime")
             }
             if(!!this.game) {
-                if(!!this.game.wave) {
-                    this.game.wave.bumpKillcount()
+                if(!!this.game.waves && !!this.game.adventurer) {
+                    if(!!this.game.waves[this.game.adventurer.wave]) {
+                        this.game.waves[this.game.adventurer.wave].bumpKillcount()
+                    }
                 }
             }
         }
-    }
-    getOffscreenMovement() {
-        if (this.position.x < 0) return {x: +1}
-        if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
-        if (this.position.y < 0) return {y: +1}
-        if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
-        return false
     }
     pruneMovement(choices) {
         for(var choice of choices) {
@@ -144,27 +130,8 @@ export default class Monster {
                     choices = this.removeFromArray(choices, choice)
                 }
             }
-            if (this.outOfBounds(movementVector)) {
-                choices = this.removeFromArray(choices, choice)
-            }
         }
         return choices
-    }
-    outOfBounds(positionVector) {
-
-        if (positionVector.x + this.position.x < 0) {
-            return true
-        }
-        if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
-            return true
-        }
-        if (positionVector.y + this.position.y < 0) {
-            return true
-        }
-        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT) {
-            return true
-        }
-        return false
     }
     removeFromArray(myarray, value) {
         var temp = myarray

@@ -15,8 +15,10 @@ export default class Game {
             position: {x: 3, y: 3},
         })
 
-        if(game.wave != undefined) {
-            this.wave = new MonsterWave(this, game.wave)
+        if(!!game.waves) {
+            this.waves = game.waves.map((wave) => {
+                return new MonsterWave(this, wave)
+            })
         }
 
         this.monsters = new Array()
@@ -122,9 +124,21 @@ export default class Game {
         }
 
         // Update the wave.
-        if(!!this.wave) {
-            this.wave.onAction()
+        if(!!this.waves) {
+            if(!!this.waves[this.adventurer.wave]) {
+                this.waves[this.adventurer.wave].onAction()
+            }
         }
 
+    }
+    getKillcount() {
+        if(!!this.adventurer && !!this.waves) {
+            if(!!this.waves[this.adventurer.wave]) {
+                return this.waves[this.adventurer.wave].killcount
+            } else {
+                return "X"
+            }
+        }
+        return "!!"
     }
 }
