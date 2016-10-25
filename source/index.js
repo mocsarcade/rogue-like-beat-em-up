@@ -16,8 +16,6 @@ import Frame from "scripts/model/Frame.js"
 
 import MONSTERS from "scripts/data/monsters.js"
 
-import DATA from "scripts/data"
-
 var state = {
     frame: new Frame(),
     game: new Game({
@@ -99,7 +97,9 @@ if(STAGE == "PRODUCTION") {
     //purpleTrack.onended = function() {
     //    redTrack.play()
     //}
-
+    require(["scripts/utility/Jukebox.js"], function(require) {
+        // ..
+    })
 }
 
 // While in development, we expose the game state
