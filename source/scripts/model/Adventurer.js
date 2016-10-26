@@ -23,6 +23,9 @@ export default class Adventurer {
 
         this.maxhealth = 3
         this.health = this.maxhealth
+        
+        this.wave = 0
+        
         this.grabCount = 0
         this.grabMonster = null
     }
@@ -54,6 +57,25 @@ export default class Adventurer {
         movement.y = movement.y || 0
 
         this.animation = false
+        var didSomething = false
+        
+        // collision with room
+        if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
+        || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
+            movement.x = 0
+        }
+        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave * -1) {
+            if(!this.game.waves[this.wave]) {
+                movement.y = 0
+            } else if(this.game.waves[this.wave].killcount > 0) {
+                movement.y = 0
+            }
+        }
+        if(this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave * -1 + 1)) {
+            console.log("!!")
+            movement.y = 0
+        }
+        
         this.bloodscreen = false
 
         if(this.grabCount == 0) {
@@ -64,7 +86,9 @@ export default class Adventurer {
                     if(this.position.x + movement.x == monster.position.x
                     && this.position.y + movement.y == monster.position.y) {
                         monster.handleAttack(1)
-                        //this.instance = ShortID.generate()
+                        
+                        didSomething = true
+                        
                         if(movement.x < 0 && movement.y == 0) {
                             this.animation = "attack-westwards"
                         } else if(movement.x > 0 && movement.y == 0) {
@@ -102,16 +126,30 @@ export default class Adventurer {
                     }
                 }
             }
-
+            
             // translation
-
             this.position.x += movement.x
             this.position.y += movement.y
+
+            // waves
+            this.wave = Math.floor(this.position.y / DATA.FRAME.HEIGHT) * -1
+
+            // camera
+            if(!!this.game) {
+                if(!!this.game.camera) {
+                    this.game.camera.position.x = DATA.FRAME.WIDTH * 0.5
+                    this.game.camera.position.y = DATA.FRAME.HEIGHT * (-1 * this.wave + 0.5)
+                }
+            }
         } else {
             this.grabCount = this.grabCount - 1
             this.grabMonster.handleAttack(1)
         }
-        this.game.onAction()
+        
+        // signaling
+        if(didSomething || movement.x != 0 || movement.y != 0) {
+            this.game.onAction()
+        }
     }
     beAttacked(damage) {
         this.bloodscreen = true

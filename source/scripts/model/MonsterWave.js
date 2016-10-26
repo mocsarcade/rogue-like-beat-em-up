@@ -26,7 +26,7 @@ export default class MonsterWave {
         this.capacity = wave.capacity || 4
         this.monsters = wave.monsters || []
 
-        this.killcount = 10
+        this.killcount = wave.killcount || 10
     }
     onAction() {
         // If attached to a game...
@@ -48,21 +48,22 @@ export default class MonsterWave {
     // Returns a random position to
     // spawn a monster, which should
     // generally be a position that
-    // is just off-screen.
+    // is just off-screen. This is
+    // restricted to north, east
+    // and west. Nothing will be
+    // spawned to the south.
     getRandomPosition() {
-        // TODO: Update this method to consult the
-        // bounds of either a DungeonRoom or Camera.
         // TODO: Update this method to ensure it won't
         // collide with an already existing monster.
-        if(Math.random() < 0.5) {
+        if(Math.random() <= 0.333) {
             return {
-                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
-                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
+                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
+                y: (-1 * this.game.adventurer.wave * DATA.FRAME.HEIGHT) - 1,
             }
         } else {
             return {
-                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
-                y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
+                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
+                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT) + (-1 * this.game.adventurer.wave * DATA.FRAME.HEIGHT)
             }
         }
     }
