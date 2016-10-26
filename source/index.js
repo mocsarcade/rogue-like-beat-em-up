@@ -39,6 +39,17 @@ var state = {
                 killcount: 1,
                 monsters: [
                     MONSTERS.RED_SLIME,
+                    // MONSTERS.RED_ORC,
+                    // MONSTERS.BLUE_ORC,
+                    // MONSTERS.GREEN_ORC,
+                    // MONSTERS.WHITE_TROLL,
+                    // MONSTERS.RED_BAT,
+                    // MONSTERS.BLUE_BAT,
+                    // MONSTERS.GREEN_BAT,
+                    // MONSTERS.FAST_BAT,
+                    // MONSTERS.STONE_BAT,
+                    // MONSTERS.RED_THIEF,
+                    // MONSTERS.BLUE_THIEF,
                 ]
             },
             {
@@ -66,6 +77,14 @@ var loop = new Afloop((delta) => {
     render(state)
 })
 
+
+
+
+if(STAGE == "PRODUCTION") {
+    require(["scripts/utility/Jukebox.js"], function(require) {
+    })
+}
+
 // While in development, we expose the game state
 // to the window, so we can examine it from the
 // javascript console. Please do not use this
@@ -74,6 +93,7 @@ var loop = new Afloop((delta) => {
 if(STAGE == "DEVELOPMENT") {
     window.state = state
 }
+
 
 // With every build, we include a "stats.json"
 // that details the size of the build, the speed

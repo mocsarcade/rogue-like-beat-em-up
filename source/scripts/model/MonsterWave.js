@@ -32,10 +32,10 @@ export default class MonsterWave {
         // If attached to a game...
         if(this.game != undefined) {
             // If there are still monsters left to kill...
-            if(this.game.monsters.length < this.killcount) {
+            if(this.getCapacity() < this.killcount) {
                 // If, at the moment, the number of monsters is
                 // less than the intended capacity of monsters...
-                while(this.game.monsters.length < this.capacity) {
+                while(this.getCapacity() < this.capacity) {
                     // Then spawn a new monster in the game!
                     this.game.monsters.push(new Monster(this.game, {
                         protomonster: this.getRandomMonster(),
@@ -83,5 +83,10 @@ export default class MonsterWave {
         if(this.killcount <= 0) {
             console.log("you win!")
         }
+    }
+    getCapacity() {
+        return this.game.monsters.reduce((capacity, monster) => {
+            return capacity + (monster.isDead ? 0 : 1)
+        }, 0)
     }
 }

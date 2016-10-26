@@ -73,5 +73,43 @@ html {
     z-index: 999;
     position: absolute;
 
-    padding: 4px;
+    padding: 6px;
+}
+
+#hearts {
+    float: right;
+}
+
+.heart {
+    width: 0.8em;
+    height: 0.8em;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    margin-left: 2px;
+    display: inline-block;
+}
+
+#bloodscreen {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+    background-color: #A52F22;
+
+    animation-name: fade-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

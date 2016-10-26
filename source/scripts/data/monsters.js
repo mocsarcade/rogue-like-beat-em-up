@@ -142,5 +142,34 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         }
     },
-
+    RED_THIEF: {
+        sprite: DATA.SPRITES.MONSTERS.THIEF,
+        color: DATA.COLORS.RED,
+        health: 2,
+        strength: 1,
+        grabCounter: function() {
+            this.turnCount = this.turnCount || 0
+            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
+            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
+                this.turnCount = this.turnCount + 1
+                this.game.adventurer.grabCount += 2
+                this.game.adventurer.grabMonster = this
+            }
+        }
+    },
+    BLUE_THIEF: {
+        sprite: DATA.SPRITES.MONSTERS.THIEF,
+        color: DATA.COLORS.BLUE,
+        health: 3,
+        strength: 2,
+        grabCounter: function() {
+            this.turnCount = this.turnCount || 0
+            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
+            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
+                this.turnCount = this.turnCount + 1
+                this.game.adventurer.grabCount += 3
+                this.game.adventurer.grabMonster = this
+            }
+        }
+    },
 }
