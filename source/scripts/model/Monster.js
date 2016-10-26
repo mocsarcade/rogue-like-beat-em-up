@@ -63,11 +63,12 @@ export default class Monster {
         movement.y = movement.y || 0
         
         // collision with the camera
-        if(movement.x < 0 && this.position.x + movement.x < 0
-        || movement.y < 0 && this.position.y + movement.y < 0
-        || movement.x > 0 && this.position.x + movement.x >= DATA.FRAME.WIDTH
-        || movement.y > 0 && this.position.y + movement.y >= DATA.FRAME.HEIGHT) {
+        if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
+        || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
             movement.x = 0
+        }
+        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave * -1
+        || this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave * -1 + 1)) {
             movement.y = 0
         }
 

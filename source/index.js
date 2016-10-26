@@ -38,8 +38,7 @@ var state = {
                 capacity: 1,
                 killcount: 1,
                 monsters: [
-                    MONSTERS.RED_SLIME,
-                    // MONSTERS.RED_ORC,
+                    MONSTERS.RED_ORC,
                     // MONSTERS.BLUE_ORC,
                     // MONSTERS.GREEN_ORC,
                     // MONSTERS.WHITE_TROLL,
@@ -56,15 +55,15 @@ var state = {
                 capacity: 5,
                 killcount: 5,
                 monsters: [
-                    MONSTERS.RED_SLIME,
+                    MONSTERS.RED_ORC,
                 ]
             },
             {
                 capacity: 4,
                 killcount: 10,
                 monsters: [
-                    MONSTERS.RED_SLIME,
-                    MONSTERS.BLUE_SLIME,
+                    MONSTERS.RED_ORC,
+                    MONSTERS.BLUE_ORC,
                 ]
             }
         ]
