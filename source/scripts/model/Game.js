@@ -30,26 +30,26 @@ export default class Game {
 
         // TODO: Initialize this
         // from the parameters.
-        this.tiles = [
-            {
-                key: "1x1",
-                color: DATA.COLORS.WHITE,
-                sprite: DATA.SPRITES.TERRAIN.DOT[0],
-                position: {x: 1, y: 1}
-            },
-            {
-                key: "5x5",
-                color: DATA.COLORS.WHITE,
-                sprite: DATA.SPRITES.TERRAIN.DOT[1],
-                position: {x: 5, y: 5}
-            },
-            {
-                key: "3x-3",
-                color: DATA.COLORS.WHITE,
-                sprite: DATA.SPRITES.TERRAIN.DOT[1],
-                position: {x: 3, y: -4}
-            },
-        ]
+        // this.tiles = [
+        //     {
+        //         key: "1x1",
+        //         color: "#888",
+        //         sprite: DATA.SPRITES.TERRAIN.DOT[0],
+        //         position: {x: 1, y: 1}
+        //     },
+        //     {
+        //         key: "5x5",
+        //         color: "#888",
+        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
+        //         position: {x: 5, y: 5}
+        //     },
+        //     {
+        //         key: "3x-3",
+        //         color: "#888",
+        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
+        //         position: {x: 3, y: -4}
+        //     },
+        // ]
         
         // TODO: Initialize this
         // from the parameters.
@@ -138,9 +138,23 @@ export default class Game {
             if(!!this.waves[this.adventurer.wave]) {
                 return this.waves[this.adventurer.wave].killcount
             } else {
-                return "YOU WIN"
+                return "X"
             }
         }
         return "!!"
+    }
+    get wave() {
+        return this.waves[this.adventurer.wave]
+    }
+    get message() {
+        if(this.wave.specialMessage) {
+            return this.waves[this.adventurer.wave].specialMessage
+        } else if(this.wave.killcount == "X") {
+            return "You beat all the rooms!!\nThanks for playing!"
+        } else if(this.wave.killcount <= 0) {
+            return "↑↑↑↑↑↑\nRoom cleared!\nMove up to next room."
+        } else if(this.wave.message) {
+            return this.waves[this.adventurer.wave].message
+        }
     }
 }

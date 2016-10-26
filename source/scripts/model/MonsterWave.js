@@ -23,12 +23,22 @@ export default class MonsterWave {
         // to a function of how many monsters have
         // already been killed, so the wave can
         // become more difficult during the wave.
-        this.capacity = wave.capacity || 4
+        this._capacity = wave.capacity || 4
         this.monsters = wave.monsters || []
 
-        this.killcount = wave.killcount || 10
+        this.killcount = wave.killcount
+        if(this.killcount === undefined) {
+            this.killcount = 10
+        }
+        
+        this.message = wave.message
+        this.specialMessage = wave.specialMessage
     }
     onAction() {
+        if(this.monsters.length == 0) {
+            return
+        }
+        
         // If attached to a game...
         if(this.game != undefined) {
             // If there are still monsters left to kill...
@@ -85,5 +95,12 @@ export default class MonsterWave {
         return this.game.monsters.reduce((capacity, monster) => {
             return capacity + (monster.isDead ? 0 : 1)
         }, 0)
+    }
+    get capacity() {
+        if(this._capacity instanceof Function) {
+            return this._capacity()
+        } else {
+            return this._capacity
+        }
     }
 }

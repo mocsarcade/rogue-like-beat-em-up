@@ -28,28 +28,40 @@ var state = {
         },
         waves: [
             {
-                capacity: 1,
-                killcount: 1,
+                killcount: 0,
+                specialMessage: [
+                    "Welcome to Enchiridion!",
+                    "All art and designs are WIP",
+                    "Move UP to the next room."
+                ].join("\n")
+            },
+            // orcs
+            {
+                capacity: function() {
+                    if(this.killcount >= 9) {
+                        return 1
+                    } else if(this.killcount >= 7) {
+                        return 2
+                    } else if(this.killcount >= 5) {
+                        return 3
+                    } else if(this.killcount >= 2) {
+                        return 4
+                    }
+                },
+                killcount: 10,
                 monsters: [
                     MONSTERS.RED_ORC,
-                    // MONSTERS.BLUE_ORC,
-                    // MONSTERS.GREEN_ORC,
-                    // MONSTERS.WHITE_TROLL,
-                    // MONSTERS.RED_BAT,
-                    // MONSTERS.BLUE_BAT,
-                    // MONSTERS.GREEN_BAT,
-                    // MONSTERS.FAST_BAT,
-                    // MONSTERS.STONE_BAT,
-                    // MONSTERS.RED_THIEF,
-                    // MONSTERS.BLUE_THIEF,
-                ]
+                ],
+                message: "Room 1: Golem Orcs",
             },
             {
-                capacity: 5,
-                killcount: 5,
+                capacity: 4,
+                killcount: 10,
                 monsters: [
+                    MONSTERS.RED_BAT,
                     MONSTERS.RED_ORC,
-                ]
+                ],
+                message: "Room 2: Orcs.. and Bats",
             },
             {
                 capacity: 4,
@@ -57,8 +69,92 @@ var state = {
                 monsters: [
                     MONSTERS.RED_ORC,
                     MONSTERS.BLUE_ORC,
-                ]
-            }
+                ],
+                message: "Room 3: Lots of Orcs",
+            },
+            {
+                capacity: 1,
+                killcount: 1,
+                monsters: [
+                    MONSTERS.GREEN_ORC,
+                ],
+                message: "Room 4: The Green Orc",
+            },
+            // bats
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_BAT,
+                    MONSTERS.RED_BAT,
+                    MONSTERS.RED_BAT,
+                    MONSTERS.BLUE_BAT,
+                ],
+                message: "Room 5: Lots of Bats",
+            },
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_BAT,
+                    MONSTERS.GREEN_BAT,
+                    MONSTERS.GREEN_BAT,
+                    MONSTERS.GREEN_BAT,
+                ],
+                message: "Room 6: WTF Bats",
+            },
+            {
+                capacity: 1,
+                killcount: 1,
+                monsters: [
+                    MONSTERS.FAST_BAT,
+                ],
+                message: "Room 7: WTAF Bats",
+            },
+            // not included in waves yet:
+            // - STONE_BAT
+            // - BLUE_SLIME
+            // - NECROMANCER
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_THIEF,
+                ],
+                message: "Room 8: Kobold Thieves"
+            },
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_THIEF,
+                    MONSTERS.RED_THIEF,
+                    MONSTERS.BLUE_THIEF,
+                ],
+                message: "Room 8: Lots of Thieves"
+            },
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_SLIME,
+                ],
+                message: "Room 9: Gelatinous Slimes"
+            },
+            {
+                capacity: function() {
+                    if(this.killcount == 3) {
+                        return 1
+                    } else {
+                        return 2
+                    }
+                },
+                killcount: 3,
+                monsters: [
+                    MONSTERS.WHITE_TROLL,
+                ],
+                message: "Room 10: The Troll"
+            },
         ]
     }),
 }
