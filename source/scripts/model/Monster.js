@@ -11,6 +11,7 @@ export default class Monster {
         this.color = monster.protomonster.color || DATA.COLORS.PINK
         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
         this.sprite = this.pickSprite()
+        this.isSpawned = true
 
         this.game = game
 
@@ -33,6 +34,7 @@ export default class Monster {
         this.turnCounter = monster.protomonster.turnCounter || function () {
             this.phase = !this.phase
         }
+        this.onDeath = monster.protomonster.onDeath || function () {}
 
         this.health = monster.protomonster.health || 1
 
@@ -122,6 +124,8 @@ export default class Monster {
         this.health = this.health || 0
         this.health -= damage
         if(this.health <= 0) {
+            this.game.remove("monsters", this)
+            this.onDeath()
             this.isDead = true
             if(!!this.game) {
                 if(!!this.game.waves && !!this.game.adventurer) {
