@@ -12,7 +12,11 @@ ncp("./package.json", "./builds/web/package.json")
 
 var packager = require('electron-packager')
 packager({
-    "dir":"builds/web",
-    "all":true,
-    "out":"builds/electron"
+    "dir": "builds/web",
+    "arch": "all",
+    "platform": "all",
+    "out": "builds/electron"
+}, function(error, paths) {
+    console.log(paths)
+    console.log("done")
 })
