@@ -69,18 +69,15 @@ export default class Adventurer {
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
             movement.x = 0
         }
-        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave) {
-            if(!!this.game
-            && !!this.game.waves
-            && !!this.game.waves[this.wave]) {
-                if(this.game.waves[this.wave] > 0) {
-                    movement.y = 0
-                }
-            } else {
+        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave * -1) {
+            if(!this.game.waves[this.wave]) {
+                movement.y = 0
+            } else if(this.game.waves[this.wave].killcount > 0) {
                 movement.y = 0
             }
         }
-        if(this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave + 1)) {
+        if(this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave * -1 + 1)) {
+            console.log("!!")
             movement.y = 0
         }
 

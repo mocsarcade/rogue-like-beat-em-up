@@ -36,14 +36,14 @@ var state = {
         waves: [
             {
                 capacity: 1,
-                killcount: 5,
+                killcount: 1,
                 monsters: [
                     MONSTERS.RED_SLIME,
                 ]
             },
             {
-                capacity: 4,
-                killcount: 10,
+                capacity: 5,
+                killcount: 5,
                 monsters: [
                     MONSTERS.RED_SLIME,
                 ]
