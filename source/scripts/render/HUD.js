@@ -22,7 +22,7 @@ export default class HUD extends React.Component {
     get killcount() {
         return (
             <span id="killcount">
-                {this.props.game.wave.killcount}
+                {this.props.game.getKillcount()}
             </span>
         )
     }

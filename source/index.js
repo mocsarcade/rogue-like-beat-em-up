@@ -8,55 +8,65 @@
 
 import Afloop from "afloop"
 
+import Input from "scripts/utility/Input.js"
 import Render from "scripts/utility/Render.js"
-import KeyboardInput from "scripts/utility/inputs/KeyboardInput"
 
 import Game from "scripts/model/Game.js"
 import Frame from "scripts/model/Frame.js"
 
 import MONSTERS from "scripts/data/monsters.js"
 
+window.Input = Input
+
 var state = {
     frame: new Frame(),
     game: new Game({
         adventurer: {
-            inputs: {
-                // TODO: Save and load these inputs, so the
-                // players can configure their inputs.
-                north: new KeyboardInput(["<up>", "W"]),
-                south: new KeyboardInput(["<down>", "S"]),
-                west: new KeyboardInput(["<left>", "A"]),
-                east: new KeyboardInput(["<right>", "D"]),
-                wait: new KeyboardInput("<space>")
-            },
             position: {
                 x: 3, y: 3
             }
         },
-        wave: {
-            capacity: 4,
-            monsters: [
-                MONSTERS.RED_SLIME,
-                MONSTERS.BLUE_SLIME,
-                // MONSTERS.RED_ORC,
-                // MONSTERS.BLUE_ORC,
-                // MONSTERS.GREEN_ORC,
-                // MONSTERS.WHITE_TROLL,
-                // MONSTERS.RED_BAT,
-                // MONSTERS.BLUE_BAT,
-                // MONSTERS.GREEN_BAT,
-                // MONSTERS.FAST_BAT,
-                // MONSTERS.STONE_BAT,
-                // MONSTERS.RED_THIEF,
-                // MONSTERS.BLUE_THIEF,
-            ]
-        }
+        waves: [
+            {
+                capacity: 1,
+                killcount: 1,
+                monsters: [
+                    MONSTERS.RED_ORC,
+                    // MONSTERS.BLUE_ORC,
+                    // MONSTERS.GREEN_ORC,
+                    // MONSTERS.WHITE_TROLL,
+                    // MONSTERS.RED_BAT,
+                    // MONSTERS.BLUE_BAT,
+                    // MONSTERS.GREEN_BAT,
+                    // MONSTERS.FAST_BAT,
+                    // MONSTERS.STONE_BAT,
+                    // MONSTERS.RED_THIEF,
+                    // MONSTERS.BLUE_THIEF,
+                ]
+            },
+            {
+                capacity: 5,
+                killcount: 5,
+                monsters: [
+                    MONSTERS.RED_ORC,
+                ]
+            },
+            {
+                capacity: 4,
+                killcount: 10,
+                monsters: [
+                    MONSTERS.RED_ORC,
+                    MONSTERS.BLUE_ORC,
+                ]
+            }
+        ]
     }),
 }
 
 var render = new Render()
 var loop = new Afloop((delta) => {
-    state.game.onFrameLoop(delta)
+    var inputs = Input.getInputs(delta)
+    state.game.onFrameLoop(delta, inputs)
     render(state)
 })
 

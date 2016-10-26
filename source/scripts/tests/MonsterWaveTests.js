@@ -5,17 +5,19 @@ import MonsterWave from "scripts/model/MonsterWave.js"
 
 export default function MonsterWaveTests() {
     var game = new Game({
-        wave: {
-            capacity: 4,
-            monsters: [{}],
-        }
+        waves: [
+            {
+                capacity: 4,
+                monsters: [{}],
+            }
+        ]
     })
 
-    Expect(game.wave).not.to.be(undefined)
-    Expect(game.wave).to.be.an(MonsterWave)
+    Expect(game.waves[0]).not.to.be(undefined)
+    Expect(game.waves[0]).to.be.an(MonsterWave)
 
     Expect(game.monsters.length).to.be(0)
-    game.wave.onAction()
+    game.waves[0].onAction()
     Expect(game.monsters.length).not.to.be(0)
 
     // expect(game.monsters.length).to.be(game.wave.capacity)

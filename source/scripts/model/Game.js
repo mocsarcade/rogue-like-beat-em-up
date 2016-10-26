@@ -4,6 +4,7 @@ import Adventurer from "scripts/model/Adventurer.js"
 import Monster from "scripts/model/Monster.js"
 import MonsterWave from "scripts/model/MonsterWave.js"
 // import Dungeon from "scripts/model/Dungeon.js"
+import Camera from "scripts/model/Camera.js"
 
 import DATA from "scripts/data"
 
@@ -14,8 +15,10 @@ export default class Game {
             position: {x: 3, y: 3},
         })
 
-        if(game.wave != undefined) {
-            this.wave = new MonsterWave(this, game.wave)
+        if(!!game.waves) {
+            this.waves = game.waves.map((wave) => {
+                return new MonsterWave(this, wave)
+            })
         }
 
         this.monsters = new Array()
@@ -25,20 +28,47 @@ export default class Game {
             })
         }
 
-        // this.tiles = [
-        //     {
-        //         key: "1x1",
-        //         color: DATA.COLORS.WHITE,
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[0],
-        //         position: {x: 1, y: 1}
-        //     },
-        //     {
-        //         key: "5x5",
-        //         color: DATA.COLORS.WHITE,
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
-        //         position: {x: 5, y: 5}
-        //     },
-        // ]
+        // TODO: Initialize this
+        // from the parameters.
+        this.tiles = [
+            {
+                key: "1x1",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[0],
+                position: {x: 1, y: 1}
+            },
+            {
+                key: "5x5",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+                position: {x: 5, y: 5}
+            },
+            {
+                key: "3x-3",
+                color: DATA.COLORS.WHITE,
+                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+                position: {x: 3, y: -4}
+            },
+        ]
+        
+        // TODO: Initialize this
+        // from the parameters.
+        this.rooms = [
+            {
+                position: {x: 3.5, y: 3.5},
+                width: DATA.FRAME.WIDTH,
+                height: DATA.FRAME.HEIGHT
+            },
+            {
+                position: {x: 3.5, y: -3.5},
+                width: DATA.FRAME.WIDTH,
+                height: DATA.FRAME.HEIGHT
+            },
+        ]
+        
+        this.camera = new Camera({
+            position: {x: 3.5, y: 3.5}
+        })
     }
     add(name, entity) {
         entity.game = this
@@ -65,10 +95,10 @@ export default class Game {
     // This method is called
     // once every frame, and
     // is passed a delta in ms.
-    onFrameLoop(delta) {
+    onFrameLoop(delta, inputs) {
 
         // Update the adventurer.
-        this.adventurer.update(delta)
+        this.adventurer.update(delta, inputs)
 
         // Update any effects.
         if(!!this.effects) {
@@ -96,9 +126,21 @@ export default class Game {
         }
 
         // Update the wave.
-        if(!!this.wave) {
-            this.wave.onAction()
+        if(!!this.waves) {
+            if(!!this.waves[this.adventurer.wave]) {
+                this.waves[this.adventurer.wave].onAction()
+            }
         }
 
+    }
+    getKillcount() {
+        if(!!this.adventurer && !!this.waves) {
+            if(!!this.waves[this.adventurer.wave]) {
+                return this.waves[this.adventurer.wave].killcount
+            } else {
+                return "X"
+            }
+        }
+        return "!!"
     }
 }

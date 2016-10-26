@@ -11,9 +11,11 @@ export default class Mount extends React.Component {
             return (
                 <Frame frame={this.state.frame}>
                     <HUD game={this.state.game}/>
-                    {this.state.game.entities.map((entity) => {
-                        return <Entity data={entity} key={entity.key}/>
-                    })}
+                    <Camera camera={this.state.game.camera}>
+                        {this.state.game.entities.map((entity) => {
+                            return <Entity data={entity} key={entity.key}/>
+                        })}
+                    </Camera>
                 </Frame>
             )
         } else {

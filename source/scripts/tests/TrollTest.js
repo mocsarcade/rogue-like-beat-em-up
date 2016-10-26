@@ -25,7 +25,7 @@ export default function TrollTest() {
                 protomonster: MONSTERS.WHITE_TROLL
             }
         ]
-        
+
     })
 
     game.monsters[0].onAction()
