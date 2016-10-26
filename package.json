@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "A roguelike beat-em-up.",
   "license": "MIT",
+  "main": "electron-bootstrap.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mocsarcade/enchiridion"
@@ -16,9 +17,11 @@
   ],
   "dependencies": {
     "afloop": "^1.0.2",
+    "electron": "^1.4.4",
     "expect.js": "^0.3.1",
     "keyb": "^1.1.0",
     "microajax": "^1.0.3",
+    "ncp": "^2.0.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "shortid": "^2.2.4",
@@ -35,6 +38,7 @@
     "chalk": "^1.1.3",
     "css-loader": "^0.23.1",
     "dateformat": "^1.0.12",
+    "electron-packager": "^8.0.0",
     "eslint": "^2.13.1",
     "eslint-loader": "^1.3.0",
     "extended-define-webpack-plugin": "^0.1.0",
@@ -56,6 +60,7 @@
     "yargs": "^4.7.1"
   },
   "scripts": {
-    "build": "node build"
+    "build": "node build",
+    "electronify": "node electronify"
   }
 }
