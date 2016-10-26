@@ -9,13 +9,25 @@ import Camera from "scripts/model/Camera.js"
 import DATA from "scripts/data"
 
 export default class Game {
-    constructor(game = {}) {
+    constructor(game = new Object(), state) {
+        this.protogame = JSON.parse(JSON.stringify(game))
+        this.state = state
 
         this.adventurer = new Adventurer(this, game.adventurer || {
             position: {x: 3, y: 3},
         })
 
+        this.tiles = []
         if(!!game.waves) {
+            game.waves.forEach((wave, index) => {
+                if(wave.tiles instanceof Array) {
+                    wave.tiles.forEach((tile) => {
+                        tile.position.y += DATA.FRAME.HEIGHT * index * -1
+                        tile.key = Math.floor(Math.random() * 1000)
+                        this.tiles.push(tile)
+                    })
+                }
+            })
             this.waves = game.waves.map((wave) => {
                 return new MonsterWave(this, wave)
             })
@@ -27,29 +39,6 @@ export default class Game {
                 return new Monster(this, monster)
             })
         }
-
-        // TODO: Initialize this
-        // from the parameters.
-        // this.tiles = [
-        //     {
-        //         key: "1x1",
-        //         color: "#888",
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[0],
-        //         position: {x: 1, y: 1}
-        //     },
-        //     {
-        //         key: "5x5",
-        //         color: "#888",
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
-        //         position: {x: 5, y: 5}
-        //     },
-        //     {
-        //         key: "3x-3",
-        //         color: "#888",
-        //         sprite: DATA.SPRITES.TERRAIN.DOT[1],
-        //         position: {x: 3, y: -4}
-        //     },
-        // ]
         
         // TODO: Initialize this
         // from the parameters.
@@ -156,5 +145,12 @@ export default class Game {
         } else if(this.wave.message) {
             return this.waves[this.adventurer.wave].message
         }
+    }
+    reset(position) {
+        if(!!position) {
+            this.protogame.adventurer.position = position
+        }
+        this.state.game = new Game(this.protogame, this.state)
+        this.state.game.camera.lookAt(this.state.game.adventurer)
     }
 }

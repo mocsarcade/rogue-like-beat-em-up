@@ -33,6 +33,8 @@ export default class MonsterWave {
         
         this.message = wave.message
         this.specialMessage = wave.specialMessage
+        this.isRespawnRoom = wave.isRespawnRoom
+        this.tiles = wave.tiles || []
     }
     onAction() {
         if(this.monsters.length == 0) {
