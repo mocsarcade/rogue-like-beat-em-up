@@ -80,9 +80,6 @@ export default class MonsterWave {
     }
     bumpKillcount() {
         this.killcount -= 1
-        if(this.killcount <= 0) {
-            console.log("you win!")
-        }
     }
     getCapacity() {
         return this.game.monsters.reduce((capacity, monster) => {

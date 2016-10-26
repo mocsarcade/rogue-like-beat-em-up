@@ -138,7 +138,7 @@ export default class Game {
             if(!!this.waves[this.adventurer.wave]) {
                 return this.waves[this.adventurer.wave].killcount
             } else {
-                return "X"
+                return "YOU WIN"
             }
         }
         return "!!"
