@@ -21,7 +21,7 @@ var DATE_MASK = "hh:MM:TT"
 
 var PORT = 4444
 var NAME = require("./package.json").name
-var VERSION = require("./package.json").version
+var VERSION = "v" + require("./package.json").version
 var STAGE = yargs.argv.production ? "PRODUCTION" : "DEVELOPMENT"
 var MODE = yargs.argv._.indexOf("server") != -1 ? "SERVER" : null
 
@@ -41,7 +41,7 @@ rimraf("./builds/web", function() {
         },
         output: {
             filename: "[name]",
-            path: "./builds/web",
+            path: "./builds/web/" + VERSION,
         },
         module: {
             preLoaders: [
@@ -130,7 +130,7 @@ rimraf("./builds/web", function() {
         if(MODE == "SERVER") {
             if(build.server == null) {
                 build.server = BrowserSync({
-                    server: "./builds/web",
+                    server: "./builds/web/" + VERSION,
                     logLevel: "silent",
                     notify: false,
                     host: "localhost",

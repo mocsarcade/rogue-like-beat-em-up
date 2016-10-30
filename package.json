@@ -1,9 +1,9 @@
 {
   "name": "enchiridion",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A roguelike beat-em-up.",
   "license": "MIT",
-  "main": "electron-bootstrap.js",
+  "main": "main.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mocsarcade/enchiridion"
@@ -21,7 +21,6 @@
     "expect.js": "^0.3.1",
     "keyb": "^1.1.0",
     "microajax": "^1.0.3",
-    "ncp": "^2.0.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "shortid": "^2.2.4",
@@ -45,9 +44,11 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "filesize": "^3.3.0",
+    "gh-pages": "^0.11.0",
     "html-loader": "^0.4.3",
     "internal-ip": "^1.2.0",
     "json-loader": "^0.5.4",
+    "ncp": "^2.0.0",
     "ngrok": "^2.2.1",
     "postcss-loader": "^0.9.1",
     "precss": "^1.4.0",
