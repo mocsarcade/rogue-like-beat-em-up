@@ -225,7 +225,7 @@ export default {
             }
         }
     },
-    SPIDER: {
+    NORMAL_SPIDER: {
         sprite: DATA.SPRITES.MONSTERS.SPIDER,
         color: DATA.COLORS.WHITE,
         health: 1,
@@ -243,5 +243,30 @@ export default {
             return move
 
         }
-    }
+    },
+    MOTHER_SPIDER: {
+        sprite: DATA.SPRITES.MONSTERS.SPIDER,
+        color: DATA.COLORS.GREEN,
+        health: 1,
+        strength: 1,
+        movement: function () {
+
+            var dx = this.game.adventurer.position.x - this.position.x
+            var dy = this.game.adventurer.position.y - this.position.y
+
+            if (this.outOfBounds({x: 0, y: 0})) {
+                dx = 0
+                dy = 0
+            }
+
+            var move = {
+                x: Math.sign(-dx || DATA.FRAME.WIDTH/2 - this.position.x),
+                y: Math.sign(-dy || DATA.FRAME.HEIGHT/2 - this.position.y)
+            }
+
+
+            return move
+
+        }
+    },
 }
