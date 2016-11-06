@@ -235,19 +235,10 @@ export default {
             var dx = this.game.adventurer.position.x - this.position.x
             var dy = this.game.adventurer.position.y - this.position.y
 
-            if (this.outOfBounds(this.position)) {
-                dx = DATA.FRAME.WIDTH/2 - this.position.x
-                dy = DATA.FRAME.HEIGHT/2 - this.position.y
+            var move = {
+                x: Math.sign(dx || DATA.FRAME.WIDTH/2 - this.position.x),
+                y: Math.sign(dy || DATA.FRAME.HEIGHT/2 - this.position.y)
             }
-
-            var move = {x: 0, y: 0}
-            if(dx > 0) move.x = +1
-            if(dx < 0) move.x = -1
-            if(dy > 0) move.y = +1
-            if(dy < 0) move.y = -1
-
-            if (move.x == 0) move.x = 1
-            if (move.y == 0) move.y = 1
 
             return move
 
