@@ -7,36 +7,51 @@ import DATA from "scripts/data/index.js"
 
 export default function SpiderTest() {
 
-    // We are a testing a game.
-
-    var game = new Game({
-
-        // A game with an adventurer.
+    // Normal Spider test
+    var game1 = new Game({
         adventurer: {
             position: {x: 3, y: 3},
         },
-
-        // A game with an adventurer and a bat.
-
         monsters: [
             {
                 position: {x: 1, y: 1},
-                protomonster: MONSTERS.SPIDER
+                protomonster: MONSTERS.NORMAL_SPIDER
             }
         ]
-
-        // Also, by purposefully forgetting to
-        // pass a "wave" to the game, our test
-        // won't be interrupted by other monsters
-        // being spawned in.
     })
 
-    Expect(game.monsters[0].position).to.be.eql({x: 1,y: 1})
-    game.monsters[0].onAction()
-    Expect(game.monsters[0].position).to.be.eql({x: 2,y: 2})
-    Expect(game.monsters[0].position.x).not.to.be.below(0)
-    Expect(game.monsters[0].position.y).not.to.be.below(0)
-    Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
-    Expect(game.monsters[0].position.y).not.to.be.above(DATA.FRAME.HEIGHT)
+    Expect(game1.monsters[0].position).to.be.eql({x: 1,y: 1})
+    game1.monsters[0].onAction()
+    Expect(game1.monsters[0].position).to.be.eql({x: 2,y: 2})
+
+
+    // Mother Spider test
+    var game2 = new Game({
+        adventurer: {
+            position: {x: 3, y: 3},
+        },
+        monsters: [
+            {
+                position: {x: 2, y: 2},
+                protomonster: MONSTERS.MOTHER_SPIDER
+            }
+        ]
+    })
+
+    Expect(game2.monsters[0].position).to.be.eql({x: 2,y: 2})
+    Expect(game2.monsters.length).to.be.eql(1)
+
+    game2.monsters[0].onAction()
+    Expect(game2.monsters[0].position).to.be.eql({x: 1,y: 1})
+    Expect(game2.monsters.length).to.be.eql(1)
+
+    game2.monsters[0].onAction()
+    Expect(game2.monsters.length).to.be.eql(1)
+
+    game2.monsters[0].onAction()
+    Expect(game2.monsters.length).to.be.eql(1)
+
+    game2.monsters[0].onAction()
+    Expect(game2.monsters.length).to.be.eql(2)
 
 }
