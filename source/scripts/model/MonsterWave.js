@@ -31,7 +31,7 @@ export default class MonsterWave {
         if(this.killcount === undefined) {
             this.killcount = 10
         }
-        
+
         this.message = wave.message
         this.specialMessage = wave.specialMessage
         this.isRespawnRoom = wave.isRespawnRoom
@@ -41,7 +41,7 @@ export default class MonsterWave {
         if(this.monsters.length == 0) {
             return
         }
-        
+
         // If attached to a game...
         if(this.game != undefined) {
             // If there are still monsters left to kill...
@@ -88,7 +88,6 @@ export default class MonsterWave {
         // TODO: Update this method to optionally
         // use weighted randomness if a weight is
         // assigned to each monster in the wave.
-        return MONSTERS.SPIDER
         var index = Math.floor(Math.random() * this.monsters.length)
         return this.monsters[index]
     }
