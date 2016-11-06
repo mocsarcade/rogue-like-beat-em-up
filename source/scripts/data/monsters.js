@@ -258,6 +258,17 @@ export default {
         color: DATA.COLORS.GREEN,
         health: 5,
         strength: 0,
+        turnCounter: function() {
+            this.phase = !this.phase
+            this.turnsUntilSpawn = (this.turnsUntilSpawn || 4) - 1
+            if (this.turnsUntilSpawn <= 0) {
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.NORMAL_SPIDER,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.waves[this.game.adventurer.wave].killcount += 1
+            }
+        },
         movement: function () {
 
             var dx = this.game.adventurer.position.x - this.position.x
