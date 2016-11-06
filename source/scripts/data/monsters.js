@@ -240,6 +240,15 @@ export default {
                 y: Math.sign(dy || DATA.FRAME.HEIGHT/2 - this.position.y)
             }
 
+            if (this.outOfBounds(move)) {
+                if (this.outOfBounds({x: move.x, y: 0})) {
+                    move.x = -move.x
+                }
+                if (this.outOfBounds({x: 0, y: move.y})) {
+                    move.y = -move.y
+                }
+            }
+
             return move
 
         }
@@ -247,14 +256,14 @@ export default {
     MOTHER_SPIDER: {
         sprite: DATA.SPRITES.MONSTERS.SPIDER,
         color: DATA.COLORS.GREEN,
-        health: 1,
-        strength: 1,
+        health: 5,
+        strength: 0,
         movement: function () {
 
             var dx = this.game.adventurer.position.x - this.position.x
             var dy = this.game.adventurer.position.y - this.position.y
 
-            if (this.outOfBounds({x: 0, y: 0})) {
+            if (this.outOfBounds()) {
                 dx = 0
                 dy = 0
             }
@@ -264,6 +273,14 @@ export default {
                 y: Math.sign(-dy || DATA.FRAME.HEIGHT/2 - this.position.y)
             }
 
+            if (this.outOfBounds(move)) {
+                if (this.outOfBounds({x: move.x, y: 0})) {
+                    move.x = -move.x
+                }
+                if (this.outOfBounds({x: 0, y: move.y})) {
+                    move.y = -move.y
+                }
+            }
 
             return move
 
