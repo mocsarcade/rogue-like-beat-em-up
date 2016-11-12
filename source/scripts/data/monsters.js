@@ -165,17 +165,20 @@ export default {
         sprite: DATA.SPRITES.MONSTERS.SMALL_NECROMANCER,       
         color: DATA.COLORS.BROWN,              
         health: 1,              
-        strength: 1,      
+        strength: 1,
+        skeletonCap: 0,       
         turnCounter: function() {
             this.turn = this.turn + 1 || 0
-            if (this.turn >= 7) {
+            this.skeletonCap = this.skeletonCap || 0
+            if (this.turn >=7 && this.skeletonCap < 3) {
+                this.skeletonCap += 1
                 this.phase = false
                 this.game.monsters.push(new Monster(this.game, {
                     protomonster: MONSTERS.SKELETON,
                     position: {x: this.position.x, y: this.position.y},
                 }))
-                    this.game.wave.killcount += 1
-                    this.turn = 0
+                this.game.wave.killcount += 1
+                this.turn = 0
             } else {
                 this.phase = true
             }
@@ -192,20 +195,21 @@ export default {
          strength: 1,           
         turnCounter: function() {
             this.turn = this.turn + 1 || 0
-            if (this.turn >=7) {
+            this.skeletonCap = this.skeletonCap || 0
+            if (this.turn >=7 && this.skeletonCap < 3) {
+                this.skeletonCap += 1
                 this.phase = false
                 this.game.monsters.push(new Monster(this.game, {
                     protomonster: MONSTERS.SKELETON,
                     position: {x: this.position.x, y: this.position.y},
                 }))
-                    this.game.wave.killcount += 1
+                this.game.wave.killcount += 1
                 this.turn = 0
             } else {
                 this.phase = true
             }
         },
-        movement: function () {       
-             
+        movement: function () {             
             if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
                 return this.flee()     
          }      
