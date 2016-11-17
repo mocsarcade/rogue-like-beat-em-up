@@ -9,6 +9,7 @@ export default class HUD extends React.Component {
                 {this.bloodscreen}
                 {this.killcount}
                 {this.hearts}
+                {this.message}
             </div>
         )
     }
@@ -47,6 +48,13 @@ export default class HUD extends React.Component {
         } else {
             return 0
         }
+    }
+    get message() {
+        return (
+            <pre id="message">
+                {this.props.game.message}
+            </pre>
+        )
     }
 }
 

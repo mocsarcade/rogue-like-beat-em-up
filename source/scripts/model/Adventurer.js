@@ -133,6 +133,16 @@ export default class Adventurer {
 
             // waves
             this.wave = Math.floor(this.position.y / DATA.FRAME.HEIGHT) * -1
+            if(this.game && this.game.waves) {
+                if(this.game.waves[this.wave]) {
+                    if(this.game.waves[this.wave].isRespawnRoom) {
+                        this.respawn = {
+                            x: this.game.waves[this.wave].tiles[0].position.x,
+                            y: this.game.waves[this.wave].tiles[0].position.y
+                        }
+                    }
+                }
+            }
 
             // camera
             if(!!this.game) {
@@ -155,7 +165,7 @@ export default class Adventurer {
         this.bloodscreen = true
         this.health -= damage || 0.5
         if(this.health <= 0) {
-            console.log("you died")
+            this.game.reset(this.respawn)
         }
     }
 }

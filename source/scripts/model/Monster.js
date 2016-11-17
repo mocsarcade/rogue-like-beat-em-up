@@ -69,8 +69,8 @@ export default class Monster {
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
             movement.x = 0
         }
-        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave * -1
-        || this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave * -1 + 1)) {
+        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1
+        || this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
             movement.y = 0
         }
 
@@ -124,7 +124,6 @@ export default class Monster {
         this.health = this.health || 0
         this.health -= damage
         if(this.health <= 0) {
-            this.game.remove("monsters", this)
             this.onDeath()
             this.isDead = true
             if(!!this.game) {
@@ -151,6 +150,9 @@ export default class Monster {
                     choices = this.removeFromArray(choices, choice)
                 }
             }
+            if(this.outOfBounds(movementVector)) {
+                choices = this.removeFromArray(choices, choice)
+            }
         }
         return choices
     }
@@ -160,5 +162,35 @@ export default class Monster {
         delete temp[index]
         if (index > -1) temp.splice(index, 1)
         return temp
+    }
+    outOfBounds(positionVector) {
+        if (positionVector.x + this.position.x < 0) {
+            return true
+        }
+        if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
+            return true
+        }
+        if (positionVector.y + this.position.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1) {
+            return true
+        }
+        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
+            return true
+        }
+        return false
+    }
+    getOffscreenMovement() {
+        if(this.position.x < 0) {
+            return {x: +1}
+        }
+        if(this.position.x >= DATA.FRAME.WIDTH) {
+            return {x: -1}
+        }
+        if(this.position.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1) {
+            return {y: +1}
+        }
+        if(this.position.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
+            return {y: -1}
+        }
+        return false
     }
 }
