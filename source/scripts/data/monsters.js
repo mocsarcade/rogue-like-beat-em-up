@@ -21,6 +21,7 @@ export default {
                     position: {x: this.position.x, y: this.position.y},
                 }))
                 this.game.wave.killcount += 2
+                this.game.waves[this.game.adventurer.wave].killcount += 2
             } else if (this.isSpawned = false) {
                 this.game.remove("monsters", this)
             }
@@ -44,6 +45,7 @@ export default {
                     position: {x: this.position.x, y: this.position.y},
                 }))
                 this.game.wave.killcount += 2
+                this.game.waves[this.game.adventurer.wave].killcount += 2
             } else if (this.isSpawned = false) {
                 this.game.remove("monsters", this)
             }
@@ -88,13 +90,30 @@ export default {
             return this.phase
         }
     },
+    GREEN_METALGOLEM: {
+       sprite: DATA.SPRITES.MONSTERS.METALGOLEM,
+       color: DATA.COLORS.GREEN,
+       health: 3,
+       strength: 5,
+       turnCounter: function() {
+           this.turncount = this.turncount + 1 || 0
+           if(this.turncount % 1 == 0) {
+               this.phase = true
+           } else {
+               this.phase = false
+           }
+           return this.phase
+       }
+   },
     RED_BAT: {
         sprite: DATA.SPRITES.MONSTERS.BAT,
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -114,7 +133,9 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -134,7 +155,9 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -1, y: -1},
                 {x: -1, y: +1},
@@ -151,7 +174,9 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -2},
                 {x: +2},
@@ -177,7 +202,6 @@ export default {
             }
         },
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
             var choices = [
                 {x: -1},
                 {x: +1},

@@ -65,11 +65,12 @@ export default class Monster {
         movement.y = movement.y || 0
 
         // collision with the camera
-        if(movement.x < 0 && this.position.x + movement.x < 0
-        || movement.y < 0 && this.position.y + movement.y < 0
-        || movement.x > 0 && this.position.x + movement.x >= DATA.FRAME.WIDTH
-        || movement.y > 0 && this.position.y + movement.y >= DATA.FRAME.HEIGHT) {
+        if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
+        || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
             movement.x = 0
+        }
+        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1
+        || this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
             movement.y = 0
         }
 
@@ -127,8 +128,10 @@ export default class Monster {
             this.onDeath()
             this.isDead = true
             if(!!this.game) {
-                if(!!this.game.wave) {
-                    this.game.wave.bumpKillcount()
+                if(!!this.game.waves && !!this.game.adventurer) {
+                    if(!!this.game.waves[this.game.adventurer.wave]) {
+                        this.game.waves[this.game.adventurer.wave].bumpKillcount()
+                    }
                 }
             }
             this.stack = -100
@@ -136,13 +139,6 @@ export default class Monster {
             this.color = DATA.COLORS.RED
             this.sprite = DATA.SPRITES.BLOOD[Math.floor(Math.random() * DATA.SPRITES.BLOOD.length)]
         }
-    }
-    getOffscreenMovement() {
-        if (this.position.x < 0) return {x: +1}
-        if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
-        if (this.position.y < 0) return {y: +1}
-        if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
-        return false
     }
     pruneMovement(choices) {
         for(var choice of choices) {
@@ -155,27 +151,11 @@ export default class Monster {
                     choices = this.removeFromArray(choices, choice)
                 }
             }
-            if (this.outOfBounds(movementVector)) {
+            if(this.outOfBounds(movementVector)) {
                 choices = this.removeFromArray(choices, choice)
             }
         }
         return choices
-    }
-    outOfBounds(positionVector) {
-
-        if (positionVector.x + this.position.x < 0) {
-            return true
-        }
-        if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
-            return true
-        }
-        if (positionVector.y + this.position.y < 0) {
-            return true
-        }
-        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT) {
-            return true
-        }
-        return false
     }
     removeFromArray(myarray, value) {
         var temp = myarray
@@ -183,5 +163,35 @@ export default class Monster {
         delete temp[index]
         if (index > -1) temp.splice(index, 1)
         return temp
+    }
+    outOfBounds(positionVector) {
+        if (positionVector.x + this.position.x < 0) {
+            return true
+        }
+        if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
+            return true
+        }
+        if (positionVector.y + this.position.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1) {
+            return true
+        }
+        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
+            return true
+        }
+        return false
+    }
+    getOffscreenMovement() {
+        if(this.position.x < 0) {
+            return {x: +1}
+        }
+        if(this.position.x >= DATA.FRAME.WIDTH) {
+            return {x: -1}
+        }
+        if(this.position.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1) {
+            return {y: +1}
+        }
+        if(this.position.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
+            return {y: -1}
+        }
+        return false
     }
 }
