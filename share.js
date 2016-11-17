@@ -25,7 +25,7 @@ rimraf("./shares", function() {
             // Publish the build to the gh-pages branch
             ghpages.publish(path.join(__dirname, 'shares/'), {
                 add: true,
-                repo: 'git@github.com:mocsarcade/enchiridion.git',
+                repo: 'git@github.com:willamin/enchiridion.git',
                 logger: function(message) {
                     console.log(message);
                 }

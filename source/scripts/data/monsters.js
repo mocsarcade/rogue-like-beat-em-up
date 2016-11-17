@@ -297,4 +297,61 @@ export default {
 
         }
     },
+    WEB: {
+        sprite: DATA.SPRITES.TERRAIN.WEB,
+        color: DATA.COLORS.WHITE,
+        opacity: 0.5,
+        isTerrain: true,
+        health: 10,
+        stack: -100,
+        movement: function() {},
+        hasAlternateSprite: false,
+        grabCounter: function() {
+            this.turnCount = this.turnCount || 0
+            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
+            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
+                this.turnCount = this.turnCount + 1
+                this.game.adventurer.grabCount += 3
+                this.game.adventurer.grabMonster = this
+            }
+        }
+    },
+    WEB_SPIDER: {
+        sprite: DATA.SPRITES.MONSTERS.SPIDER,
+        color: DATA.COLORS.BLUE,
+        health: 5,
+        strength: 0,
+        turnCounter: function() {
+            this.phase = !this.phase
+            this.turnsUntilSpawn = (this.turnsUntilSpawn || 4) - 1
+            if (this.turnsUntilSpawn <= 0) {
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.WEB,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+            }
+        },
+        movement: function () {
+
+            var dx = this.game.adventurer.position.x - this.position.x
+            var dy = this.game.adventurer.position.y - this.position.y
+
+            var move = {
+                x: Math.sign(dx || DATA.FRAME.WIDTH/2 - this.position.x),
+                y: Math.sign(dy || DATA.FRAME.HEIGHT/2 - this.position.y)
+            }
+
+            if (this.outOfBounds(move)) {
+                if (this.outOfBounds({x: move.x, y: 0})) {
+                    move.x = -move.x
+                }
+                if (this.outOfBounds({x: 0, y: move.y})) {
+                    move.y = -move.y
+                }
+            }
+
+            return move
+
+        }
+    },
 }

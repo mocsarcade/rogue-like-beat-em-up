@@ -39,19 +39,7 @@ export default function SpiderTest() {
     })
 
     Expect(game2.monsters[0].position).to.be.eql({x: 2,y: 2})
-    Expect(game2.monsters.length).to.be.eql(1)
-
     game2.monsters[0].onAction()
     Expect(game2.monsters[0].position).to.be.eql({x: 1,y: 1})
-    Expect(game2.monsters.length).to.be.eql(1)
-
-    game2.monsters[0].onAction()
-    Expect(game2.monsters.length).to.be.eql(1)
-
-    game2.monsters[0].onAction()
-    Expect(game2.monsters.length).to.be.eql(1)
-
-    game2.monsters[0].onAction()
-    Expect(game2.monsters.length).to.be.eql(2)
 
 }

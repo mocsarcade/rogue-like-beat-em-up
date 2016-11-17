@@ -71,6 +71,7 @@ export default {
                 require("images/sprites/terrain/dot-1.png"),
                 require("images/sprites/terrain/dot-2.png"),
             ],
+            WEB: require("images/sprites/terrain/web.png"),
         },
         BLOOD: [
             require("images/sprites/blood/0.png"),
@@ -95,5 +96,6 @@ export default {
                 100: require("images/sprites/hud/heart-100.png"),
             },
         },
+        NULL: require("images/textures/null.png"),
     }
 }

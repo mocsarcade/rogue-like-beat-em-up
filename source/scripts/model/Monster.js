@@ -12,6 +12,11 @@ export default class Monster {
         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
         this.sprite = this.pickSprite()
         this.isSpawned = true
+        this.opacity = monster.protomonster.opacity || 1
+        this.isDead = monster.protomonster.isDead || false
+        this.stack = monster.protomonster.stack || 0
+        this.hasAlternateSprite = monster.protomonster.hasAlternateSprite || true
+        this.isTerrain = monster.protomonster.isTerrain || false
 
         this.game = game
 
@@ -38,13 +43,19 @@ export default class Monster {
 
         this.health = monster.protomonster.health || 1
 
-
+        if (monster.protomonster.onSpawn) {
+            monster.protomonster.onSpawn()
+        }
     }
     pickSprite() {
-        if(this.phase == true) {
-            return this.basesprite.ALPHA
+        if (this.hasAlternateSprite) {
+            if(this.phase == true) {
+                return this.basesprite.ALPHA
+            } else {
+                return this.basesprite.OMEGA
+            }
         } else {
-            return this.basesprite.OMEGA
+            return this.basesprite
         }
     }
     onAction() {

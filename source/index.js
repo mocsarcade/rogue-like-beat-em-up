@@ -36,6 +36,14 @@ state.game = new Game({
                 "Move ↑↑↑ to the next room."
             ].join("\n")
         },
+        {
+            capacity: 1,
+            killcount: 5,
+            monsters: [
+                MONSTERS.WEB_SPIDER,
+            ],
+            message: "Room 0: spider test",
+        },
         // orcs
         {
             capacity: function() {
