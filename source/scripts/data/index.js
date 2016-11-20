@@ -41,9 +41,12 @@ export default {
             BAT: {
                 ALPHA: require("images/bat_alpha.png"),
                 OMEGA: require("images/bat_omega.png"),
-            }
+            },
+            THIEF: {
+                ALPHA: require("images/sprites/monsters/thief_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/thief_omega.png"),
+            },
         },
-
         EFFECTS: {
             SLICE: [
                 require("images/sprites/effects/slice-1.png"),
@@ -64,6 +67,29 @@ export default {
                 require("images/sprites/terrain/dot-1.png"),
                 require("images/sprites/terrain/dot-2.png"),
             ],
-        }
+        },
+        BLOOD: [
+            require("images/sprites/blood/0.png"),
+            require("images/sprites/blood/1.png"),
+            require("images/sprites/blood/2.png"),
+            require("images/sprites/blood/3.png"),
+            require("images/sprites/blood/4.png"),
+            require("images/sprites/blood/5.png"),
+            require("images/sprites/blood/6.png"),
+            require("images/sprites/blood/7.png"),
+            require("images/sprites/blood/8.png"),
+            require("images/sprites/blood/9.png"),
+            require("images/sprites/blood/10.png"),
+            require("images/sprites/blood/11.png"),
+            require("images/sprites/blood/12.png"),
+            require("images/sprites/blood/13.png"),
+        ],
+        HUD: {
+            HEART: {
+                0: require("images/sprites/hud/heart-0.png"),
+                50: require("images/sprites/hud/heart-50.png"),
+                100: require("images/sprites/hud/heart-100.png"),
+            },
+        },
     }
 }

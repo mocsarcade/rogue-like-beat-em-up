@@ -23,41 +23,59 @@ export default class MonsterWave {
         // to a function of how many monsters have
         // already been killed, so the wave can
         // become more difficult during the wave.
-        this.capacity = wave.capacity || 4
+        this._capacity = wave.capacity || 4
         this.monsters = wave.monsters || []
+
+        this.killcount = wave.killcount
+        if(this.killcount === undefined) {
+            this.killcount = 10
+        }
+        
+        this.message = wave.message
+        this.specialMessage = wave.specialMessage
+        this.isRespawnRoom = wave.isRespawnRoom
+        this.tiles = wave.tiles || []
     }
     onAction() {
+        if(this.monsters.length == 0) {
+            return
+        }
+        
         // If attached to a game...
         if(this.game != undefined) {
-            // If, at the moment, the number of monsters is
-            // less than the intended capacity of monsters...
-            if(this.game.monsters.length < this.capacity) {
-                // Then spawn a new monster in the game!
-                this.game.add("monsters", new Monster(this.game, {
-                    position: this.getRandomPosition(),
-                    protomonster: this.getRandomMonster()
-                }))
+            // If there are still monsters left to kill...
+            if(this.getCapacity() < this.killcount) {
+                // If, at the moment, the number of monsters is
+                // less than the intended capacity of monsters...
+                while(this.getCapacity() < this.capacity) {
+                    // Then spawn a new monster in the game!
+                    this.game.monsters.push(new Monster(this.game, {
+                        protomonster: this.getRandomMonster(),
+                        position: this.getRandomPosition(),
+                    }))
+                }
             }
-            // TODO: Use a for-loop so the wave can
-            // spawn more than one monster per action.
         }
     }
     // Returns a random position to
     // spawn a monster, which should
     // generally be a position that
-    // is just off-screen.
+    // is just off-screen. This is
+    // restricted to north, east
+    // and west. Nothing will be
+    // spawned to the south.
     getRandomPosition() {
-        // TODO: Update this method to consult the
-        // bounds of either a DungeonRoom or Camera.
-        if(Math.random() < 0.5) {
+        // TODO: Update this method to ensure it won't
+        // collide with an already existing monster.
+        if(Math.random() <= 0.333) {
             return {
-                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
-                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
+                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
+                y: (-1 * this.game.adventurer.wave * DATA.FRAME.HEIGHT) - 1,
             }
         } else {
             return {
-                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
-                y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
+                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
+                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT) + (-1 * this.game.adventurer.wave * DATA.FRAME.HEIGHT)
             }
         }
     }
@@ -71,5 +89,20 @@ export default class MonsterWave {
         // assigned to each monster in the wave.
         var index = Math.floor(Math.random() * this.monsters.length)
         return this.monsters[index]
+    }
+    bumpKillcount() {
+        this.killcount -= 1
+    }
+    getCapacity() {
+        return this.game.monsters.reduce((capacity, monster) => {
+            return capacity + (monster.isDead ? 0 : 1)
+        }, 0)
+    }
+    get capacity() {
+        if(this._capacity instanceof Function) {
+            return this._capacity()
+        } else {
+            return this._capacity
+        }
     }
 }
