@@ -118,6 +118,14 @@ export default class Monster {
                     this.animation = "attack-northwards"
                 } else if(movement.x == 0 && movement.y > 0) {
                     this.animation = "attack-southwards"
+                } else if(movement.x > 0 && movement.y > 0) {
+                    this.animation = "attack-southeastwards"
+                } else if(movement.x > 0 && movement.y < 0) {
+                    this.animation = "attack-northeastwards"
+                } else if(movement.x < 0 && movement.y > 0) {
+                    this.animation = "attack-southeastwards"
+                } else if(movement.x < 0 && movement.y < 0) {
+                    this.animation = "attack-northwestwards"
                 }
                 this.game.add("effects", new Effect({
                     sprite: new AnimatedSprite({
