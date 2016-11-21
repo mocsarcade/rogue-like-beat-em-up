@@ -10,7 +10,6 @@ export default class Monster {
         this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
-        this.sprite = this.pickSprite()
         this.isSpawned = true
         this.opacity = monster.protomonster.opacity || 1
         this.isDead = monster.protomonster.isDead || false
@@ -20,6 +19,7 @@ export default class Monster {
         } else {
             this.hasAlternateSprite = monster.protomonster.hasAlternateSprite
         }
+        this.sprite = this.pickSprite()
         this.isTerrain = monster.protomonster.isTerrain || false
 
         this.game = game
