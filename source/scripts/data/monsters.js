@@ -266,7 +266,6 @@ export default {
                     protomonster: MONSTERS.NORMAL_SPIDER,
                     position: {x: this.position.x, y: this.position.y},
                 }))
-                this.game.waves[this.game.adventurer.wave].killcount += 1
             }
         },
         movement: function () {
