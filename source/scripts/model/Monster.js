@@ -15,7 +15,11 @@ export default class Monster {
         this.opacity = monster.protomonster.opacity || 1
         this.isDead = monster.protomonster.isDead || false
         this.stack = monster.protomonster.stack || 0
-        this.hasAlternateSprite = monster.protomonster.hasAlternateSprite || true
+        if (monster.protomonster.hasAlternateSprite == undefined) {
+            this.hasAlternateSprite = true
+        } else {
+            this.hasAlternateSprite = monster.protomonster.hasAlternateSprite
+        }
         this.isTerrain = monster.protomonster.isTerrain || false
 
         this.game = game
@@ -101,28 +105,32 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
-            this.game.adventurer.beAttacked()
-            this.grabCounter()
-            if(movement.x < 0 && movement.y == 0) {
-                this.animation = "attack-westwards"
-            } else if(movement.x > 0 && movement.y == 0) {
-                this.animation = "attack-eastwards"
-            } else if(movement.x == 0 && movement.y < 0) {
-                this.animation = "attack-northwards"
-            } else if(movement.x == 0 && movement.y > 0) {
-                this.animation = "attack-southwards"
+            if (!this.isTerrain) {
+                this.game.adventurer.beAttacked()
             }
-            this.game.add("effects", new Effect({
-                sprite: new AnimatedSprite({
-                    images: DATA.SPRITES.EFFECTS.SLASH,
-                    isLoop: false,
-                    timing: 20,
-                }),
-                position: {
-                    x: this.position.x + movement.x,
-                    y: this.position.y + movement.y,
+            this.grabCounter()
+            if (!this.isTerrain) {
+                if(movement.x < 0 && movement.y == 0) {
+                    this.animation = "attack-westwards"
+                } else if(movement.x > 0 && movement.y == 0) {
+                    this.animation = "attack-eastwards"
+                } else if(movement.x == 0 && movement.y < 0) {
+                    this.animation = "attack-northwards"
+                } else if(movement.x == 0 && movement.y > 0) {
+                    this.animation = "attack-southwards"
                 }
-            }))
+                this.game.add("effects", new Effect({
+                    sprite: new AnimatedSprite({
+                        images: DATA.SPRITES.EFFECTS.SLASH,
+                        isLoop: false,
+                        timing: 20,
+                    }),
+                    position: {
+                        x: this.position.x + movement.x,
+                        y: this.position.y + movement.y,
+                    }
+                }))
+            }
             movement.x = 0
             movement.y = 0
         }

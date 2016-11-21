@@ -96,7 +96,7 @@ export default class MonsterWave {
     }
     getCapacity() {
         return this.game.monsters.reduce((capacity, monster) => {
-            return capacity + (monster.isDead ? 0 : 1)
+            return capacity + ((monster.isDead || monster.isTerrain) ? 0 : 1)
         }, 0)
     }
     get capacity() {

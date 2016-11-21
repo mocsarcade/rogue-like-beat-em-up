@@ -304,14 +304,17 @@ export default {
         isTerrain: true,
         health: 10,
         stack: -100,
+        strength: 0,
         movement: function() {},
         hasAlternateSprite: false,
+        turnCounter: function() {
+            this.phase = true
+        },
         grabCounter: function() {
             this.turnCount = this.turnCount || 0
-            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
             if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
-                this.turnCount = this.turnCount + 1
-                this.game.adventurer.grabCount += 3
+                this.turnCount += 1
+                this.game.adventurer.grabCount += 1
                 this.game.adventurer.grabMonster = this
             }
         }
