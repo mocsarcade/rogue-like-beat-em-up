@@ -10,8 +10,17 @@ export default class Monster {
         this.key = "monster" + "-" + ShortID.generate()
         this.color = monster.protomonster.color || DATA.COLORS.PINK
         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
-        this.sprite = this.pickSprite()
         this.isSpawned = true
+        this.opacity = monster.protomonster.opacity || 1
+        this.isDead = monster.protomonster.isDead || false
+        this.stack = monster.protomonster.stack || 0
+        if (monster.protomonster.hasAlternateSprite == undefined) {
+            this.hasAlternateSprite = true
+        } else {
+            this.hasAlternateSprite = monster.protomonster.hasAlternateSprite
+        }
+        this.sprite = this.pickSprite()
+        this.isTerrain = monster.protomonster.isTerrain || false
 
         this.game = game
 
@@ -38,13 +47,19 @@ export default class Monster {
 
         this.health = monster.protomonster.health || 1
 
-
+        if (monster.protomonster.onSpawn) {
+            monster.protomonster.onSpawn()
+        }
     }
     pickSprite() {
-        if(this.phase == true) {
-            return this.basesprite.ALPHA
+        if (this.hasAlternateSprite) {
+            if(this.phase == true) {
+                return this.basesprite.ALPHA
+            } else {
+                return this.basesprite.OMEGA
+            }
         } else {
-            return this.basesprite.OMEGA
+            return this.basesprite
         }
     }
     onAction() {
@@ -63,7 +78,7 @@ export default class Monster {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
-        
+
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -90,28 +105,40 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
-            this.game.adventurer.beAttacked()
-            this.grabCounter()
-            if(movement.x < 0 && movement.y == 0) {
-                this.animation = "attack-westwards"
-            } else if(movement.x > 0 && movement.y == 0) {
-                this.animation = "attack-eastwards"
-            } else if(movement.x == 0 && movement.y < 0) {
-                this.animation = "attack-northwards"
-            } else if(movement.x == 0 && movement.y > 0) {
-                this.animation = "attack-southwards"
+            if (!this.isTerrain) {
+                this.game.adventurer.beAttacked()
             }
-            this.game.add("effects", new Effect({
-                sprite: new AnimatedSprite({
-                    images: DATA.SPRITES.EFFECTS.SLASH,
-                    isLoop: false,
-                    timing: 20,
-                }),
-                position: {
-                    x: this.position.x + movement.x,
-                    y: this.position.y + movement.y,
+            this.grabCounter()
+            if (!this.isTerrain) {
+                if(movement.x < 0 && movement.y == 0) {
+                    this.animation = "attack-westwards"
+                } else if(movement.x > 0 && movement.y == 0) {
+                    this.animation = "attack-eastwards"
+                } else if(movement.x == 0 && movement.y < 0) {
+                    this.animation = "attack-northwards"
+                } else if(movement.x == 0 && movement.y > 0) {
+                    this.animation = "attack-southwards"
+                } else if(movement.x > 0 && movement.y > 0) {
+                    this.animation = "attack-southeastwards"
+                } else if(movement.x > 0 && movement.y < 0) {
+                    this.animation = "attack-northeastwards"
+                } else if(movement.x < 0 && movement.y > 0) {
+                    this.animation = "attack-southeastwards"
+                } else if(movement.x < 0 && movement.y < 0) {
+                    this.animation = "attack-northwestwards"
                 }
-            }))
+                this.game.add("effects", new Effect({
+                    sprite: new AnimatedSprite({
+                        images: DATA.SPRITES.EFFECTS.SLASH,
+                        isLoop: false,
+                        timing: 20,
+                    }),
+                    position: {
+                        x: this.position.x + movement.x,
+                        y: this.position.y + movement.y,
+                    }
+                }))
+            }
             movement.x = 0
             movement.y = 0
         }
@@ -164,6 +191,7 @@ export default class Monster {
         return temp
     }
     outOfBounds(positionVector) {
+        positionVector = positionVector || {x: 0, y: 0}
         if (positionVector.x + this.position.x < 0) {
             return true
         }

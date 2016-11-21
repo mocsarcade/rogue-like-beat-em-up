@@ -39,6 +39,30 @@ html {
     100% {transform: translateX(0px)}
 }
 
+@keyframes attack-southeastwards {
+    0% {transform: translate(0px,0px)}
+    50% {transform: translate(+7px,+7px)}
+    100% {transform: translate(0px,0px)}
+}
+
+@keyframes attack-northeastwards {
+    0% {transform: translate(0px,0px)}
+    50% {transform: translate(+7px,-7px)}
+    100% {transform: translate(0px,0px)}
+}
+
+@keyframes attack-southeastwards {
+    0% {transform: translate(0px,0px)}
+    50% {transform: translate(-7px,+7px)}
+    100% {transform: translate(0px,0px)}
+}
+
+@keyframes attack-southwestwards {
+    0% {transform: translate(0px,0px)}
+    50% {transform: translate(-7px,-7px)}
+    100% {transform: translate(0px,0px)}
+}
+
 @function strip-unit($number) {
     @if type-of($number) == 'number' and not unitless($number) {
         @return $number / ($number * 0 + 1);

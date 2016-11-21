@@ -13,6 +13,7 @@
 // then, enjoy the waves of monsters. :]
 
 import DATA from "scripts/data"
+import MONSTERS from "scripts/data/monsters.js"
 import Monster from "scripts/model/Monster.js"
 
 export default class MonsterWave {
@@ -30,7 +31,7 @@ export default class MonsterWave {
         if(this.killcount === undefined) {
             this.killcount = 10
         }
-        
+
         this.message = wave.message
         this.specialMessage = wave.specialMessage
         this.isRespawnRoom = wave.isRespawnRoom
@@ -40,7 +41,7 @@ export default class MonsterWave {
         if(this.monsters.length == 0) {
             return
         }
-        
+
         // If attached to a game...
         if(this.game != undefined) {
             // If there are still monsters left to kill...
@@ -95,7 +96,7 @@ export default class MonsterWave {
     }
     getCapacity() {
         return this.game.monsters.reduce((capacity, monster) => {
-            return capacity + (monster.isDead ? 0 : 1)
+            return capacity + ((monster.isDead || monster.isTerrain) ? 0 : 1)
         }, 0)
     }
     get capacity() {

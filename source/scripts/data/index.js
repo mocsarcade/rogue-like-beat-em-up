@@ -46,6 +46,14 @@ export default {
                 ALPHA: require("images/sprites/monsters/thief_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
             },
+            SPIDER: {
+                ALPHA: require("images/sprites/monsters/spider_alpha.png"),
+                OMEGA: require("images/sprites/monsters/spider_omega.png"),
+            },
+            MOTHER_SPIDER: {
+                ALPHA: require("images/sprites/monsters/mother_spider_alpha.png"),
+                OMEGA: require("images/sprites/monsters/mother_spider_omega.png"),
+            },
         },
         EFFECTS: {
             SLICE: [
@@ -67,6 +75,7 @@ export default {
                 require("images/sprites/terrain/dot-1.png"),
                 require("images/sprites/terrain/dot-2.png"),
             ],
+            WEB: require("images/sprites/terrain/web.png"),
         },
         BLOOD: [
             require("images/sprites/blood/0.png"),
@@ -91,5 +100,6 @@ export default {
                 100: require("images/sprites/hud/heart-100.png"),
             },
         },
+        NULL: require("images/textures/null.png"),
     }
 }
