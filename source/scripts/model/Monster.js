@@ -38,6 +38,8 @@ export default class Monster {
 
         this.health = monster.protomonster.health || 1
 
+        this.onHit = monster.protomonster.onHit || function () {}
+
 
     }
     pickSprite() {
@@ -63,7 +65,7 @@ export default class Monster {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
-        
+
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -123,6 +125,7 @@ export default class Monster {
     handleAttack(damage) {
         this.health = this.health || 0
         this.health -= damage
+        this.onHit()
         if(this.health <= 0) {
             this.onDeath()
             this.isDead = true

@@ -230,6 +230,23 @@ export default {
         color: DATA.COLORS.BROWN,
         health: 20,
         strength: 1,
+        spawnSomeBats: function() {
+            [
+                {x: this.position.x, y: this.position.y},
+                {x: this.position.x, y: this.position.y},
+                {x: this.position.x, y: this.position.y},
+                {x: this.position.x, y: this.position.y},
+            ].forEach((position) => {
+                var child = new Monster(this.game, {
+                    protomonster: MONSTERS.RED_BAT,
+                    position: position,
+                })
+                child.onDeath = function() {
+                    this.game.wave.killcount += 1
+                }
+                this.game.monsters.push(child)
+            })
+        }
         turnCounter: function() {
             /*
              * phase indicates the shifting of alpha/omega or stand/move
@@ -249,21 +266,7 @@ export default {
                 this.phase = !this.phase
                 this.pauseCount = 6
                 this.turnCount = 8;
-                [
-                    {x: this.position.x, y: this.position.y},
-                    {x: this.position.x, y: this.position.y},
-                    {x: this.position.x, y: this.position.y},
-                    {x: this.position.x, y: this.position.y},
-                ].forEach((position) => {
-                    var child = new Monster(this.game, {
-                        protomonster: MONSTERS.RED_BAT,
-                        position: position,
-                    })
-                    child.onDeath = function() {
-                        this.game.wave.killcount += 1
-                    }
-                    this.game.monsters.push(child)
-                })
+                this.spawnSomeBats()
             }
             this.game.wave.message =
             "phase: " + (this.phase ? 'will pause' : 'will move/attack') + "\n" +
@@ -283,6 +286,9 @@ export default {
             ]
             choices = this.pruneMovement(choices)
             return choices[Math.floor((Math.random() * choices.length))]
+        },
+        onHit: function() {
+            spawnSomeBats()
         }
     },
 }
