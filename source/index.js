@@ -40,7 +40,7 @@ state.game = new Game({
             capacity: 1,
             killcount: 5,
             monsters: [
-                MONSTERS.WEB_SPIDER,
+                MONSTERS.MOTHER_SPIDER,
             ],
             message: "Room 0: spider test",
         },

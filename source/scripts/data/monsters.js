@@ -261,11 +261,20 @@ export default {
         turnCounter: function() {
             this.phase = !this.phase
             this.turnsUntilSpawn = (this.turnsUntilSpawn || 4) - 1
-            if (this.turnsUntilSpawn <= 0) {
-                this.game.monsters.push(new Monster(this.game, {
+            this.childCount = this.childCount || 0
+
+            if (this.turnsUntilSpawn <= 0 && this.childCount < 3) {
+                var child = new Monster(this.game, {
                     protomonster: MONSTERS.NORMAL_SPIDER,
                     position: {x: this.position.x, y: this.position.y},
-                }))
+                })
+                var mother = this
+                child.onDeath = function() {
+                    mother.childCount -= 1
+                    this.game.wave.killcount += 1
+                }
+                this.game.monsters.push(child)
+                this.childCount += 1
             }
         },
         movement: function () {
