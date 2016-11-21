@@ -228,7 +228,7 @@ export default {
     CHAOS_WIZARD: {
         sprite: DATA.SPRITES.MONSTERS.CHAOS_WIZARD,
         color: DATA.COLORS.BROWN,
-        health: 1,
+        health: 20,
         strength: 1,
         movement: function () {
             if(this.getOffscreenMovement()) {
