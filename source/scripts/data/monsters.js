@@ -230,7 +230,48 @@ export default {
         color: DATA.COLORS.BROWN,
         health: 20,
         strength: 1,
+        turnCounter: function() {
+            /*
+             * phase indicates the shifting of alpha/omega or stand/move
+             * turn count indicates how many of the wizard's turns are remaining before a spawn
+             * pause count indicates how many of the player's turns are remaining before the wizard resumes moving
+             */
+            this.pauseCount = this.pauseCount || 0
+            this.turnCount = this.turnCount || 4
+
+            if (this.pauseCount <= 0 ) {
+                this.phase = !this.phase
+                this.turnCount -= 1
+            } else {
+                this.pauseCount -= 1
+            }
+            if (this.turnCount <= 0) {
+                this.phase = !this.phase
+                this.pauseCount = 6
+                this.turnCount = 8;
+                [
+                    {x: this.position.x, y: this.position.y},
+                    {x: this.position.x, y: this.position.y},
+                    {x: this.position.x, y: this.position.y},
+                    {x: this.position.x, y: this.position.y},
+                ].forEach((position) => {
+                    var child = new Monster(this.game, {
+                        protomonster: MONSTERS.RED_BAT,
+                        position: position,
+                    })
+                    child.onDeath = function() {
+                        this.game.wave.killcount += 1
+                    }
+                    this.game.monsters.push(child)
+                })
+            }
+            this.game.wave.message =
+            "phase: " + (this.phase ? 'will pause' : 'will move/attack') + "\n" +
+            "pause: " + this.pauseCount + "\n" +
+            "turn:  " + this.turnCount;
+        },
         movement: function () {
+            if (this.pauseCount > 0) {return}
             if(this.getOffscreenMovement()) {
                 return this.getOffscreenMovement()
             }
