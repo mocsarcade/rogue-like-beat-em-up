@@ -225,4 +225,23 @@ export default {
             }
         }
     },
+    CHAOS_WIZARD: {
+        sprite: DATA.SPRITES.MONSTERS.CHAOS_WIZARD,
+        color: DATA.COLORS.BROWN,
+        health: 1,
+        strength: 1,
+        movement: function () {
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        }
+    },
 }

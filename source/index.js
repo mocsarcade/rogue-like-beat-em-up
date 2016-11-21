@@ -36,6 +36,14 @@ state.game = new Game({
                 "Move ↑↑↑ to the next room."
             ].join("\n")
         },
+        {
+            capacity: 1,
+            killcount: 1,
+            monsters: [
+                MONSTERS.CHAOS_WIZARD,
+            ],
+            message: "Room 0: chaos wizard",
+        },
         // orcs
         {
             capacity: function() {
