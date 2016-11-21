@@ -254,7 +254,7 @@ export default {
         }
     },
     MOTHER_SPIDER: {
-        sprite: DATA.SPRITES.MONSTERS.SPIDER,
+        sprite: DATA.SPRITES.MONSTERS.MOTHER_SPIDER,
         color: DATA.COLORS.GREEN,
         health: 5,
         strength: 0,

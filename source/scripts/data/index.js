@@ -50,6 +50,10 @@ export default {
                 ALPHA: require("images/sprites/monsters/spider_alpha.png"),
                 OMEGA: require("images/sprites/monsters/spider_omega.png"),
             },
+            MOTHER_SPIDER: {
+                ALPHA: require("images/sprites/monsters/mother_spider_alpha.png"),
+                OMEGA: require("images/sprites/monsters/mother_spider_omega.png"),
+            },
         },
         EFFECTS: {
             SLICE: [
