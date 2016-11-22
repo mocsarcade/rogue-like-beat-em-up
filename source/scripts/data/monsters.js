@@ -225,4 +225,85 @@ export default {
             }
         }
     },
+    CHAOS_WIZARD: {
+        sprite: DATA.SPRITES.MONSTERS.CHAOS_WIZARD,
+        color: DATA.COLORS.BROWN,
+        health: 10,
+        strength: 1,
+        onSpawn: function() {
+            this.spawnSomeBats = function() {
+                this.childCount = this.childCount || 0
+                var countToSpawn = () => {
+                    if (this.health < 3) {
+                        return 8
+                    } else if (this.health < 6) {
+                        return 4
+                    } else {
+                        return 2
+                    }
+                }
+                var parent = this
+                for(var i = 0; i < countToSpawn(); i += 1) {
+                    if (this.childCount < 12) {
+                        var child = new Monster(this.game, {
+                            protomonster: MONSTERS.RED_BAT,
+                            position: {x: this.position.x, y: this.position.y}
+                        })
+                        child.phase = true
+                        child.onDeath = function() {
+                            this.game.wave.killcount += 1
+                            parent.childCount -= 1
+                        }
+                        this.game.monsters.push(child)
+                        this.childCount += 1
+                    }
+                }
+                var newPosition = this.getFreeSpace()
+                this.position = newPosition
+            }
+        },
+        turnCounter: function() {
+            /*
+             * phase indicates the shifting of alpha/omega or stand/move
+             * turn count indicates how many of the wizard's turns are remaining before a spawn
+             * pause count indicates how many of the player's turns are remaining before the wizard resumes moving
+             */
+            this.pauseCount = this.pauseCount || 0
+            this.turnCount = this.turnCount || 4
+
+            if (this.pauseCount <= 0 ) {
+                this.phase = !this.phase
+                this.turnCount -= 1
+                if (this.turnCount <= 0) {
+                    this.phase = !this.phase
+                    this.turnCount = 4
+                    if (this.getDistanceToAdventurer() > 2) {
+                        this.spawnSomeBats()
+                        this.pauseCount = 4
+                    }
+                }
+            } else {
+                this.pauseCount -= 1
+            }
+        },
+        movement: function () {
+            if (this.pauseCount > 0) {
+                return
+            }
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
+            var choices = [
+                {x: -1},
+                {x: +1},
+                {y: -1},
+                {y: +1}
+            ]
+            choices = this.pruneMovement(choices)
+            return choices[Math.floor((Math.random() * choices.length))]
+        },
+        onHit: function() {
+            this.spawnSomeBats()
+        }
+    },
 }

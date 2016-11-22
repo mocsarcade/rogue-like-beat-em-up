@@ -38,6 +38,10 @@ export default class Monster {
 
         this.health = monster.protomonster.health || 1
 
+        this.onHit = monster.protomonster.onHit || function () {}
+
+        this.onSpawn = monster.protomonster.onSpawn || function () {}
+        this.onSpawn()
 
     }
     pickSprite() {
@@ -63,7 +67,7 @@ export default class Monster {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
-        
+
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -123,6 +127,7 @@ export default class Monster {
     handleAttack(damage) {
         this.health = this.health || 0
         this.health -= damage
+        this.onHit()
         if(this.health <= 0) {
             this.onDeath()
             this.isDead = true
@@ -192,5 +197,30 @@ export default class Monster {
             return {y: -1}
         }
         return false
+    }
+    getFreeSpace(depth) {
+        depth = depth || 0
+        if (depth > 10) {
+            return {x: this.x, y: this.y}
+        }
+        var x = Math.floor((Math.random() * DATA.FRAME.WIDTH))
+        var y = Math.floor((Math.random() * DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1))
+        this.game.monsters.forEach((monster) => {
+            if (monster) {
+                if (monster.position.x == x && monster.position.y == y) {
+                    return this.getFreeSpace(depth + 1)
+                }
+            }
+        })
+        if (this.game.adventurer) {
+            if (this.game.adventurer.position.x == x && this.game.adventurer.position.y == y) {
+                return this.getFreeSpace(depth + 1)
+            }
+        }
+        return {x: x, y: y}
+    }
+
+    getDistanceToAdventurer() {
+        return Math.abs(this.game.adventurer.position.x - this.position.x) + Math.abs(this.game.adventurer.position.y - this.position.y)
     }
 }
