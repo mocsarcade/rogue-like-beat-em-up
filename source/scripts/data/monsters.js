@@ -276,19 +276,15 @@ export default {
                 this.turnCount -= 1
                 if (this.turnCount <= 0) {
                     this.phase = !this.phase
-                    this.pauseCount = 4
                     this.turnCount = 4
-                    this.spawnSomeBats()
+                    if (this.getDistanceToAdventurer() > 2) {
+                        this.spawnSomeBats()
+                        this.pauseCount = 4
+                    }
                 }
             } else {
                 this.pauseCount -= 1
             }
-            this.game.wave.message =
-            "health: " + this.health
-            // "phase: " + (this.phase ? "will pause" : "will move/attack") + "\n" +
-            // "pause: " + this.pauseCount + "\n" +
-            // "turn:  " + this.turnCount + "\n" +
-            // "children: " + this.childCount
         },
         movement: function () {
             if (this.pauseCount > 0) {

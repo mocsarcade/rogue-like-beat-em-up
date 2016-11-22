@@ -219,4 +219,8 @@ export default class Monster {
         }
         return {x: x, y: y}
     }
+
+    getDistanceToAdventurer() {
+        return Math.abs(this.game.adventurer.position.x - this.position.x) + Math.abs(this.game.adventurer.position.y - this.position.y)
+    }
 }
