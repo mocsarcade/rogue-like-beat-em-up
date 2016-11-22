@@ -1,10 +1,6 @@
 import DATA from "scripts/data"
 import Monster from "scripts/model/Monster.js"
 import MONSTERS from "scripts/data/monsters.js"
-<<<<<<< HEAD
-
-=======
->>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
 
 export default {
     RED_SLIME: {
@@ -189,10 +185,8 @@ export default {
             }
         },
         movement: function () {
-<<<<<<< HEAD
             if (this.getOffscreenMovement()) return this.getOffscreenMovement()
-=======
->>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
+
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -201,7 +195,7 @@ export default {
             ]
             choices = this.pruneMovement(choices)
             return choices[Math.floor((Math.random() * choices.length))]
-<<<<<<< HEAD
+
         }
     },
     SKELETON: {
@@ -238,15 +232,15 @@ export default {
             }
         },
         movement: function () {              
-             if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
-                return this.flee()     
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
+            return this.flee()     
         }    
     },        
     BIG_NECROMANCER: {        
-         sprite: DATA.SPRITES.MONSTERS.BIG_NECROMANCER,      
-         color: DATA.COLORS.GRAY,     
-         health: 2,        
-         strength: 1,           
+        sprite: DATA.SPRITES.MONSTERS.BIG_NECROMANCER,      
+        color: DATA.COLORS.GRAY,     
+        health: 10,        
+        strength: 1,           
         turnCounter: function() {
             this.turn = this.turn + 1 || 0
             this.skeletonCap = this.skeletonCap || 0
@@ -265,14 +259,9 @@ export default {
         },
         movement: function () {             
             if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
-                return this.flee()     
-         }      
-    },                  
-
-=======
-        }
-    },
->>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
+            return this.flee()     
+        }      
+    },                 
     RED_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.RED,
@@ -303,10 +292,6 @@ export default {
             }
         }
     },
-<<<<<<< HEAD
-
-=======
->>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
 }
 
 

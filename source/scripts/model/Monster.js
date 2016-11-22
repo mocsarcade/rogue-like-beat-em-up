@@ -128,38 +128,38 @@ export default class Monster {
         var adY = this.game.adventurer.position.y
         //Translate coordinates to movement directions
         if (monX <= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y)))  {      
-           return {x: +1}
+            return {x: +1}
         }
-       if (monX >= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y))) {         
-           return {x: -1}
+        if (monX >= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y))) {         
+            return {x: -1}
         }
-       if (monY <= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {         
-           return {y: +1}
+        if (monY <= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {         
+            return {y: +1}
         }
-       if (monY >= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {      
-           return {y: -1}
+        if (monY >= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {      
+            return {y: -1}
         }
-   }
+    }
     flee() {
            //Variables for the monster and hero positions
-       var monX = this.position.x
-       var monY = this.position.y
-       var adX = this.game.adventurer.position.x 
-       var adY = this.game.adventurer.position.y
+        var monX = this.position.x
+        var monY = this.position.y
+        var adX = this.game.adventurer.position.x 
+        var adY = this.game.adventurer.position.y
        //Translate coordinates to movement directions
-       if (monX <= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y)))  {      
-           return {x: -1}
-       }
-       if (monX >= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y))) {         
-           return {x: +1}
-       }
-       if (monY <= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {         
-           return {y: -1}
-       }
-       if (monY >= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {      
-           return {y: +1}
-       }
-   }
+        if (monX <= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y)))  {      
+            return {x: -1}
+        }
+        if (monX >= adX && (Math.abs(this.game.adventurer.position.x - this.position.x) > Math.abs(this.game.adventurer.position.y - this.position.y))) {         
+            return {x: +1}
+        }
+        if (monY <= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {         
+            return {y: -1}
+        }
+        if (monY >= adY && (Math.abs(this.game.adventurer.position.y - this.position.y) > Math.abs(this.game.adventurer.position.x - this.position.x))) {      
+            return {y: +1}
+        }
+    }
     handleAttack(damage) {
         this.health = this.health || 0
         this.health -= damage

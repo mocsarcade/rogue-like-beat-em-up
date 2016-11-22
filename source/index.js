@@ -52,6 +52,7 @@ state.game = new Game({
             killcount: 10,
             monsters: [
                 MONSTERS.RED_ORC,
+                MONSTERS.SMALL_NECROMANCER,
             ],
             message: "Room 1: Golem Orcs",
         },
@@ -166,27 +167,6 @@ state.game = new Game({
             monsters: [
 
                 MONSTERS.RED_SLIME,
-<<<<<<< HEAD
-                MONSTERS.BLUE_SLIME,
-                MONSTERS.RED_ORC,
-                MONSTERS.BLUE_ORC,
-                MONSTERS.GREEN_ORC,
-                MONSTERS.WHITE_TROLL,
-                MONSTERS.RED_BAT,
-                MONSTERS.BLUE_BAT,
-                MONSTERS.GREEN_BAT,
-                MONSTERS.FAST_BAT,
-                MONSTERS.STONE_BAT,
-                MONSTERS.SMALL_NECROMANCER, 
-                MONSTERS.BIG_NECROMANCER,
-                MONSTERS.RED_THIEF,
-                MONSTERS.BLUE_THIEF,
-
-            ]
-        }
-    }),
-}
-=======
             ],
             message: "Room 9: Gelatinous Slimes"
         },
@@ -206,7 +186,7 @@ state.game = new Game({
         },
     ]
 }, state)
->>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
+
 
 var render = new Render()
 var loop = new Afloop((delta) => {
