@@ -185,6 +185,8 @@ export default {
             }
         },
         movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -193,8 +195,73 @@ export default {
             ]
             choices = this.pruneMovement(choices)
             return choices[Math.floor((Math.random() * choices.length))]
+
         }
     },
+    SKELETON: {
+        sprite: DATA.SPRITES.MONSTERS.SKELETON, 
+        color: DATA.COLORS.WHITE,
+        health: 1,
+        strength: 1,
+        isSpawned: true, 
+        movement: function () {
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            return this.pursuit()
+        }
+    },
+    SMALL_NECROMANCER: {                 
+        sprite: DATA.SPRITES.MONSTERS.SMALL_NECROMANCER,       
+        color: DATA.COLORS.BROWN,              
+        health: 1,              
+        strength: 1,
+        skeletonCap: 0,       
+        turnCounter: function() {
+            this.turn = this.turn + 1 || 0
+            this.skeletonCap = this.skeletonCap || 0
+            if (this.turn >=7 && this.skeletonCap < 3) {
+                this.skeletonCap += 1
+                this.phase = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SKELETON,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.wave.killcount += 1
+                this.turn = 0
+            } else {
+                this.phase = true
+            }
+        },
+        movement: function () {              
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
+            return this.flee()     
+        }    
+    },        
+    BIG_NECROMANCER: {        
+        sprite: DATA.SPRITES.MONSTERS.BIG_NECROMANCER,      
+        color: DATA.COLORS.GRAY,     
+        health: 10,        
+        strength: 1,           
+        turnCounter: function() {
+            this.turn = this.turn + 1 || 0
+            this.skeletonCap = this.skeletonCap || 0
+            if (this.turn >=7 && this.skeletonCap < 3) {
+                this.skeletonCap += 1
+                this.phase = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SKELETON,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.wave.killcount += 1
+                this.turn = 0
+            } else {
+                this.phase = true
+            }
+        },
+        movement: function () {             
+            if (this.getOffscreenMovement()) return this.getOffscreenMovement()                       
+            return this.flee()     
+        }      
+    },                 
     RED_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.RED,
@@ -226,3 +293,5 @@ export default {
         }
     },
 }
+
+
