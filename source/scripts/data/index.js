@@ -46,6 +46,10 @@ export default {
                 ALPHA: require("images/sprites/monsters/thief_alpha.png"),
                 OMEGA:  require("images/sprites/monsters/thief_omega.png"),
             },
+            METALGOLEM: {
+                ALPHA: require("images/sprites/monsters/MetalGolem_alpha.png"),
+                OMEGA:  require("images/sprites/monsters/MetalGolem_omega.png"),
+            },
         },
         EFFECTS: {
             SLICE: [

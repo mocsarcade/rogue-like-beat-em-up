@@ -51,9 +51,9 @@ state.game = new Game({
             },
             killcount: 10,
             monsters: [
-                MONSTERS.RED_ORC,
+                MONSTERS.GREEN_METALGOLEM,
             ],
-            message: "Room 1: Golem Orcs",
+            message: "Room 1: METAL GOLEM Boss",
         },
         {
             capacity: 4,
