@@ -1,7 +1,10 @@
 import DATA from "scripts/data"
 import Monster from "scripts/model/Monster.js"
 import MONSTERS from "scripts/data/monsters.js"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
 
 export default {
     RED_SLIME: {
@@ -9,12 +12,51 @@ export default {
         color: DATA.COLORS.RED,
         health: 1,
         strength: 1,
-
+        isSpawned: true,
+        onDeath: function() {
+            if(this.isSpawned == true) {
+                this.isSpawned = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.waves[this.game.adventurer.wave].killcount += 2
+            } else if (this.isSpawned = false) {
+                this.game.remove("monsters", this)
+            }
+        }
     },
     BLUE_SLIME: {
         sprite: DATA.SPRITES.MONSTERS.SLIME,
         color: DATA.COLORS.BLUE,
         health: 2,
+        strength: 1,
+        isSpawned: true,
+        onDeath: function() {
+            if(this.isSpawned == true) {
+                this.isSpawned = false
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.monsters.push(new Monster(this.game, {
+                    protomonster: MONSTERS.SPAWNED_SLIME,
+                    position: {x: this.position.x, y: this.position.y},
+                }))
+                this.game.waves[this.game.adventurer.wave].killcount += 2
+            } else if (this.isSpawned = false) {
+                this.game.remove("monsters", this)
+            }
+        }
+    },
+    SPAWNED_SLIME: {
+        sprite: DATA.SPRITES.MONSTERS.SLIME,
+        color: DATA.COLORS.PINK,
+        health: 1,
         strength: 1,
     },
     RED_ORC: {
@@ -56,7 +98,9 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -76,7 +120,9 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -96,7 +142,9 @@ export default {
             this.phase = true
         },
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -1, y: -1},
                 {x: -1, y: +1},
@@ -113,7 +161,9 @@ export default {
         health: 1,
         strength: 1,
         movement: function () {
-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+            if(this.getOffscreenMovement()) {
+                return this.getOffscreenMovement()
+            }
             var choices = [
                 {x: -2},
                 {x: +2},
@@ -139,7 +189,10 @@ export default {
             }
         },
         movement: function () {
+<<<<<<< HEAD
             if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+=======
+>>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
             var choices = [
                 {x: -1},
                 {x: +1},
@@ -148,6 +201,7 @@ export default {
             ]
             choices = this.pruneMovement(choices)
             return choices[Math.floor((Math.random() * choices.length))]
+<<<<<<< HEAD
         }
     },
     SKELETON: {
@@ -215,6 +269,10 @@ export default {
          }      
     },                  
 
+=======
+        }
+    },
+>>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
     RED_THIEF: {
         sprite: DATA.SPRITES.MONSTERS.THIEF,
         color: DATA.COLORS.RED,
@@ -245,7 +303,10 @@ export default {
             }
         }
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 682ab14a2d2967d1e43e74bf9f038f60d9eefbee
 }
 
 

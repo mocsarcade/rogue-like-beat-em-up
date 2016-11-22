@@ -1,0 +1,1968 @@
+diff --git a/electron-bootstrap.js b/electron-bootstrap.js
+new file mode 100644
+index 0000000..23f9fac
+--- /dev/null
++++ b/electron-bootstrap.js
+@@ -0,0 +1,24 @@
++const electron = require("electron")
++const app = electron.app
++const BrowserWindow = electron.BrowserWindow
++
++let mainWindow
++
++function createWindow () {
++    mainWindow = new BrowserWindow({width: 600, height: 600})
++    mainWindow.loadURL(`file://${__dirname}/index.html`)
++    mainWindow.on("closed", function () {
++        mainWindow = null
++    })
++}
++app.on("ready", createWindow)
++
++app.on("window-all-closed", function () {
++    app.quit()
++})
++
++app.on("activate", function () {
++    if (mainWindow === null) {
++        createWindow()
++    }
++})
+diff --git a/electronify.js b/electronify.js
+new file mode 100644
+index 0000000..fe0909f
+--- /dev/null
++++ b/electronify.js
+@@ -0,0 +1,22 @@
++var fs = require("fs")
++var path = require("path")
++var ncp = require("ncp").ncp
++ncp.limit = 16
++ncp("./electron-bootstrap.js", "./builds/web/electron-bootstrap.js", function(err){
++    if (err) {
++        console.log("Make sure you've built the game before you electronify it.")
++        process.exit()
++    }
++})
++ncp("./package.json", "./builds/web/package.json")
++
++var packager = require('electron-packager')
++packager({
++    "dir": "builds/web",
++    "arch": "all",
++    "platform": "all",
++    "out": "builds/electron"
++}, function(error, paths) {
++    console.log(paths)
++    console.log("done")
++})
+diff --git a/package.json b/package.json
+index 5bc5f1e..648f1e2 100644
+--- a/package.json
++++ b/package.json
+@@ -3,6 +3,7 @@
+   "version": "0.0.0",
+   "description": "A roguelike beat-em-up.",
+   "license": "MIT",
++  "main": "electron-bootstrap.js",
+   "repository": {
+     "type": "git",
+     "url": "https://github.com/mocsarcade/enchiridion"
+@@ -16,9 +17,11 @@
+   ],
+   "dependencies": {
+     "afloop": "^1.0.2",
++    "electron": "^1.4.4",
+     "expect.js": "^0.3.1",
+     "keyb": "^1.1.0",
+     "microajax": "^1.0.3",
++    "ncp": "^2.0.0",
+     "react": "^0.14.3",
+     "react-dom": "^0.14.3",
+     "shortid": "^2.2.4",
+@@ -35,12 +38,14 @@
+     "chalk": "^1.1.3",
+     "css-loader": "^0.23.1",
+     "dateformat": "^1.0.12",
++    "electron-packager": "^8.0.0",
+     "eslint": "^2.13.1",
+     "eslint-loader": "^1.3.0",
+     "extended-define-webpack-plugin": "^0.1.0",
+     "extract-text-webpack-plugin": "^1.0.1",
+     "file-loader": "^0.9.0",
+     "filesize": "^3.3.0",
++    "gh-pages": "^0.11.0",
+     "html-loader": "^0.4.3",
+     "internal-ip": "^1.2.0",
+     "json-loader": "^0.5.4",
+@@ -56,6 +61,8 @@
+     "yargs": "^4.7.1"
+   },
+   "scripts": {
+-    "build": "node build"
++    "build": "node build",
++    "electronify": "node electronify",
++    "share": "node share"
+   }
+ }
+diff --git a/share.js b/share.js
+new file mode 100644
+index 0000000..fe09681
+--- /dev/null
++++ b/share.js
+@@ -0,0 +1,36 @@
++var ghpages = require("gh-pages")
++var path = require("path")
++var yargs = require("yargs")
++var fs = require("fs")
++var rimraf = require("rimraf")
++var ncp = require("ncp").ncp
++
++ncp.limit = 16
++var NAME = yargs.argv._[0]
++
++// Start off clearing the shares directory
++rimraf("./shares", function() {
++
++    // Make the "shares/name" directory
++    fs.mkdirSync("shares/")
++    fs.mkdirSync("shares/" + NAME)
++
++    // Copy the build to the "shares/name" directory
++    ncp("builds/web/", "shares/" + NAME + "/", function(err) {
++        if (err) {
++            // Log any errors in copying
++            console.log("couldn't copy files: " + err)
++        }
++        else {
++            // Publish the build to the gh-pages branch
++            ghpages.publish(path.join(__dirname, 'shares/'), {
++                add: true,
++                repo: 'git@github.com:mocsarcade/enchiridion.git',
++                logger: function(message) {
++                    console.log(message);
++                }
++            })
++        }
++    })
++
++})
+diff --git a/share.sh b/share.sh
+deleted file mode 100755
+index 096d834..0000000
+--- a/share.sh
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# To run:
+-# ./share.sh v.0.0.1
+-
+-git clone $(git remote -v | grep push | cut -f2 | cut -d ' ' -f1) --branch gh-pages shares
+-
+-node build --production
+-
+-mkdir -p ./shares/$1
+-cp -r ./builds/web/* ./shares/$1
+-
+-git --git-dir=./shares/.git --work-tree=./shares config user.email "$(git config user.email)"
+-git --git-dir=./shares/.git --work-tree=./shares config user.name "$(git config user.name)"
+-
+-git --git-dir=./shares/.git --work-tree=./shares add $1
+-git --git-dir=./shares/.git --work-tree=./shares commit -m "Pushed $1"
+-git --git-dir=./shares/.git --work-tree=./shares push origin gh-pages
+-
+-rm -rf shares
+-
+-REPO="$(git remote -v | grep push | cut -f2 | cut -d ' ' -f1 | cut -d ':' -f2)"
+-
+-echo
+-echo Share your build by going to:
+-echo https://$(echo $REPO | cut -d '/' -f1).github.io/$(echo $REPO | cut -d '/' -f2 | cut -d '.' -f1)/$1
+-echo
+diff --git a/source/audio/purple.mp3 b/source/audio/purple.mp3
+new file mode 100644
+index 0000000..667954d
+Binary files /dev/null and b/source/audio/purple.mp3 differ
+diff --git a/source/audio/red.mp3 b/source/audio/red.mp3
+new file mode 100644
+index 0000000..7223541
+Binary files /dev/null and b/source/audio/red.mp3 differ
+diff --git a/source/audio/yellow.mp3 b/source/audio/yellow.mp3
+new file mode 100644
+index 0000000..1d24728
+Binary files /dev/null and b/source/audio/yellow.mp3 differ
+diff --git a/source/fonts/fract.ttf b/source/fonts/fract.ttf
+deleted file mode 100644
+index 0ff980c..0000000
+Binary files a/source/fonts/fract.ttf and /dev/null differ
+diff --git a/source/images/sprites/blood/0.png b/source/images/sprites/blood/0.png
+new file mode 100755
+index 0000000..0816f05
+Binary files /dev/null and b/source/images/sprites/blood/0.png differ
+diff --git a/source/images/sprites/blood/1.png b/source/images/sprites/blood/1.png
+new file mode 100755
+index 0000000..2244c4b
+Binary files /dev/null and b/source/images/sprites/blood/1.png differ
+diff --git a/source/images/sprites/blood/10.png b/source/images/sprites/blood/10.png
+new file mode 100755
+index 0000000..e0af273
+Binary files /dev/null and b/source/images/sprites/blood/10.png differ
+diff --git a/source/images/sprites/blood/11.png b/source/images/sprites/blood/11.png
+new file mode 100755
+index 0000000..1963c7f
+Binary files /dev/null and b/source/images/sprites/blood/11.png differ
+diff --git a/source/images/sprites/blood/12.png b/source/images/sprites/blood/12.png
+new file mode 100755
+index 0000000..d1fcae5
+Binary files /dev/null and b/source/images/sprites/blood/12.png differ
+diff --git a/source/images/sprites/blood/13.png b/source/images/sprites/blood/13.png
+new file mode 100755
+index 0000000..f1b43f9
+Binary files /dev/null and b/source/images/sprites/blood/13.png differ
+diff --git a/source/images/sprites/blood/2.png b/source/images/sprites/blood/2.png
+new file mode 100755
+index 0000000..351a694
+Binary files /dev/null and b/source/images/sprites/blood/2.png differ
+diff --git a/source/images/sprites/blood/3.png b/source/images/sprites/blood/3.png
+new file mode 100755
+index 0000000..609e2dd
+Binary files /dev/null and b/source/images/sprites/blood/3.png differ
+diff --git a/source/images/sprites/blood/4.png b/source/images/sprites/blood/4.png
+new file mode 100755
+index 0000000..33b11a3
+Binary files /dev/null and b/source/images/sprites/blood/4.png differ
+diff --git a/source/images/sprites/blood/5.png b/source/images/sprites/blood/5.png
+new file mode 100755
+index 0000000..0c5efa1
+Binary files /dev/null and b/source/images/sprites/blood/5.png differ
+diff --git a/source/images/sprites/blood/6.png b/source/images/sprites/blood/6.png
+new file mode 100755
+index 0000000..4663ab1
+Binary files /dev/null and b/source/images/sprites/blood/6.png differ
+diff --git a/source/images/sprites/blood/7.png b/source/images/sprites/blood/7.png
+new file mode 100755
+index 0000000..6d94fb0
+Binary files /dev/null and b/source/images/sprites/blood/7.png differ
+diff --git a/source/images/sprites/blood/8.png b/source/images/sprites/blood/8.png
+new file mode 100755
+index 0000000..0927f51
+Binary files /dev/null and b/source/images/sprites/blood/8.png differ
+diff --git a/source/images/sprites/blood/9.png b/source/images/sprites/blood/9.png
+new file mode 100755
+index 0000000..a3cf382
+Binary files /dev/null and b/source/images/sprites/blood/9.png differ
+diff --git a/source/images/sprites/hud/heart-0.png b/source/images/sprites/hud/heart-0.png
+new file mode 100755
+index 0000000..7c6d860
+Binary files /dev/null and b/source/images/sprites/hud/heart-0.png differ
+diff --git a/source/images/sprites/hud/heart-100.png b/source/images/sprites/hud/heart-100.png
+new file mode 100755
+index 0000000..68f75c8
+Binary files /dev/null and b/source/images/sprites/hud/heart-100.png differ
+diff --git a/source/images/sprites/hud/heart-50.png b/source/images/sprites/hud/heart-50.png
+new file mode 100755
+index 0000000..d03d255
+Binary files /dev/null and b/source/images/sprites/hud/heart-50.png differ
+diff --git a/source/images/sprites/monsters/thief_alpha.png b/source/images/sprites/monsters/thief_alpha.png
+new file mode 100644
+index 0000000..ceac4f4
+Binary files /dev/null and b/source/images/sprites/monsters/thief_alpha.png differ
+diff --git a/source/images/sprites/monsters/thief_omega.png b/source/images/sprites/monsters/thief_omega.png
+new file mode 100644
+index 0000000..69fe48c
+Binary files /dev/null and b/source/images/sprites/monsters/thief_omega.png differ
+diff --git a/source/index.css b/source/index.css
+index 4a6a1e5..d09d055 100644
+--- a/source/index.css
++++ b/source/index.css
+@@ -1,4 +1,4 @@
+-@import "./styles/Font.scss";
++@import "./styles/Font.css";
+ 
+ * {
+     margin: 0;
+@@ -38,3 +38,88 @@ html {
+     50% {transform: translateX(+7px)}
+     100% {transform: translateX(0px)}
+ }
++
++@function strip-unit($number) {
++    @if type-of($number) == 'number' and not unitless($number) {
++        @return $number / ($number * 0 + 1);
++    }
++
++    @return $number;
++}
++
++#frame {
++    top: 0px;
++    left: 0px;
++    right: 0px;
++    bottom: 0px;
++    margin: auto;
++    position: fixed;
++
++    overflow: hidden;
++    background-color: #222;
++
++    width: 126px;
++    height: 126px;
++
++    transform-origin: center;
++    // transform: scale(100vh);
++}
++
++#hud {
++    top: 0px;
++    left: 0px;
++    right: 0px;
++    bottom: 0px;
++    z-index: 999;
++    position: absolute;
++
++    padding: 6px;
++}
++
++#hearts {
++    float: right;
++}
++
++.heart {
++    width: 0.8em;
++    height: 0.8em;
++    background-size: contain;
++    background-position: center;
++    background-repeat: no-repeat;
++
++    margin-left: 2px;
++    display: inline-block;
++}
++
++#bloodscreen {
++    top: 0px;
++    left: 0px;
++    right: 0px;
++    bottom: 0px;
++    position: absolute;
++    background-color: #A52F22;
++
++    animation-name: fade-out;
++    animation-duration: 0.2s;
++    animation-fill-mode: forwards;
++    animation-timing-function: ease-out;
++}
++
++@keyframes fade-out {
++    0% {
++        opacity: 1;
++    }
++    100% {
++        opacity: 0;
++    }
++}
++
++#message {
++    font: inherit;
++    font-size: 8px;
++    position: absolute;
++    left: 6px;
++    right: 6px;
++    bottom: 6px;
++    text-align: center;
++}
+diff --git a/source/index.js b/source/index.js
+index 79c1c09..b71f4d8 100644
+--- a/source/index.js
++++ b/source/index.js
+@@ -8,62 +8,198 @@
+ 
+ import Afloop from "afloop"
+ 
++import Input from "scripts/utility/Input.js"
+ import Render from "scripts/utility/Render.js"
+-import KeyboardInput from "scripts/utility/inputs/KeyboardInput"
+ 
+ import Game from "scripts/model/Game.js"
+ import Frame from "scripts/model/Frame.js"
+ 
+ import MONSTERS from "scripts/data/monsters.js"
++import DATA from "scripts/data"
+ 
+-var state = {
+-    frame: new Frame(),
+-    game: new Game({
+-        adventurer: {
+-            inputs: {
+-                // TODO: Save and load these inputs, so the
+-                // players can configure their inputs.
+-                north: new KeyboardInput(["<up>", "W"]),
+-                south: new KeyboardInput(["<down>", "S"]),
+-                west: new KeyboardInput(["<left>", "A"]),
+-                east: new KeyboardInput(["<right>", "D"]),
+-                wait: new KeyboardInput("<space>")
++window.Input = Input
++
++var state = {}
++state.frame = new Frame(),
++state.game = new Game({
++    adventurer: {
++        position: {
++            x: 3, y: 3
++        }
++    },
++    waves: [
++        {
++            killcount: 0,
++            specialMessage: [
++                "Welcome to Enchiridion!",
++                "All art and designs are WIP",
++                "Move ↑↑↑ to the next room."
++            ].join("\n")
++        },
++        // orcs
++        {
++            capacity: function() {
++                if(this.killcount >= 9) {
++                    return 1
++                } else if(this.killcount >= 7) {
++                    return 2
++                } else if(this.killcount >= 5) {
++                    return 3
++                } else if(this.killcount >= 2) {
++                    return 4
++                }
+             },
+-            position: {
+-                x: 3, y: 3
+-            }
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_ORC,
++            ],
++            message: "Room 1: Golem Orcs",
+         },
+-        wave: {
++        {
+             capacity: 4,
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_BAT,
++                MONSTERS.RED_ORC,
++            ],
++            message: "Room 2: Orcs.. and Bats",
++        },
++        {
++            capacity: 4,
++            killcount: 10,
+             monsters: [
+-                MONSTERS.RED_SLIME,
+-                MONSTERS.BLUE_SLIME,
+                 MONSTERS.RED_ORC,
+                 MONSTERS.BLUE_ORC,
++            ],
++            message: "Room 3: Lots of Orcs",
++        },
++        {
++            capacity: 1,
++            killcount: 1,
++            monsters: [
+                 MONSTERS.GREEN_ORC,
+-                MONSTERS.WHITE_TROLL,
++            ],
++            message: "Room 4: The Green Orc",
++        },
++        {
++            killcount: 0,
++            specialMessage: [
++                "This is a respawn room!",
++                "If you die, you'll return here."
++            ].join("\n"),
++            tiles: [
++                {
++                    color: DATA.COLORS.YELLOW,
++                    sprite: DATA.SPRITES.TERRAIN.OCTOTHORPE,
++                    position: {x: 3, y: 3}
++                },
++            ],
++            isRespawnRoom: true
++        },
++        // bats
++        {
++            capacity: 4,
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_BAT,
++                MONSTERS.RED_BAT,
+                 MONSTERS.RED_BAT,
+                 MONSTERS.BLUE_BAT,
++            ],
++            message: "Room 5: Lots of Bats",
++        },
++        {
++            capacity: 4,
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_BAT,
++                MONSTERS.GREEN_BAT,
++                MONSTERS.GREEN_BAT,
+                 MONSTERS.GREEN_BAT,
++            ],
++            message: "Room 6: WTF Bats",
++        },
++        {
++            capacity: 1,
++            killcount: 1,
++            monsters: [
+                 MONSTERS.FAST_BAT,
+-                MONSTERS.STONE_BAT,
+-            ]
++            ],
++            message: "Room 7: WTAF Bats",
+         },
+-        monsters: [
+-            {
+-                position: {x: 0, y: 0},
+-                protomonster: MONSTERS.RED_SLIME
+-            }
+-        ]
+-    }),
+-}
++        {
++            killcount: 0,
++            specialMessage: [
++                "This is a respawn room!",
++                "If you die, you'll return here."
++            ].join("\n"),
++            tiles: [
++                {
++                    color: DATA.COLORS.GREEN,
++                    sprite: DATA.SPRITES.TERRAIN.OCTOTHORPE,
++                    position: {x: 3, y: 3}
++                },
++            ],
++            isRespawnRoom: true
++        },
++        {
++            capacity: 4,
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_THIEF,
++            ],
++            message: "Room 8: Kobold Thieves"
++        },
++        {
++            capacity: 4,
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_THIEF,
++                MONSTERS.RED_THIEF,
++                MONSTERS.BLUE_THIEF,
++            ],
++            message: "Room 8: Lots of Thieves"
++        },
++        {
++            capacity: 4,
++            killcount: 10,
++            monsters: [
++                MONSTERS.RED_SLIME,
++            ],
++            message: "Room 9: Gelatinous Slimes"
++        },
++        {
++            capacity: function() {
++                if(this.killcount == 3) {
++                    return 1
++                } else {
++                    return 2
++                }
++            },
++            killcount: 3,
++            monsters: [
++                MONSTERS.WHITE_TROLL,
++            ],
++            message: "Room 10: The Troll"
++        },
++    ]
++}, state)
+ 
+ var render = new Render()
+ var loop = new Afloop((delta) => {
+-    state.game.onFrameLoop(delta)
++    var inputs = Input.getInputs(delta)
++    state.game.onFrameLoop(delta, inputs)
+     render(state)
+ })
+ 
++
++
++
++if(STAGE == "PRODUCTION") {
++    require(["scripts/utility/Jukebox.js"], function(require) {
++    })
++}
++
+ // While in development, we expose the game state
+ // to the window, so we can examine it from the
+ // javascript console. Please do not use this
+@@ -73,6 +209,7 @@ if(STAGE == "DEVELOPMENT") {
+     window.state = state
+ }
+ 
++
+ // With every build, we include a "stats.json"
+ // that details the size of the build, the speed
+ // of the build, and most importantly, and errors
+diff --git a/source/scripts/data/index.js b/source/scripts/data/index.js
+index e241888..0dfecce 100644
+--- a/source/scripts/data/index.js
++++ b/source/scripts/data/index.js
+@@ -41,9 +41,12 @@ export default {
+             BAT: {
+                 ALPHA: require("images/bat_alpha.png"),
+                 OMEGA: require("images/bat_omega.png"),
+-            }
++            },
++            THIEF: {
++                ALPHA: require("images/sprites/monsters/thief_alpha.png"),
++                OMEGA:  require("images/sprites/monsters/thief_omega.png"),
++            },
+         },
+-
+         EFFECTS: {
+             SLICE: [
+                 require("images/sprites/effects/slice-1.png"),
+@@ -64,6 +67,29 @@ export default {
+                 require("images/sprites/terrain/dot-1.png"),
+                 require("images/sprites/terrain/dot-2.png"),
+             ],
+-        }
++        },
++        BLOOD: [
++            require("images/sprites/blood/0.png"),
++            require("images/sprites/blood/1.png"),
++            require("images/sprites/blood/2.png"),
++            require("images/sprites/blood/3.png"),
++            require("images/sprites/blood/4.png"),
++            require("images/sprites/blood/5.png"),
++            require("images/sprites/blood/6.png"),
++            require("images/sprites/blood/7.png"),
++            require("images/sprites/blood/8.png"),
++            require("images/sprites/blood/9.png"),
++            require("images/sprites/blood/10.png"),
++            require("images/sprites/blood/11.png"),
++            require("images/sprites/blood/12.png"),
++            require("images/sprites/blood/13.png"),
++        ],
++        HUD: {
++            HEART: {
++                0: require("images/sprites/hud/heart-0.png"),
++                50: require("images/sprites/hud/heart-50.png"),
++                100: require("images/sprites/hud/heart-100.png"),
++            },
++        },
+     }
+ }
+diff --git a/source/scripts/data/monsters.js b/source/scripts/data/monsters.js
+index f52cabf..4e6fb91 100644
+--- a/source/scripts/data/monsters.js
++++ b/source/scripts/data/monsters.js
+@@ -1,4 +1,6 @@
+ import DATA from "scripts/data"
++import Monster from "scripts/model/Monster.js"
++import MONSTERS from "scripts/data/monsters.js"
+ 
+ export default {
+     RED_SLIME: {
+@@ -6,12 +8,52 @@ export default {
+         color: DATA.COLORS.RED,
+         health: 1,
+         strength: 1,
++        isSpawned: true,
++        onDeath: function() {
++            if(this.isSpawned == true) {
++                this.isSpawned = false
++                this.game.monsters.push(new Monster(this.game, {
++                    protomonster: MONSTERS.SPAWNED_SLIME,
++                    position: {x: this.position.x, y: this.position.y},
++                }))
++                this.game.monsters.push(new Monster(this.game, {
++                    protomonster: MONSTERS.SPAWNED_SLIME,
++                    position: {x: this.position.x, y: this.position.y},
++                }))
++                this.game.waves[this.game.adventurer.wave].killcount += 2
++            } else if (this.isSpawned = false) {
++                this.game.remove("monsters", this)
++            }
++        }
+     },
+     BLUE_SLIME: {
+         sprite: DATA.SPRITES.MONSTERS.SLIME,
+         color: DATA.COLORS.BLUE,
+         health: 2,
+         strength: 1,
++        isSpawned: true,
++        onDeath: function() {
++            if(this.isSpawned == true) {
++                this.isSpawned = false
++                this.game.monsters.push(new Monster(this.game, {
++                    protomonster: MONSTERS.SPAWNED_SLIME,
++                    position: {x: this.position.x, y: this.position.y},
++                }))
++                this.game.monsters.push(new Monster(this.game, {
++                    protomonster: MONSTERS.SPAWNED_SLIME,
++                    position: {x: this.position.x, y: this.position.y},
++                }))
++                this.game.waves[this.game.adventurer.wave].killcount += 2
++            } else if (this.isSpawned = false) {
++                this.game.remove("monsters", this)
++            }
++        }
++    },
++    SPAWNED_SLIME: {
++        sprite: DATA.SPRITES.MONSTERS.SLIME,
++        color: DATA.COLORS.PINK,
++        health: 1,
++        strength: 1,
+     },
+     RED_ORC: {
+         sprite: DATA.SPRITES.MONSTERS.ORC,
+@@ -36,6 +78,15 @@ export default {
+         color: DATA.COLORS.WHITE,
+         health: 5,
+         strength: 5,
++        turnCounter: function() {
++            this.turncount = this.turncount + 1 || 0
++            if(this.turncount % 4 == 0) {
++                this.phase = true
++            } else {
++                this.phase = false
++            }
++            return this.phase
++        }
+     },
+     RED_BAT: {
+         sprite: DATA.SPRITES.MONSTERS.BAT,
+@@ -43,7 +94,9 @@ export default {
+         health: 1,
+         strength: 1,
+         movement: function () {
+-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
++            if(this.getOffscreenMovement()) {
++                return this.getOffscreenMovement()
++            }
+             var choices = [
+                 {x: -1},
+                 {x: +1},
+@@ -63,7 +116,9 @@ export default {
+             this.phase = true
+         },
+         movement: function () {
+-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
++            if(this.getOffscreenMovement()) {
++                return this.getOffscreenMovement()
++            }
+             var choices = [
+                 {x: -1},
+                 {x: +1},
+@@ -83,7 +138,9 @@ export default {
+             this.phase = true
+         },
+         movement: function () {
+-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
++            if(this.getOffscreenMovement()) {
++                return this.getOffscreenMovement()
++            }
+             var choices = [
+                 {x: -1, y: -1},
+                 {x: -1, y: +1},
+@@ -100,7 +157,9 @@ export default {
+         health: 1,
+         strength: 1,
+         movement: function () {
+-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
++            if(this.getOffscreenMovement()) {
++                return this.getOffscreenMovement()
++            }
+             var choices = [
+                 {x: -2},
+                 {x: +2},
+@@ -126,7 +185,6 @@ export default {
+             }
+         },
+         movement: function () {
+-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+             var choices = [
+                 {x: -1},
+                 {x: +1},
+@@ -137,28 +195,34 @@ export default {
+             return choices[Math.floor((Math.random() * choices.length))]
+         }
+     },
+-    SKELETON: {
+-        sprite: DATA.SPRITES.MONSTERS.ORC, //Temp until we get an image
+-        color: DATA.COLORS.WHITE,
+-        health: 1,
++    RED_THIEF: {
++        sprite: DATA.SPRITES.MONSTERS.THIEF,
++        color: DATA.COLORS.RED,
++        health: 2,
+         strength: 1,
+-        movement: function () {
+-            if (this.getOffscreenMovement()) return this.getOffscreenMovement()
+-            var choices = [
+-                {x: -1},
+-                {x: +1},
+-                {y: -1},
+-                {y: +1}
+-            ]
+-            choices = this.pruneMovement(choices)
+-            return choices[Math.floor((Math.random() * choices.length))]
++        grabCounter: function() {
++            this.turnCount = this.turnCount || 0
++            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
++            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
++                this.turnCount = this.turnCount + 1
++                this.game.adventurer.grabCount += 2
++                this.game.adventurer.grabMonster = this
++            }
++        }
++    },
++    BLUE_THIEF: {
++        sprite: DATA.SPRITES.MONSTERS.THIEF,
++        color: DATA.COLORS.BLUE,
++        health: 3,
++        strength: 2,
++        grabCounter: function() {
++            this.turnCount = this.turnCount || 0
++            //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
++            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
++                this.turnCount = this.turnCount + 1
++                this.game.adventurer.grabCount += 3
++                this.game.adventurer.grabMonster = this
++            }
+         }
+     },
+-    BONE_PILE: {
+-        sprite: DATA.SPRITES.MONSTERS.BONES, //Temp until we get an image
+-        color: DATA.COLORS.WHITE,
+-        health: 1,
+-        strength: 0,
+-
+-
+ }
+diff --git a/source/scripts/model/Adventurer.js b/source/scripts/model/Adventurer.js
+index 5c448e8..710b465 100644
+--- a/source/scripts/model/Adventurer.js
++++ b/source/scripts/model/Adventurer.js
+@@ -4,12 +4,12 @@ import ShortID from "shortid"
+ 
+ import Effect from "scripts/model/Effect.js"
+ import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
++import MONSTERS from "scripts/data/monsters.js"
+ 
+ export default class Adventurer {
+     constructor(game, protoadventurer) {
+         protoadventurer = protoadventurer || {}
+ 
+-        this.inputs = protoadventurer.inputs || {}
+         this.game = game
+ 
+         this.key = "adventurer"
+@@ -23,28 +23,31 @@ export default class Adventurer {
+ 
+         this.maxhealth = 3
+         this.health = this.maxhealth
++        
++        this.wave = 0
++        
++        this.grabCount = 0
++        this.grabMonster = null
+     }
+-    update(delta) {
+-        for(var key in this.inputs) {
+-            if(!!this.inputs[key].update) {
+-                this.inputs[key].update(delta)
+-            }
+-        }
++    update(delta, inputs) {
+ 
+-        if(this.inputs.north.isDown(delta)) {
++        if(inputs.north == true) {
+             this.move({y: -1})
+         }
+-        if(this.inputs.south.isDown(delta)) {
++        if(inputs.south == true) {
+             this.move({y: +1})
+         }
+-        if(this.inputs.west.isDown(delta)) {
++        if(inputs.west == true) {
+             this.move({x: -1})
+         }
+-        if(this.inputs.east.isDown(delta)) {
++        if(inputs.east == true) {
+             this.move({x: +1})
+         }
+-        if(this.inputs.wait.isDown(delta)) {
+-            this.move()
++
++        if(STAGE == "DEVELOPMENT") {
++            if(inputs.assert == true) {
++                this.move()
++            }
+         }
+     }
+     move(movement) {
+@@ -54,54 +57,115 @@ export default class Adventurer {
+         movement.y = movement.y || 0
+ 
+         this.animation = false
++        var didSomething = false
++        
++        // collision with room
++        if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
++        || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
++            movement.x = 0
++        }
++        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave * -1) {
++            if(!this.game.waves[this.wave]) {
++                movement.y = 0
++            } else if(this.game.waves[this.wave].killcount > 0) {
++                movement.y = 0
++            }
++        }
++        if(this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave * -1 + 1)) {
++            console.log("!!")
++            movement.y = 0
++        }
++        
++        this.bloodscreen = false
++
++        if(this.grabCount == 0) {
++
++            // collision with monsters
++            this.game.monsters.forEach((monster) => {
++                if(!monster.isDead) {
++                    if(this.position.x + movement.x == monster.position.x
++                    && this.position.y + movement.y == monster.position.y) {
++                        monster.handleAttack(1)
++                        
++                        didSomething = true
++                        
++                        if(movement.x < 0 && movement.y == 0) {
++                            this.animation = "attack-westwards"
++                        } else if(movement.x > 0 && movement.y == 0) {
++                            this.animation = "attack-eastwards"
++                        } else if(movement.x == 0 && movement.y < 0) {
++                            this.animation = "attack-northwards"
++                        } else if(movement.x == 0 && movement.y > 0) {
++                            this.animation = "attack-southwards"
++                        }
++
++                        this.game.add("effects", new Effect({
++                            sprite: new AnimatedSprite({
++                                images: DATA.SPRITES.EFFECTS.SLICE,
++                                isLoop: false,
++                                timing: 20,
++                            }),
++                            position: {
++                                x: this.position.x + movement.x,
++                                y: this.position.y + movement.y,
++                            }
++                        }))
++                        movement.x = 0
++                        movement.y = 0
++                    }
++                }
++            })
+ 
+-        // collision with monsters
+-        this.game.monsters.forEach((monster) => {
+-            if(this.position.x + movement.x == monster.position.x
+-            && this.position.y + movement.y == monster.position.y) {
+-                monster.handleAttack(1)
+-
+-                //this.instance = ShortID.generate()
+-                if(movement.x < 0 && movement.y == 0) {
+-                    this.animation = "attack-westwards"
+-                } else if(movement.x > 0 && movement.y == 0) {
+-                    this.animation = "attack-eastwards"
+-                } else if(movement.x == 0 && movement.y < 0) {
+-                    this.animation = "attack-northwards"
+-                } else if(movement.x == 0 && movement.y > 0) {
+-                    this.animation = "attack-southwards"
++            // collision with dungeon
++            if(this.game.tiles instanceof Array) {
++                var key = (this.position.x + movement.x) + "x" + (this.position.y + movement.y)
++                if(this.game.tiles[key] != undefined) {
++                    if(this.game.tiles[key].isCollideable) {
++                        movement.x = 0
++                        movement.y = 0
++                    }
+                 }
+-                this.game.add("effects", new Effect({
+-                    sprite: new AnimatedSprite({
+-                        images: DATA.SPRITES.EFFECTS.SLICE,
+-                        isLoop: false,
+-                        timing: 20,
+-                    }),
+-                    position: {
+-                        x: this.position.x + movement.x,
+-                        y: this.position.y + movement.y,
++            }
++            
++            // translation
++            this.position.x += movement.x
++            this.position.y += movement.y
++
++            // waves
++            this.wave = Math.floor(this.position.y / DATA.FRAME.HEIGHT) * -1
++            if(this.game && this.game.waves) {
++                if(this.game.waves[this.wave]) {
++                    if(this.game.waves[this.wave].isRespawnRoom) {
++                        this.respawn = {
++                            x: this.game.waves[this.wave].tiles[0].position.x,
++                            y: this.game.waves[this.wave].tiles[0].position.y
++                        }
+                     }
+-                }))
+-                movement.x = 0
+-                movement.y = 0
++                }
+             }
+-        })
+-
+-        // collision with dungeon
+-        if(this.game.tiles instanceof Array) {
+-            var key = (this.position.x + movement.x) + "x" + (this.position.y + movement.y)
+-            if(this.game.tiles[key] != undefined) {
+-                if(this.game.tiles[key].isCollideable) {
+-                    movement.x = 0
+-                    movement.y = 0
++
++            // camera
++            if(!!this.game) {
++                if(!!this.game.camera) {
++                    this.game.camera.position.x = DATA.FRAME.WIDTH * 0.5
++                    this.game.camera.position.y = DATA.FRAME.HEIGHT * (-1 * this.wave + 0.5)
+                 }
+             }
++        } else {
++            this.grabCount = this.grabCount - 1
++            this.grabMonster.handleAttack(1)
++        }
++        
++        // signaling
++        if(didSomething || movement.x != 0 || movement.y != 0) {
++            this.game.onAction()
++        }
++    }
++    beAttacked(damage) {
++        this.bloodscreen = true
++        this.health -= damage || 0.5
++        if(this.health <= 0) {
++            this.game.reset(this.respawn)
+         }
+-
+-        // translation
+-        this.position.x += movement.x
+-        this.position.y += movement.y
+-
+-        this.game.onAction()
+     }
+ }
+diff --git a/source/scripts/model/Camera.js b/source/scripts/model/Camera.js
+index ba43f3c..76ba9c1 100644
+--- a/source/scripts/model/Camera.js
++++ b/source/scripts/model/Camera.js
+@@ -1,6 +1,6 @@
+ export default class Camera {
+-    constructor() {
+-        this.position = {x: 0, y: 0}
++    constructor(camera = new Object()) {
++        this.position = camera.position || {x: 0, y: 0}
+     }
+     lookAt(entity) {
+         this.position.x = entity.position.x + ((entity.width || 1) / 2)
+diff --git a/source/scripts/model/Game.js b/source/scripts/model/Game.js
+index 4602e3a..2591511 100644
+--- a/source/scripts/model/Game.js
++++ b/source/scripts/model/Game.js
+@@ -4,41 +4,60 @@ import Adventurer from "scripts/model/Adventurer.js"
+ import Monster from "scripts/model/Monster.js"
+ import MonsterWave from "scripts/model/MonsterWave.js"
+ // import Dungeon from "scripts/model/Dungeon.js"
++import Camera from "scripts/model/Camera.js"
+ 
+ import DATA from "scripts/data"
+ 
+ export default class Game {
+-    constructor(game = {}) {
++    constructor(game = new Object(), state) {
++        this.protogame = JSON.parse(JSON.stringify(game))
++        this.state = state
+ 
+         this.adventurer = new Adventurer(this, game.adventurer || {
+             position: {x: 3, y: 3},
+         })
+ 
+-        if(game.wave != undefined) {
+-            this.wave = new MonsterWave(this, game.wave)
++        this.tiles = []
++        if(!!game.waves) {
++            game.waves.forEach((wave, index) => {
++                if(wave.tiles instanceof Array) {
++                    wave.tiles.forEach((tile) => {
++                        tile.position.y += DATA.FRAME.HEIGHT * index * -1
++                        tile.key = Math.floor(Math.random() * 1000)
++                        this.tiles.push(tile)
++                    })
++                }
++            })
++            this.waves = game.waves.map((wave) => {
++                return new MonsterWave(this, wave)
++            })
+         }
+-        
++
+         this.monsters = new Array()
+         if(game.monsters instanceof Array) {
+             this.monsters = game.monsters.map((monster) => {
+                 return new Monster(this, monster)
+             })
+         }
+-
+-        this.tiles = [
++        
++        // TODO: Initialize this
++        // from the parameters.
++        this.rooms = [
+             {
+-                key: "1x1",
+-                color: DATA.COLORS.WHITE,
+-                sprite: DATA.SPRITES.TERRAIN.DOT[0],
+-                position: {x: 1, y: 1}
++                position: {x: 3.5, y: 3.5},
++                width: DATA.FRAME.WIDTH,
++                height: DATA.FRAME.HEIGHT
+             },
+             {
+-                key: "5x5",
+-                color: DATA.COLORS.WHITE,
+-                sprite: DATA.SPRITES.TERRAIN.DOT[1],
+-                position: {x: 5, y: 5}
++                position: {x: 3.5, y: -3.5},
++                width: DATA.FRAME.WIDTH,
++                height: DATA.FRAME.HEIGHT
+             },
+         ]
++        
++        this.camera = new Camera({
++            position: {x: 3.5, y: 3.5}
++        })
+     }
+     add(name, entity) {
+         entity.game = this
+@@ -65,10 +84,10 @@ export default class Game {
+     // This method is called
+     // once every frame, and
+     // is passed a delta in ms.
+-    onFrameLoop(delta) {
++    onFrameLoop(delta, inputs) {
+ 
+         // Update the adventurer.
+-        this.adventurer.update(delta)
++        this.adventurer.update(delta, inputs)
+ 
+         // Update any effects.
+         if(!!this.effects) {
+@@ -87,16 +106,51 @@ export default class Game {
+         // Update all the monsters
+         if(this.monsters instanceof Array) {
+             this.monsters.forEach((monster) => {
+-                if(monster.onAction instanceof Function) {
+-                    monster.onAction()
++                if(!monster.isDead) {
++                    if(monster.onAction instanceof Function) {
++                        monster.onAction()
++                    }
+                 }
+             })
+         }
+ 
+         // Update the wave.
+-        if(!!this.wave) {
+-            this.wave.onAction()
++        if(!!this.waves) {
++            if(!!this.waves[this.adventurer.wave]) {
++                this.waves[this.adventurer.wave].onAction()
++            }
+         }
+ 
+     }
++    getKillcount() {
++        if(!!this.adventurer && !!this.waves) {
++            if(!!this.waves[this.adventurer.wave]) {
++                return this.waves[this.adventurer.wave].killcount
++            } else {
++                return "X"
++            }
++        }
++        return "!!"
++    }
++    get wave() {
++        return this.waves[this.adventurer.wave]
++    }
++    get message() {
++        if(this.wave.specialMessage) {
++            return this.waves[this.adventurer.wave].specialMessage
++        } else if(this.wave.killcount == "X") {
++            return "You beat all the rooms!!\nThanks for playing!"
++        } else if(this.wave.killcount <= 0) {
++            return "↑↑↑↑↑↑\nRoom cleared!\nMove up to next room."
++        } else if(this.wave.message) {
++            return this.waves[this.adventurer.wave].message
++        }
++    }
++    reset(position) {
++        if(!!position) {
++            this.protogame.adventurer.position = position
++        }
++        this.state.game = new Game(this.protogame, this.state)
++        this.state.game.camera.lookAt(this.state.game.adventurer)
++    }
+ }
+diff --git a/source/scripts/model/Monster.js b/source/scripts/model/Monster.js
+index fd14442..e2fe66a 100644
+--- a/source/scripts/model/Monster.js
++++ b/source/scripts/model/Monster.js
+@@ -2,7 +2,7 @@ import DATA from "scripts/data"
+ 
+ import Effect from "scripts/model/Effect.js"
+ import AnimatedSprite from "scripts/utility/AnimatedSprite.js"
+-
++import MONSTERS from "scripts/data/monsters.js"
+ import ShortID from "shortid"
+ 
+ export default class Monster {
+@@ -11,6 +11,7 @@ export default class Monster {
+         this.color = monster.protomonster.color || DATA.COLORS.PINK
+         this.basesprite = monster.protomonster.sprite || DATA.SPRITES.MONSTERS.SLIME
+         this.sprite = this.pickSprite()
++        this.isSpawned = true
+ 
+         this.game = game
+ 
+@@ -28,9 +29,12 @@ export default class Monster {
+                 if(dy < 0) return {y: -1}
+             }
+         }
++        this.grabCounter = monster.protomonster.grabCounter || function () {
++        }
+         this.turnCounter = monster.protomonster.turnCounter || function () {
+             this.phase = !this.phase
+         }
++        this.onDeath = monster.protomonster.onDeath || function () {}
+ 
+         this.health = monster.protomonster.health || 1
+ 
+@@ -59,23 +63,26 @@ export default class Monster {
+         movement = movement || {}
+         movement.x = movement.x || 0
+         movement.y = movement.y || 0
+-
++        
+         // collision with the camera
+-        if(movement.x < 0 && this.position.x + movement.x < 0
+-        || movement.y < 0 && this.position.y + movement.y < 0
+-        || movement.x > 0 && this.position.x + movement.x >= DATA.FRAME.WIDTH
+-        || movement.y > 0 && this.position.y + movement.y >= DATA.FRAME.HEIGHT) {
++        if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
++        || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
+             movement.x = 0
++        }
++        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1
++        || this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
+             movement.y = 0
+         }
+ 
+         // collision with other monsters
+         this.game.monsters.forEach((monster) => {
+             if(monster != this) {
+-                if(monster.position.x == this.position.x + movement.x
+-                && monster.position.y == this.position.y + movement.y) {
+-                    movement.x = 0
+-                    movement.y = 0
++                if(!monster.isDead) {
++                    if(monster.position.x == this.position.x + movement.x
++                    && monster.position.y == this.position.y + movement.y) {
++                        movement.x = 0
++                        movement.y = 0
++                    }
+                 }
+             }
+         })
+@@ -83,6 +90,8 @@ export default class Monster {
+         // collsiion with adventurer
+         if(this.position.x + movement.x == this.game.adventurer.position.x
+         && this.position.y + movement.y == this.game.adventurer.position.y) {
++            this.game.adventurer.beAttacked()
++            this.grabCounter()
+             if(movement.x < 0 && movement.y == 0) {
+                 this.animation = "attack-westwards"
+             } else if(movement.x > 0 && movement.y == 0) {
+@@ -155,16 +164,21 @@ export default class Monster {
+         this.health = this.health || 0
+         this.health -= damage
+         if(this.health <= 0) {
+-            this.game.remove("monsters", this)
++            this.onDeath()
++            this.isDead = true
++            if(!!this.game) {
++                if(!!this.game.waves && !!this.game.adventurer) {
++                    if(!!this.game.waves[this.game.adventurer.wave]) {
++                        this.game.waves[this.game.adventurer.wave].bumpKillcount()
++                    }
++                }
++            }
++            this.stack = -100
++            this.opacity = 0.5
++            this.color = DATA.COLORS.RED
++            this.sprite = DATA.SPRITES.BLOOD[Math.floor(Math.random() * DATA.SPRITES.BLOOD.length)]
+         }
+     }
+-    getOffscreenMovement() {
+-        if (this.position.x < 0) return {x: +1}
+-        if (this.position.x >= DATA.FRAME.WIDTH) return {x: -1}
+-        if (this.position.y < 0) return {y: +1}
+-        if (this.position.y >= DATA.FRAME.HEIGHT) return {y: -1}
+-        return false
+-    }
+     pruneMovement(choices) {
+         for(var choice of choices) {
+             var movementVector = {
+@@ -176,33 +190,47 @@ export default class Monster {
+                     choices = this.removeFromArray(choices, choice)
+                 }
+             }
+-            if (this.outOfBounds(movementVector)) {
++            if(this.outOfBounds(movementVector)) {
+                 choices = this.removeFromArray(choices, choice)
+             }
+         }
+         return choices
+     }
++    removeFromArray(myarray, value) {
++        var temp = myarray
++        var index = temp.indexOf(value)
++        delete temp[index]
++        if (index > -1) temp.splice(index, 1)
++        return temp
++    }
+     outOfBounds(positionVector) {
+-
+         if (positionVector.x + this.position.x < 0) {
+             return true
+         }
+         if (positionVector.x + this.position.x >= DATA.FRAME.WIDTH) {
+             return true
+         }
+-        if (positionVector.y + this.position.y < 0) {
++        if (positionVector.y + this.position.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1) {
+             return true
+         }
+-        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT) {
++        if (positionVector.y + this.position.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
+             return true
+         }
+         return false
+     }
+-    removeFromArray(myarray, value) {
+-        var temp = myarray
+-        var index = temp.indexOf(value)
+-        delete temp[index]
+-        if (index > -1) temp.splice(index, 1)
+-        return temp
++    getOffscreenMovement() {
++        if(this.position.x < 0) {
++            return {x: +1}
++        }
++        if(this.position.x >= DATA.FRAME.WIDTH) {
++            return {x: -1}
++        }
++        if(this.position.y < DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1) {
++            return {y: +1}
++        }
++        if(this.position.y >= DATA.FRAME.HEIGHT * (this.game.adventurer.wave * -1 + 1)) {
++            return {y: -1}
++        }
++        return false
+     }
+ }
+diff --git a/source/scripts/model/MonsterWave.js b/source/scripts/model/MonsterWave.js
+index 95acf1b..75b3e27 100644
+--- a/source/scripts/model/MonsterWave.js
++++ b/source/scripts/model/MonsterWave.js
+@@ -23,41 +23,59 @@ export default class MonsterWave {
+         // to a function of how many monsters have
+         // already been killed, so the wave can
+         // become more difficult during the wave.
+-        this.capacity = wave.capacity || 4
++        this._capacity = wave.capacity || 4
+         this.monsters = wave.monsters || []
++
++        this.killcount = wave.killcount
++        if(this.killcount === undefined) {
++            this.killcount = 10
++        }
++        
++        this.message = wave.message
++        this.specialMessage = wave.specialMessage
++        this.isRespawnRoom = wave.isRespawnRoom
++        this.tiles = wave.tiles || []
+     }
+     onAction() {
++        if(this.monsters.length == 0) {
++            return
++        }
++        
+         // If attached to a game...
+         if(this.game != undefined) {
+-            // If, at the moment, the number of monsters is
+-            // less than the intended capacity of monsters...
+-            if(this.game.monsters.length < this.capacity) {
+-                // Then spawn a new monster in the game!
+-                this.game.add("monsters", new Monster(this.game, {
+-                    position: this.getRandomPosition(),
+-                    protomonster: this.getRandomMonster()
+-                }))
++            // If there are still monsters left to kill...
++            if(this.getCapacity() < this.killcount) {
++                // If, at the moment, the number of monsters is
++                // less than the intended capacity of monsters...
++                while(this.getCapacity() < this.capacity) {
++                    // Then spawn a new monster in the game!
++                    this.game.monsters.push(new Monster(this.game, {
++                        protomonster: this.getRandomMonster(),
++                        position: this.getRandomPosition(),
++                    }))
++                }
+             }
+-            // TODO: Use a for-loop so the wave can
+-            // spawn more than one monster per action.
+         }
+     }
+     // Returns a random position to
+     // spawn a monster, which should
+     // generally be a position that
+-    // is just off-screen.
++    // is just off-screen. This is
++    // restricted to north, east
++    // and west. Nothing will be
++    // spawned to the south.
+     getRandomPosition() {
+-        // TODO: Update this method to consult the
+-        // bounds of either a DungeonRoom or Camera.
+-        if(Math.random() < 0.5) {
++        // TODO: Update this method to ensure it won't
++        // collide with an already existing monster.
++        if(Math.random() <= 0.333) {
+             return {
+-                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
+-                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT),
++                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
++                y: (-1 * this.game.adventurer.wave * DATA.FRAME.HEIGHT) - 1,
+             }
+         } else {
+             return {
+-                x: Math.floor(Math.random() * DATA.FRAME.WIDTH),
+-                y: Math.random() < 0.5 ? -1 : DATA.FRAME.HEIGHT,
++                x: Math.random() < 0.5 ? -1 : DATA.FRAME.WIDTH,
++                y: Math.floor(Math.random() * DATA.FRAME.HEIGHT) + (-1 * this.game.adventurer.wave * DATA.FRAME.HEIGHT)
+             }
+         }
+     }
+@@ -72,4 +90,19 @@ export default class MonsterWave {
+         var index = Math.floor(Math.random() * this.monsters.length)
+         return this.monsters[index]
+     }
++    bumpKillcount() {
++        this.killcount -= 1
++    }
++    getCapacity() {
++        return this.game.monsters.reduce((capacity, monster) => {
++            return capacity + (monster.isDead ? 0 : 1)
++        }, 0)
++    }
++    get capacity() {
++        if(this._capacity instanceof Function) {
++            return this._capacity()
++        } else {
++            return this._capacity
++        }
++    }
+ }
+diff --git a/source/scripts/render/HUD.js b/source/scripts/render/HUD.js
+new file mode 100644
+index 0000000..a71af9b
+--- /dev/null
++++ b/source/scripts/render/HUD.js
+@@ -0,0 +1,72 @@
++import React from "react"
++
++import DATA from "scripts/data"
++
++export default class HUD extends React.Component {
++    render() {
++        return (
++            <div id="hud">
++                {this.bloodscreen}
++                {this.killcount}
++                {this.hearts}
++                {this.message}
++            </div>
++        )
++    }
++    get bloodscreen() {
++        if(!!this.props.game.adventurer.bloodscreen) {
++            return (
++                <div id="bloodscreen"/>
++            )
++        }
++    }
++    get killcount() {
++        return (
++            <span id="killcount">
++                {this.props.game.getKillcount()}
++            </span>
++        )
++    }
++    get hearts() {
++        var hearts = new Array()
++
++        for(var health = 1; health <= this.props.game.adventurer.maxhealth; health += 1) {
++            hearts.push(<Heart key={health} fill={this.calculateHeartFill(health)}/>)
++        }
++
++        return (
++            <div id="hearts">
++                {hearts}
++            </div>
++        )
++    }
++    calculateHeartFill(health) {
++        if(health <= this.props.game.adventurer.health) {
++            return 100
++        } else if(health < this.props.game.adventurer.health + 1) {
++            return 50
++        } else {
++            return 0
++        }
++    }
++    get message() {
++        return (
++            <pre id="message">
++                {this.props.game.message}
++            </pre>
++        )
++    }
++}
++
++class Heart extends React.Component {
++    render() {
++        return (
++            <div className="heart" style={this.style}/>
++        )
++    }
++    get style() {
++        return {
++            backgroundImage: "url(" + DATA.SPRITES.HUD.HEART[this.props.fill] + ")"
++        }
++    }
++}
+diff --git a/source/scripts/render/Mount.js b/source/scripts/render/Mount.js
+index 92a0a41..23aa779 100644
+--- a/source/scripts/render/Mount.js
++++ b/source/scripts/render/Mount.js
+@@ -3,15 +3,19 @@ import React from "react"
+ import Frame from "scripts/render/Frame.js"
+ import Entity from "scripts/render/Entity.js"
+ import Camera from "scripts/render/Camera.js"
++import HUD from "scripts/render/HUD.js"
+ 
+ export default class Mount extends React.Component {
+     render() {
+         if(!!this.state) {
+             return (
+                 <Frame frame={this.state.frame}>
+-                    {this.state.game.entities.map((entity) => {
+-                        return <Entity data={entity} key={entity.key}/>
+-                    })}
++                    <HUD game={this.state.game}/>
++                    <Camera camera={this.state.game.camera}>
++                        {this.state.game.entities.map((entity) => {
++                            return <Entity data={entity} key={entity.key}/>
++                        })}
++                    </Camera>
+                 </Frame>
+             )
+         } else {
+diff --git a/source/scripts/tests/BatTest.js b/source/scripts/tests/BatTest.js
+index 43f1ff9..a43948b 100644
+--- a/source/scripts/tests/BatTest.js
++++ b/source/scripts/tests/BatTest.js
+@@ -3,6 +3,7 @@ import Expect from "expect.js"
+ import Game from "scripts/model/Game.js"
+ 
+ import MONSTERS from "scripts/data/monsters.js"
++import DATA from "scripts/data/index.js"
+ 
+ export default function BatTest() {
+ 
+@@ -30,5 +31,12 @@ export default function BatTest() {
+         // being spawned in.
+     })
+ 
+-    // Put assertions here that test your code!
++    Expect(game.monsters[0].position).to.be.eql({x: 1,y: 1})
++    game.monsters[0].onAction()
++    Expect(game.monsters[0].position).not.to.be.eql({x: 1,y: 1})
++    Expect(game.monsters[0].position.x).not.to.be.below(0)
++    Expect(game.monsters[0].position.y).not.to.be.below(0)
++    Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
++    Expect(game.monsters[0].position.y).not.to.be.above(DATA.FRAME.HEIGHT)
++
+ }
+diff --git a/source/scripts/tests/MonsterWaveTests.js b/source/scripts/tests/MonsterWaveTests.js
+index 3849069..f549dcf 100644
+--- a/source/scripts/tests/MonsterWaveTests.js
++++ b/source/scripts/tests/MonsterWaveTests.js
+@@ -5,17 +5,19 @@ import MonsterWave from "scripts/model/MonsterWave.js"
+ 
+ export default function MonsterWaveTests() {
+     var game = new Game({
+-        wave: {
+-            capacity: 4,
+-            monsters: [{}],
+-        }
++        waves: [
++            {
++                capacity: 4,
++                monsters: [{}],
++            }
++        ]
+     })
+ 
+-    Expect(game.wave).not.to.be(undefined)
+-    Expect(game.wave).to.be.an(MonsterWave)
++    Expect(game.waves[0]).not.to.be(undefined)
++    Expect(game.waves[0]).to.be.an(MonsterWave)
+ 
+     Expect(game.monsters.length).to.be(0)
+-    game.wave.onAction()
++    game.waves[0].onAction()
+     Expect(game.monsters.length).not.to.be(0)
+ 
+     // expect(game.monsters.length).to.be(game.wave.capacity)
+diff --git a/source/scripts/tests/OrcTest.js b/source/scripts/tests/OrcTest.js
+new file mode 100644
+index 0000000..1a8ab1a
+--- /dev/null
++++ b/source/scripts/tests/OrcTest.js
+@@ -0,0 +1,37 @@
++import Expect from "expect.js"
++
++import Game from "scripts/model/Game.js"
++
++import MONSTERS from "scripts/data/monsters.js"
++
++import DATA from "scripts/data/index.js"
++
++export default function OrcTest() {
++
++    // We are a testing a game.
++
++    var game = new Game({
++
++        // A game with an adventurer.
++        adventurer: {
++            position: {x: 3, y: 3},
++        },
++
++        // A game with an adventurer and an orc.
++
++        monsters: [
++            {
++                position: {x: 1, y: 1},
++                protomonster: MONSTERS.RED_ORC
++            }
++        ]
++
++    })
++    Expect(game.monsters[0].position).to.eql({x: 1, y: 1})
++    game.monsters[0].onAction()
++    Expect(game.monsters[0].position).not.to.eql({x: 1, y: 1})
++    Expect(game.monsters[0].position.x).not.to.be.below(0)
++    Expect(game.monsters[0].position.y).not.to.be.below(0)
++    Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
++    Expect(game.monsters[0].position.y).not.to.be.above(DATA.FRAME.HEIGHT)
++}
+diff --git a/source/scripts/tests/ThievesTest.js b/source/scripts/tests/ThievesTest.js
+new file mode 100644
+index 0000000..60c104d
+--- /dev/null
++++ b/source/scripts/tests/ThievesTest.js
+@@ -0,0 +1,56 @@
++import Expect from "expect.js"
++
++import Game from "scripts/model/Game.js"
++
++import MONSTERS from "scripts/data/monsters.js"
++
++import DATA from "scripts/data/index.js"
++
++export default function ThiefTest() {
++
++    // We are a testing a game.
++
++    var game = new Game({
++
++        // A game with an adventurer.
++        adventurer: {
++            position: {x: 3, y: 3},
++        },
++
++        // A game with an adventurer and a thief.
++
++        monsters: [
++            {
++                position: {x: 3, y: 2},
++                protomonster: MONSTERS.BLUE_THIEF
++            }
++        ]
++
++    })
++
++    Expect(game.monsters[0].position).to.eql({x: 3, y: 2})
++    Expect(game.adventurer.position).to.eql({x: 3, y: 3})
++
++    game.monsters[0].onAction()
++    game.adventurer.move({y: +1})
++
++    Expect(game.monsters[0].position).to.eql({x: 3, y: 2})
++    Expect(game.adventurer.position).to.eql({x: 3, y: 3})
++
++    game.monsters[0].onAction()
++    game.adventurer.move({y: +1})
++
++    Expect(game.monsters[0].position).to.eql({x: 3, y: 2})
++    Expect(game.adventurer.position).to.eql({x: 3, y: 3})
++
++    game.monsters[0].onAction()
++    game.adventurer.move({y: +1})
++
++    Expect(game.monsters[0].isDead).to.be(true)
++    Expect(game.adventurer.position).to.eql({x: 3, y: 3})
++
++    game.adventurer.move({y: +1})
++
++    Expect(game.monsters[0].isDead).to.be(true)
++    Expect(game.adventurer.position).to.eql({x: 3, y: 4})
++}
+diff --git a/source/scripts/tests/TrollTest.js b/source/scripts/tests/TrollTest.js
+new file mode 100644
+index 0000000..c2dd24a
+--- /dev/null
++++ b/source/scripts/tests/TrollTest.js
+@@ -0,0 +1,48 @@
++import Expect from "expect.js"
++
++import Game from "scripts/model/Game.js"
++
++import MONSTERS from "scripts/data/monsters.js"
++
++import DATA from "scripts/data/index.js"
++
++export default function TrollTest() {
++
++    // We are a testing a game.
++
++    var game = new Game({
++
++        // A game with an adventurer.
++        adventurer: {
++            position: {x: 3, y: 3},
++        },
++
++        // A game with an adventurer and a troll.
++
++        monsters: [
++            {
++                position: {x: 1, y: 1},
++                protomonster: MONSTERS.WHITE_TROLL
++            }
++        ]
++
++    })
++
++    game.monsters[0].onAction()
++    Expect(game.monsters[0].position).to.eql({x: 1, y: 2})
++    game.monsters[0].onAction()
++    Expect(game.monsters[0].position).to.eql({x: 1, y: 2})
++    game.monsters[0].onAction()
++    expect(game.monsters[0].position).to.eql({x: 1, y: 2})
++    game.monsters[0].onAction()
++    expect(game.monsters[0].position).to.eql({x: 1, y: 2})
++    game.monsters[0].onAction()
++
++    Expect(game.monsters[0].position).not.to.eql({x: 1, y: 1})
++    Expect(game.monsters[0].position.x).not.to.be.below(0)
++    Expect(game.monsters[0].position.y).not.to.be.below(0)
++    Expect(game.monsters[0].position.x).not.to.be.above(DATA.FRAME.WIDTH)
++    Expect(game.monsters[0].position.y).not.to.be.above(DATA.FRAME.HEIGHT)
++
++    // Put assertions here that test your code!
++}
+diff --git a/source/scripts/utility/Input.js b/source/scripts/utility/Input.js
+new file mode 100644
+index 0000000..d6dd58c
+--- /dev/null
++++ b/source/scripts/utility/Input.js
+@@ -0,0 +1,86 @@
++import Keyb from "keyb"
++
++const STUTTER = 200
++
++export default {
++    getInputs: function(delta) {
++        var inputs = {
++            "north": false,
++            "south": false,
++            "west": false,
++            "east": false,
++            "action": false,
++        }
++
++        ///////////////
++        // Keyboard //
++        /////////////
++
++        inputs.north = inputs.north || this.pollKeyboard("W", delta)
++        inputs.south = inputs.south || this.pollKeyboard("S", delta)
++        inputs.west = inputs.west || this.pollKeyboard("A", delta)
++        inputs.east = inputs.east || this.pollKeyboard("D", delta)
++        inputs.north = inputs.north || this.pollKeyboard("<up>", delta)
++        inputs.south = inputs.south || this.pollKeyboard("<down>", delta)
++        inputs.west = inputs.west || this.pollKeyboard("<left>", delta)
++        inputs.east = inputs.east || this.pollKeyboard("<right>", delta)
++        inputs.assert = inputs.assert || this.pollKeyboard("<space>", delta)
++
++        ///////////////
++        // Gamepads //
++        /////////////
++
++        var gamepads = navigator.getGamepads()
++        for(var index = 0; index < gamepads.length; index += 1) {
++            if(gamepads[index] != undefined) {
++                if(gamepads[index].mapping != "standard") {
++                    console.warn("Detected a gamepad that we don't support. :(")
++                } else {
++                    inputs.north = inputs.north || this.pollGamepad(gamepads[index], 12, delta)
++                    inputs.south = inputs.south || this.pollGamepad(gamepads[index], 13, delta)
++                    inputs.west = inputs.west || this.pollGamepad(gamepads[index], 14, delta)
++                    inputs.east = inputs.east || this.pollGamepad(gamepads[index], 15, delta)
++                    inputs.assert = inputs.assert || this.pollGamepad(gamepads[index], 0, delta)
++                }
++            }
++        }
++
++        return inputs
++    },
++    pollKeyboard(key, delta) {
++        if(Keyb.isDown(key)) {
++            if(this._.keyboard[key] === false) {
++                this._.keyboard[key] = 0
++                return true
++            } else {
++                this._.keyboard[key] += delta
++                if(this._.keyboard[key] > STUTTER) {
++                    this._.keyboard[key] -= STUTTER
++                    return true
++                }
++            }
++        } else {
++            this._.keyboard[key] = false
++        }
++    },
++    pollGamepad(gamepad, button, delta) {
++        if(gamepad.buttons[button].pressed) {
++            if(this._.gamepad[button] === false) {
++                this._.gamepad[button] = 0
++                return true
++            } else {
++                this._.gamepad[button] += delta
++                if(this._.gamepad[button] > STUTTER) {
++                    this._.gamepad[button] -= STUTTER
++                    return true
++                }
++            }
++        } else {
++            this._.gamepad[button] = false
++        }
++    },
++    _: {
++        keyboard: {},
++        gamepad: {},
++    }
++}
+diff --git a/source/scripts/utility/Jukebox.js b/source/scripts/utility/Jukebox.js
+new file mode 100644
+index 0000000..96dc341
+--- /dev/null
++++ b/source/scripts/utility/Jukebox.js
+@@ -0,0 +1,37 @@
++var AUDIO = {
++    RED: require("audio/red.mp3"),
++    YELLOW: require("audio/yellow.mp3"),
++    PURPLE: require("audio/purple.mp3"),
++}
++
++var redTrack = new Audio(AUDIO.RED)
++var yellowTrack = new Audio(AUDIO.YELLOW)
++var purpleTrack = new Audio(AUDIO.PURPLE)
++
++//1.0 is normal speed
++//0.5 is half speed (slower)
++//2.0 is double speed (faster)
++//-1.0 is backwards, normal speed
++//-0.5 is backwards, half speed
++//when you switch rooms you should speed up or slow down the music to match the pace of the room
++redTrack.playbackRate = 1
++yellowTrack.playbackRate = 1
++purpleTrack.playbackRate = 1
++
++redTrack.volume = 0.5
++yellowTrack.volume = 0.5
++purpleTrack.volume = 0.5
++
++redTrack.play()
++
++redTrack.onended = function() {
++    yellowTrack.play()
++}
++
++yellowTrack.onended = function() {
++    purpleTrack.play()
++}
++
++purpleTrack.onended = function() {
++    redTrack.play()
++}
+diff --git a/source/styles/Font.css b/source/styles/Font.css
+new file mode 100644
+index 0000000..717296b
+--- /dev/null
++++ b/source/styles/Font.css
+@@ -0,0 +1,4 @@
++@font-face {
++    font-family: pixel;
++    src: url("./fonts/pixel.ttf") format("truetype");
++}

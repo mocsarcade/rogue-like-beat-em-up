@@ -10,7 +10,6 @@ export default class Adventurer {
     constructor(game, protoadventurer) {
         protoadventurer = protoadventurer || {}
 
-        this.inputs = protoadventurer.inputs || {}
         this.game = game
 
         this.key = "adventurer"
@@ -24,30 +23,31 @@ export default class Adventurer {
 
         this.maxhealth = 3
         this.health = this.maxhealth
+        
+        this.wave = 0
+        
         this.grabCount = 0
         this.grabMonster = null
     }
-    update(delta) {
-        for(var key in this.inputs) {
-            if(!!this.inputs[key].update) {
-                this.inputs[key].update(delta)
-            }
-        }
+    update(delta, inputs) {
 
-        if(this.inputs.north.isDown(delta)) {
+        if(inputs.north == true) {
             this.move({y: -1})
         }
-        if(this.inputs.south.isDown(delta)) {
+        if(inputs.south == true) {
             this.move({y: +1})
         }
-        if(this.inputs.west.isDown(delta)) {
+        if(inputs.west == true) {
             this.move({x: -1})
         }
-        if(this.inputs.east.isDown(delta)) {
+        if(inputs.east == true) {
             this.move({x: +1})
         }
-        if(this.inputs.wait.isDown(delta)) {
-            this.move()
+
+        if(STAGE == "DEVELOPMENT") {
+            if(inputs.assert == true) {
+                this.move()
+            }
         }
     }
     move(movement) {
@@ -57,6 +57,25 @@ export default class Adventurer {
         movement.y = movement.y || 0
 
         this.animation = false
+        var didSomething = false
+        
+        // collision with room
+        if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
+        || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
+            movement.x = 0
+        }
+        if(this.position.y + movement.y < DATA.FRAME.HEIGHT * this.wave * -1) {
+            if(!this.game.waves[this.wave]) {
+                movement.y = 0
+            } else if(this.game.waves[this.wave].killcount > 0) {
+                movement.y = 0
+            }
+        }
+        if(this.position.y + movement.y >= DATA.FRAME.HEIGHT * (this.wave * -1 + 1)) {
+            console.log("!!")
+            movement.y = 0
+        }
+        
         this.bloodscreen = false
 
         if(this.grabCount == 0) {
@@ -67,7 +86,9 @@ export default class Adventurer {
                     if(this.position.x + movement.x == monster.position.x
                     && this.position.y + movement.y == monster.position.y) {
                         monster.handleAttack(1)
-                        //this.instance = ShortID.generate()
+                        
+                        didSomething = true
+                        
                         if(movement.x < 0 && movement.y == 0) {
                             this.animation = "attack-westwards"
                         } else if(movement.x > 0 && movement.y == 0) {
@@ -105,22 +126,46 @@ export default class Adventurer {
                     }
                 }
             }
-
+            
             // translation
-
             this.position.x += movement.x
             this.position.y += movement.y
+
+            // waves
+            this.wave = Math.floor(this.position.y / DATA.FRAME.HEIGHT) * -1
+            if(this.game && this.game.waves) {
+                if(this.game.waves[this.wave]) {
+                    if(this.game.waves[this.wave].isRespawnRoom) {
+                        this.respawn = {
+                            x: this.game.waves[this.wave].tiles[0].position.x,
+                            y: this.game.waves[this.wave].tiles[0].position.y
+                        }
+                    }
+                }
+            }
+
+            // camera
+            if(!!this.game) {
+                if(!!this.game.camera) {
+                    this.game.camera.position.x = DATA.FRAME.WIDTH * 0.5
+                    this.game.camera.position.y = DATA.FRAME.HEIGHT * (-1 * this.wave + 0.5)
+                }
+            }
         } else {
             this.grabCount = this.grabCount - 1
             this.grabMonster.handleAttack(1)
         }
-        this.game.onAction()
+        
+        // signaling
+        if(didSomething || movement.x != 0 || movement.y != 0) {
+            this.game.onAction()
+        }
     }
     beAttacked(damage) {
         this.bloodscreen = true
         this.health -= damage || 0.5
         if(this.health <= 0) {
-            console.log("you died")
+            this.game.reset(this.respawn)
         }
     }
 }

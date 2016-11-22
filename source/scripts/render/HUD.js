@@ -9,6 +9,7 @@ export default class HUD extends React.Component {
                 {this.bloodscreen}
                 {this.killcount}
                 {this.hearts}
+                {this.message}
             </div>
         )
     }
@@ -22,7 +23,7 @@ export default class HUD extends React.Component {
     get killcount() {
         return (
             <span id="killcount">
-                {this.props.game.wave.killcount}
+                {this.props.game.getKillcount()}
             </span>
         )
     }
@@ -47,6 +48,13 @@ export default class HUD extends React.Component {
         } else {
             return 0
         }
+    }
+    get message() {
+        return (
+            <pre id="message">
+                {this.props.game.message}
+            </pre>
+        )
     }
 }
 
