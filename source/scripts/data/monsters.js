@@ -228,7 +228,7 @@ export default {
     CHAOS_WIZARD: {
         sprite: DATA.SPRITES.MONSTERS.CHAOS_WIZARD,
         color: DATA.COLORS.BROWN,
-        health: 20,
+        health: 10,
         strength: 1,
         onSpawn: function() {
             this.spawnSomeBats = function() {
@@ -248,8 +248,9 @@ export default {
                 for(var i = 0; i < countToSpawn(); i += 1) {
                     var child = new Monster(this.game, {
                         protomonster: MONSTERS.RED_BAT,
-                        position: {x: this.position.x, y: this.position.y},
+                        position: {x: this.position.x, y: this.position.y}
                     })
+                    child.phase = true
                     child.onDeath = function() {
                         this.game.wave.killcount += 1
                         parent.childCount -= 1
@@ -257,6 +258,8 @@ export default {
                     this.game.monsters.push(child)
                     this.childCount += 1
                 }
+                var newPosition = this.getFreeSpace()
+                this.position = newPosition
             }
         },
         turnCounter: function() {
@@ -281,10 +284,11 @@ export default {
                 this.pauseCount -= 1
             }
             this.game.wave.message =
-            "phase: " + (this.phase ? "will pause" : "will move/attack") + "\n" +
-            "pause: " + this.pauseCount + "\n" +
-            "turn:  " + this.turnCount + "\n" +
-            "children: " + this.childCount
+            "health: " + this.health
+            // "phase: " + (this.phase ? "will pause" : "will move/attack") + "\n" +
+            // "pause: " + this.pauseCount + "\n" +
+            // "turn:  " + this.turnCount + "\n" +
+            // "children: " + this.childCount
         },
         movement: function () {
             if (this.pauseCount > 0) {

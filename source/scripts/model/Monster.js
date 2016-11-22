@@ -198,4 +198,25 @@ export default class Monster {
         }
         return false
     }
+    getFreeSpace(depth) {
+        depth = depth || 0
+        if (depth > 10) {
+            return {x: this.x, y: this.y}
+        }
+        var x = Math.floor((Math.random() * DATA.FRAME.WIDTH))
+        var y = Math.floor((Math.random() * DATA.FRAME.HEIGHT * this.game.adventurer.wave * -1))
+        this.game.monsters.forEach((monster) => {
+            if (monster) {
+                if (monster.position.x == x && monster.position.y == y) {
+                    return this.getFreeSpace(depth + 1)
+                }
+            }
+        })
+        if (this.game.adventurer) {
+            if (this.game.adventurer.position.x == x && this.game.adventurer.position.y == y) {
+                return this.getFreeSpace(depth + 1)
+            }
+        }
+        return {x: x, y: y}
+    }
 }
