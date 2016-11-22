@@ -52,6 +52,7 @@ state.game = new Game({
             killcount: 10,
             monsters: [
                 MONSTERS.RED_ORC,
+                MONSTERS.SMALL_NECROMANCER,
             ],
             message: "Room 1: Golem Orcs",
         },
@@ -164,6 +165,7 @@ state.game = new Game({
             capacity: 4,
             killcount: 10,
             monsters: [
+
                 MONSTERS.RED_SLIME,
             ],
             message: "Room 9: Gelatinous Slimes"
@@ -185,20 +187,13 @@ state.game = new Game({
     ]
 }, state)
 
+
 var render = new Render()
 var loop = new Afloop((delta) => {
     var inputs = Input.getInputs(delta)
     state.game.onFrameLoop(delta, inputs)
     render(state)
 })
-
-
-
-
-if(STAGE == "PRODUCTION") {
-    require(["scripts/utility/Jukebox.js"], function(require) {
-    })
-}
 
 // While in development, we expose the game state
 // to the window, so we can examine it from the
@@ -208,7 +203,6 @@ if(STAGE == "PRODUCTION") {
 if(STAGE == "DEVELOPMENT") {
     window.state = state
 }
-
 
 // With every build, we include a "stats.json"
 // that details the size of the build, the speed

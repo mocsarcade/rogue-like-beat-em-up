@@ -4,3 +4,8 @@
 72: troll_omega
 82: bat_alpha
 101: bat_omega
+48: necromancer_alpha 
+48: necromancer_omega
+164: Skeleton
+207: Blood
+
