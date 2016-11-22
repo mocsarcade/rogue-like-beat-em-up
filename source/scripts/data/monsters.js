@@ -234,29 +234,29 @@ export default {
             this.spawnSomeBats = function() {
                 this.childCount = this.childCount || 0
                 var countToSpawn = () => {
-                    if (this.childCount < 4) {
+                    if (this.health < 3) {
+                        return 8
+                    } else if (this.health < 6) {
                         return 4
-                    } else if (this.childCount < 8) {
-                        return 2
-                    } else if (this.childCount < 12) {
-                        return 1
                     } else {
-                        return 0
+                        return 2
                     }
                 }
                 var parent = this
                 for(var i = 0; i < countToSpawn(); i += 1) {
-                    var child = new Monster(this.game, {
-                        protomonster: MONSTERS.RED_BAT,
-                        position: {x: this.position.x, y: this.position.y}
-                    })
-                    child.phase = true
-                    child.onDeath = function() {
-                        this.game.wave.killcount += 1
-                        parent.childCount -= 1
+                    if (this.childCount < 12) {
+                        var child = new Monster(this.game, {
+                            protomonster: MONSTERS.RED_BAT,
+                            position: {x: this.position.x, y: this.position.y}
+                        })
+                        child.phase = true
+                        child.onDeath = function() {
+                            this.game.wave.killcount += 1
+                            parent.childCount -= 1
+                        }
+                        this.game.monsters.push(child)
+                        this.childCount += 1
                     }
-                    this.game.monsters.push(child)
-                    this.childCount += 1
                 }
                 var newPosition = this.getFreeSpace()
                 this.position = newPosition
@@ -276,8 +276,8 @@ export default {
                 this.turnCount -= 1
                 if (this.turnCount <= 0) {
                     this.phase = !this.phase
-                    this.pauseCount = 8
-                    this.turnCount = 10
+                    this.pauseCount = 4
+                    this.turnCount = 4
                     this.spawnSomeBats()
                 }
             } else {

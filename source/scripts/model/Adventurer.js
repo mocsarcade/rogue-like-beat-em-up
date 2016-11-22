@@ -23,9 +23,9 @@ export default class Adventurer {
 
         this.maxhealth = 3
         this.health = this.maxhealth
-        
+
         this.wave = 0
-        
+
         this.grabCount = 0
         this.grabMonster = null
     }
@@ -58,7 +58,7 @@ export default class Adventurer {
 
         this.animation = false
         var didSomething = false
-        
+
         // collision with room
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -75,7 +75,7 @@ export default class Adventurer {
             console.log("!!")
             movement.y = 0
         }
-        
+
         this.bloodscreen = false
 
         if(this.grabCount == 0) {
@@ -86,9 +86,9 @@ export default class Adventurer {
                     if(this.position.x + movement.x == monster.position.x
                     && this.position.y + movement.y == monster.position.y) {
                         monster.handleAttack(1)
-                        
+
                         didSomething = true
-                        
+
                         if(movement.x < 0 && movement.y == 0) {
                             this.animation = "attack-westwards"
                         } else if(movement.x > 0 && movement.y == 0) {
@@ -126,7 +126,7 @@ export default class Adventurer {
                     }
                 }
             }
-            
+
             // translation
             this.position.x += movement.x
             this.position.y += movement.y
@@ -155,7 +155,7 @@ export default class Adventurer {
             this.grabCount = this.grabCount - 1
             this.grabMonster.handleAttack(1)
         }
-        
+
         // signaling
         if(didSomething || movement.x != 0 || movement.y != 0) {
             this.game.onAction()
