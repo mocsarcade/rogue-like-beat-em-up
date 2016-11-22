@@ -13,6 +13,7 @@ export default class Monster {
         this.sprite = this.pickSprite()
         this.isSpawned = true
 
+
         this.game = game
 
         this.position = monster.position
@@ -58,11 +59,17 @@ export default class Monster {
             this.move(this.movement())
         }
     }
+
+    getPosition() {
+        return this.position
+    }
     move(movement) {
         // initialization
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
+
+
 
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0

@@ -91,20 +91,52 @@ export default {
         }
     },
     GREEN_METALGOLEM: {
-       sprite: DATA.SPRITES.MONSTERS.METALGOLEM,
-       color: DATA.COLORS.GREEN,
-       health: 3,
-       strength: 5,
-       turnCounter: function() {
-           this.turncount = this.turncount + 1 || 0
-           if(this.turncount % 1 == 0) {
-               this.phase = true
-           } else {
-               this.phase = false
-           }
-           return this.phase
-       }
-   },
+        sprite: DATA.SPRITES.MONSTERS.METALGOLEM,
+        color: DATA.COLORS.GREEN,
+        health: 10,
+        strength: 5,
+        turnCounter: function() {
+            this.phase = true
+        },
+        movement: function() {
+            var dx = this.game.adventurer.position.x - this.position.x
+            var dy = this.game.adventurer.position.y - this.position.y
+            var vector = {}
+            this.direction = this.direction || "nowhere"
+            this.previousDirection = this.previousDirection || "nowhere"
+
+            if(Math.abs(dx) > Math.abs(dy)) {
+                if(dx > 0) {
+                    vector = {x: +1}
+                    this.direction = "right"
+                }
+                if(dx < 0) {
+                    vector = {x: -1}
+                    this.direction = "left"
+                }
+            } else {
+                if(dy > 0) {
+                    vector = {y: +1}
+                    this.direction = "down"
+                }
+                if(dy < 0) {
+                    vector = {y: -1}
+                    this.direction = "up"
+                }
+            }
+
+            if (this.direction != this.previousDirection) {
+                vector = {x: 0, y: 0}
+                this.phase = false
+                this.sprite = this.pickSprite()
+            } else {
+                this.phase = true
+            }
+
+            this.previousDirection = this.direction
+            return vector
+        },
+    },
     RED_BAT: {
         sprite: DATA.SPRITES.MONSTERS.BAT,
         color: DATA.COLORS.RED,
