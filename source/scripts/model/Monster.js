@@ -40,6 +40,8 @@ export default class Monster {
 
         this.onHit = monster.protomonster.onHit || function () {}
 
+        this.onSpawn = monster.protomonster.onSpawn || function () {}
+        this.onSpawn()
 
     }
     pickSprite() {

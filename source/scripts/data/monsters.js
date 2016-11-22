@@ -230,23 +230,35 @@ export default {
         color: DATA.COLORS.BROWN,
         health: 20,
         strength: 1,
-        spawnSomeBats: function() {
-            [
-                {x: this.position.x, y: this.position.y},
-                {x: this.position.x, y: this.position.y},
-                {x: this.position.x, y: this.position.y},
-                {x: this.position.x, y: this.position.y},
-            ].forEach((position) => {
-                var child = new Monster(this.game, {
-                    protomonster: MONSTERS.RED_BAT,
-                    position: position,
-                })
-                child.onDeath = function() {
-                    this.game.wave.killcount += 1
+        onSpawn: function() {
+            this.spawnSomeBats = function() {
+                this.childCount = this.childCount || 0
+                var countToSpawn = () => {
+                    if (this.childCount < 4) {
+                        return 4
+                    } else if (this.childCount < 8) {
+                        return 2
+                    } else if (this.childCount < 12) {
+                        return 1
+                    } else {
+                        return 0
+                    }
                 }
-                this.game.monsters.push(child)
-            })
-        }
+                var parent = this
+                for(var i = 0; i < countToSpawn(); i += 1) {
+                    var child = new Monster(this.game, {
+                        protomonster: MONSTERS.RED_BAT,
+                        position: {x: this.position.x, y: this.position.y},
+                    })
+                    child.onDeath = function() {
+                        this.game.wave.killcount += 1
+                        parent.childCount -= 1
+                    }
+                    this.game.monsters.push(child)
+                    this.childCount += 1
+                }
+            }
+        },
         turnCounter: function() {
             /*
              * phase indicates the shifting of alpha/omega or stand/move
@@ -259,22 +271,25 @@ export default {
             if (this.pauseCount <= 0 ) {
                 this.phase = !this.phase
                 this.turnCount -= 1
+                if (this.turnCount <= 0) {
+                    this.phase = !this.phase
+                    this.pauseCount = 8
+                    this.turnCount = 10
+                    this.spawnSomeBats()
+                }
             } else {
                 this.pauseCount -= 1
             }
-            if (this.turnCount <= 0) {
-                this.phase = !this.phase
-                this.pauseCount = 6
-                this.turnCount = 8;
-                this.spawnSomeBats()
-            }
             this.game.wave.message =
-            "phase: " + (this.phase ? 'will pause' : 'will move/attack') + "\n" +
+            "phase: " + (this.phase ? "will pause" : "will move/attack") + "\n" +
             "pause: " + this.pauseCount + "\n" +
-            "turn:  " + this.turnCount;
+            "turn:  " + this.turnCount + "\n" +
+            "children: " + this.childCount
         },
         movement: function () {
-            if (this.pauseCount > 0) {return}
+            if (this.pauseCount > 0) {
+                return
+            }
             if(this.getOffscreenMovement()) {
                 return this.getOffscreenMovement()
             }
@@ -288,7 +303,7 @@ export default {
             return choices[Math.floor((Math.random() * choices.length))]
         },
         onHit: function() {
-            spawnSomeBats()
+            this.spawnSomeBats()
         }
     },
 }
