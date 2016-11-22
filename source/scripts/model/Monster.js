@@ -63,7 +63,7 @@ export default class Monster {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
-        
+
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -90,6 +90,9 @@ export default class Monster {
         // collsiion with adventurer
         if(this.position.x + movement.x == this.game.adventurer.position.x
         && this.position.y + movement.y == this.game.adventurer.position.y) {
+            if (this.outOfBounds({x: 0, y: 0})) {
+                return
+            }
             this.game.adventurer.beAttacked()
             this.grabCounter()
             if(movement.x < 0 && movement.y == 0) {
