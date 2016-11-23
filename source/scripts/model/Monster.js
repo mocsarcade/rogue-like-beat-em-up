@@ -29,6 +29,8 @@ export default class Monster {
                 if(dy < 0) return {y: -1}
             }
         }
+        this.parry = monster.protomonster.parry || function () {
+        }
         this.grabCounter = monster.protomonster.grabCounter || function () {
         }
         this.turnCounter = monster.protomonster.turnCounter || function () {
@@ -63,7 +65,7 @@ export default class Monster {
         movement = movement || {}
         movement.x = movement.x || 0
         movement.y = movement.y || 0
-        
+
         // collision with the camera
         if(this.position.x + movement.x < DATA.FRAME.WIDTH * 0
         || this.position.x + movement.x >= DATA.FRAME.WIDTH * 1) {
@@ -112,6 +114,7 @@ export default class Monster {
                     y: this.position.y + movement.y,
                 }
             }))
+
             movement.x = 0
             movement.y = 0
         }
@@ -121,6 +124,7 @@ export default class Monster {
         this.position.y += movement.y
     }
     handleAttack(damage) {
+        this.parry()
         this.health = this.health || 0
         this.health -= damage
         if(this.health <= 0) {

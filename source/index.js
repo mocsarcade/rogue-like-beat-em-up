@@ -51,7 +51,7 @@ state.game = new Game({
             },
             killcount: 10,
             monsters: [
-                MONSTERS.RED_ORC,
+                MONSTERS.THIEF_OF_THE_NIGHT,
             ],
             message: "Room 1: Golem Orcs",
         },
