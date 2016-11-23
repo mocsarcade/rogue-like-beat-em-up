@@ -231,29 +231,28 @@ export default {
         health: 10,
         strength: 2,
         grabCounter: function() {
-            //this.turnCount = this.turnCount || 0
+            this.turnCount = this.turnCount || 0
             //the adventurer cannot be grabbed by another monster and he cannot grab him more than once
-            //if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
-            //    this.turnCount = this.turnCount + 1
-            //    this.game.adventurer.grabCount += 3
-            //    this.game.adventurer.grabMonster = this
-            //}
+            if(this.game.adventurer.grabCount == 0 && this.turnCount == 0) {
+                this.turnCount = this.turnCount + 1
+                this.game.adventurer.grabCount += 3
+                this.game.adventurer.grabMonster = this
+            }
         },
         parry: function() {
-            // when parrying, do this but make it depend on the direction of attack
-            //   check where the adventurer is via this.game.adventurer.position then compare it to the TOTN's position to decide
-
-            if(this.position.x > this.game.adventurer.position.x) {
-                this.position.x = this.position.x + 1
-            }
-            if(this.position.x < this.game.adventurer.position.x) {
-                this.position.x = this.position.x - 1
-            }
-            if(this.position.y > this.game.adventurer.position.y) {
-                this.position.y = this.position.y + 1
-            }
-            if(this.position.y < this.game.adventurer.position.y) {
-                this.position.y = this.position.y - 1
+            if(this.game.adventurer.grabCount == 0) {
+                if(this.position.x > this.game.adventurer.position.x) {
+                    this.position.x = this.position.x + 1
+                }
+                if(this.position.x < this.game.adventurer.position.x) {
+                    this.position.x = this.position.x - 1
+                }
+                if(this.position.y > this.game.adventurer.position.y) {
+                    this.position.y = this.position.y + 1
+                }
+                if(this.position.y < this.game.adventurer.position.y) {
+                    this.position.y = this.position.y - 1
+                }
             }
         }
     },

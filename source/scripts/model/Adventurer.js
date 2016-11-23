@@ -85,6 +85,7 @@ export default class Adventurer {
                 if(!monster.isDead) {
                     if(this.position.x + movement.x == monster.position.x
                     && this.position.y + movement.y == monster.position.y) {
+                        
                         monster.handleAttack(1)
 
                         didSomething = true
